@@ -7,33 +7,32 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
   ChevronDown,
-  Star,
-  Trophy,
-  Users,
-  Calendar,
   ArrowRight,
   Sparkles,
-  Zap,
-  Target,
-  Heart,
   Play,
   Instagram,
   Phone,
   MapPin,
   ChevronRight,
   Quote,
-  FileText,
+  Users,
+  Star,
   CheckCircle,
-  Handshake,
-  Dumbbell,
-  Medal,
 } from 'lucide-react'
 
-// Novos componentes de animação
 import { AnimatedH1, StormShowcase } from '@/components/animations'
 import { AnimatedBackground, AnimatedCounter, GlowingButton, ScrollProgress } from '@/components/ui'
 import { StormWeatherProvider, useStormWeather } from '@/context/StormWeatherContext'
-import type { StormType } from '@/context/StormWeatherContext'
+import {
+  STATS,
+  BENEFITS,
+  TEAMS,
+  TESTIMONIALS,
+  JOURNEY_STEPS,
+  FAQS,
+  TRYOUT_INFO,
+} from '@/constants/landing-data'
+import { SCROLL_THRESHOLD } from '@/constants/animation-config'
 
 // ============================================
 // SECTION HEADER COMPONENT
@@ -110,7 +109,7 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
   
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > SCROLL_THRESHOLD)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -341,161 +340,15 @@ function LandingContent() {
   const [activeTeam, setActiveTeam] = useState(0)
   const [activeFaq, setActiveFaq] = useState<number | null>(null)
 
-  // Storm weather context for dynamic background
   const { setStorm, setIntensity } = useStormWeather()
-  
-  // Data
-  const stats = [
-    { number: '15+', label: 'Campeonatos', icon: Trophy, color: '#FF7F00' },
-    { number: '8', label: 'Anos de Equipe', icon: Calendar, color: '#00BFFF' },
-    { number: '100+', label: 'Atletas Formados', icon: Users, color: '#FF8C69' },
-    { number: '25+', label: 'Pódios', icon: Star, color: '#2563EB' },
-  ]
-  
-  const benefits = [
-    {
-      icon: Target,
-      title: 'Treinamento de Elite',
-      description: 'Metodologia comprovada com técnicos certificados e acompanhamento individualizado para desenvolvimento técnico e pessoal.',
-      color: '#FF7F00',
-    },
-    {
-      icon: Zap,
-      title: 'Performance de Alto Nível',
-      description: 'Programa focado em excelência técnica, condicionamento físico e preparação mental para competições nacionais e internacionais.',
-      color: '#00BFFF',
-    },
-    {
-      icon: Heart,
-      title: 'Espírito de Equipe',
-      description: 'Ambiente de união, respeito e crescimento coletivo. Aqui você constrói amizades para toda a vida enquanto evolui no esporte.',
-      color: '#FF7F00',
-    },
-    {
-      icon: Trophy,
-      title: 'Conquistas Reais',
-      description: 'Histórico comprovado de pódios em campeonatos estaduais, nacionais e internacionais. Faça parte de uma equipe vencedora.',
-      color: '#00BFFF',
-    },
-  ]
 
-  const teams = useMemo(() => [
-    {
-      name: 'N2 Coed',
-      level: 'Nível 2',
-      category: 'Coed',
-      description: 'Time misto de nível intermediário, ideal para atletas com experiência prévia que buscam evolução técnica.',
-      requirements: ['Idade: 14-25 anos', 'Experiência mínima: 1 ano em cheerleading', 'Disponibilidade: 3x por semana', 'Habilidades: Stunts básicos, tumbling iniciante'],
-      vacancies: 5,
-      color: '#FF7F00',
-      storm: 'fire' as StormType,
-    },
-    {
-      name: 'N3 Coed',
-      level: 'Nível 3',
-      category: 'Coed',
-      description: 'Time misto avançado com foco em rotinas complexas e competições de alto nível.',
-      requirements: ['Idade: 15-25 anos', 'Experiência mínima: 2 anos em cheerleading', 'Disponibilidade: 4x por semana', 'Habilidades: Stunts intermediários, tumbling avançado'],
-      vacancies: 3,
-      color: '#00BFFF',
-      storm: 'rain' as StormType,
-    },
-    {
-      name: 'N2 All Girl',
-      level: 'Nível 2',
-      category: 'All Girl',
-      description: 'Time feminino de nível intermediário, com foco em técnica, sincronia e performance.',
-      requirements: ['Idade: 14-25 anos (feminino)', 'Experiência mínima: 1 ano em cheerleading', 'Disponibilidade: 3x por semana', 'Habilidades: Stunts femininos, tumbling básico'],
-      vacancies: 6,
-      color: '#FF7F00',
-      storm: 'hail' as StormType,
-    },
-    {
-      name: 'N3 All Girl',
-      level: 'Nível 3',
-      category: 'All Girl',
-      description: 'Time feminino avançado, preparado para competir nas maiores competições do país.',
-      requirements: ['Idade: 15-25 anos (feminino)', 'Experiência mínima: 2 anos em cheerleading', 'Disponibilidade: 4x por semana', 'Habilidades: Stunts avançados, tumbling intermediário'],
-      vacancies: 4,
-      color: '#00BFFF',
-      storm: 'thunder' as StormType,
-    },
-  ], [])
-
-  const testimonials = [
-    {
-      name: 'Maria Silva',
-      role: 'Flyer - N2 All Girl',
-      tenure: '2 anos na equipe',
-      text: 'Entrar para esta equipe mudou minha vida. O nível de comprometimento e a qualidade do treinamento são incomparáveis. Conquistei meu primeiro pódio nacional aqui!',
-      rating: 5,
-    },
-    {
-      name: 'João Santos',
-      role: 'Base - N3 Coed',
-      tenure: '3 anos na equipe',
-      text: 'A evolução técnica que tive aqui foi incrível. Além de melhorar no cheerleading, ganhei uma segunda família e aprendi valores que levo para toda a vida.',
-      rating: 5,
-    },
-    {
-      name: 'Ana Costa',
-      role: 'Back - N3 All Girl',
-      tenure: '1.5 ano na equipe',
-      text: 'Nunca pensei que chegaria tão longe. Com o apoio dos técnicos e da equipe, conquistei habilidades que achava impossíveis!',
-      rating: 5,
-    },
-  ]
-  
-  const journeySteps = [
-    { number: '01', title: 'Inscrição', description: 'Preencha o formulário online', icon: FileText },
-    { number: '02', title: 'Tryout', description: 'Demonstre suas habilidades', icon: Target },
-    { number: '03', title: 'Resultado', description: 'Acompanhe a seleção', icon: CheckCircle },
-    { number: '04', title: 'Integração', description: 'Conheça a equipe', icon: Handshake },
-    { number: '05', title: 'Treinos', description: 'Prepare-se para competir', icon: Dumbbell },
-    { number: '06', title: 'Campeonatos', description: 'Represente a equipe', icon: Medal },
-  ]
-  
-  const faqs = [
-    {
-      question: 'Preciso ter experiência prévia em cheerleading?',
-      answer: 'Recomendamos experiência mínima de 6 meses em cheerleading ou ginástica artística. Para times N3, a exigência é de pelo menos 2 anos de experiência.',
-    },
-    {
-      question: 'Tem custo para participar do tryout?',
-      answer: 'Sim, o investimento para participar do tryout é de R$ 50,00. Após a aprovação, há mensalidade para manutenção dos treinos, uniformes e participação em campeonatos.',
-    },
-    {
-      question: 'Qual a frequência dos treinos?',
-      answer: 'Times N2 treinam 3 vezes por semana (2h cada). Times N3 treinam 4 vezes por semana (2h30 cada).',
-    },
-    {
-      question: 'Como funciona o processo de seleção?',
-      answer: 'Durante o tryout, avaliamos habilidades técnicas (tumbling, stunts, jumps), condicionamento físico, atitude e trabalho em equipe.',
-    },
-    {
-      question: 'Menores de idade podem participar?',
-      answer: 'Sim! Aceitamos atletas a partir de 14 anos. Menores de 18 anos precisam de autorização dos responsáveis.',
-    },
-  ]
-  
-  const tryoutInfo = {
-    date: '15 de Março, 2026',
-    time: '9h às 17h',
-    location: 'Ginásio SkyHigh All Star - Centro Esportivo Tietê',
-    address: 'Av. Santos Dumont, 843 - Luz, São Paulo/SP',
-    metro: 'Próximo à estação Armênia (Linha 1 - Azul)',
-    parking: 'Estacionamento no local',
-    price: 'R$ 50,00',
-  }
-
-  // Effect: Update storm when active team changes
   useEffect(() => {
-    const selectedTeam = teams[activeTeam]
+    const selectedTeam = TEAMS[activeTeam]
     if (selectedTeam?.storm) {
       setStorm(selectedTeam.storm)
       setIntensity(0.8)
     }
-  }, [activeTeam, setStorm, setIntensity, teams])
+  }, [activeTeam, setStorm, setIntensity])
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] overflow-hidden">
@@ -601,7 +454,7 @@ function LandingContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            {stats.map((stat, index) => (
+            {STATS.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 className="relative group"
@@ -652,7 +505,7 @@ function LandingContent() {
           />
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {benefits.map((benefit, index) => (
+            {BENEFITS.map((benefit, index) => (
               <motion.div
                 key={benefit.title}
                 className="group relative"
@@ -706,7 +559,7 @@ function LandingContent() {
           
           {/* Team selector tabs - Clean solid */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {teams.map((team, index) => (
+            {TEAMS.map((team, index) => (
               <motion.button
                 key={team.name}
                 onClick={() => setActiveTeam(index)}
@@ -741,32 +594,32 @@ function LandingContent() {
                       <span 
                         className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border"
                         style={{ 
-                          borderColor: `${teams[activeTeam].color}40`,
-                          color: teams[activeTeam].color,
-                          backgroundColor: `${teams[activeTeam].color}10`
+                          borderColor: `${TEAMS[activeTeam].color}40`,
+                          color: TEAMS[activeTeam].color,
+                          backgroundColor: `${TEAMS[activeTeam].color}10`
                         }}
                       >
-                        {teams[activeTeam].level}
+                        {TEAMS[activeTeam].level}
                       </span>
                       <span className="text-white/50 text-sm flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        {teams[activeTeam].category}
+                        {TEAMS[activeTeam].category}
                       </span>
                     </div>
                     
                     <h3 className="text-4xl md:text-5xl font-display text-white mb-4">
-                      {teams[activeTeam].name}
+                      {TEAMS[activeTeam].name}
                     </h3>
                     
                     <p className="text-white/60 text-lg leading-relaxed mb-6">
-                      {teams[activeTeam].description}
+                      {TEAMS[activeTeam].description}
                     </p>
                     
                     {/* Requirements */}
                     <div className="space-y-2 mb-8">
-                      {teams[activeTeam].requirements.map((req, idx) => (
+                      {TEAMS[activeTeam].requirements.map((req, idx) => (
                         <div key={idx} className="flex items-center gap-3 text-white/50">
-                          <ChevronRight className="w-4 h-4" style={{ color: teams[activeTeam].color }} />
+                          <ChevronRight className="w-4 h-4" style={{ color: TEAMS[activeTeam].color }} />
                           <span>{req}</span>
                         </div>
                       ))}
@@ -776,7 +629,7 @@ function LandingContent() {
                       variant="primary"
                       onClick={() => router.push('/formulario')}
                     >
-                      Inscrever-se para {teams[activeTeam].name}
+                      Inscrever-se para {TEAMS[activeTeam].name}
                       <ArrowRight className="w-5 h-5" />
                     </GlowingButton>
                   </div>
@@ -785,9 +638,9 @@ function LandingContent() {
                   <div className="md:w-48 flex md:flex-col items-center justify-center gap-4 p-6 bg-white/5 rounded-2xl border border-white/5">
                     <div 
                       className="text-6xl md:text-7xl font-display"
-                      style={{ color: teams[activeTeam].color }}
+                      style={{ color: TEAMS[activeTeam].color }}
                     >
-                      {teams[activeTeam].vacancies}
+                      {TEAMS[activeTeam].vacancies}
                     </div>
                     <div className="text-white/50 text-center">
                       <div className="font-semibold text-white">vagas</div>
@@ -826,7 +679,7 @@ function LandingContent() {
               />
               
               <div className="grid grid-cols-6 gap-4">
-                {journeySteps.map((step, index) => {
+                {JOURNEY_STEPS.map((step, index) => {
                   const Icon = step.icon
                   const isOdd = index % 2 === 0
                   return (
@@ -867,7 +720,7 @@ function LandingContent() {
           
           {/* Mobile timeline - Clean */}
           <div className="md:hidden space-y-4">
-            {journeySteps.map((step, index) => {
+            {JOURNEY_STEPS.map((step, index) => {
               const Icon = step.icon
               const isOdd = index % 2 === 0
               return (
@@ -914,7 +767,7 @@ function LandingContent() {
           />
           
           <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
+            {TESTIMONIALS.map((testimonial, index) => (
               <motion.div
                 key={testimonial.name}
                 className="relative group"
@@ -970,14 +823,7 @@ function LandingContent() {
           
           {/* Info cards - Clean */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            {[
-              { icon: Calendar, label: 'Data', value: tryoutInfo.date },
-              { icon: Zap, label: 'Horário', value: tryoutInfo.time },
-              { icon: MapPin, label: 'Local', value: tryoutInfo.location },
-              { icon: Target, label: 'Endereço', value: tryoutInfo.address },
-              { icon: Users, label: 'Metrô', value: tryoutInfo.metro },
-              { icon: Star, label: 'Investimento', value: tryoutInfo.price },
-            ].map((item, index) => (
+            {TRYOUT_INFO.map((item, index) => (
               <motion.div
                 key={item.label}
                 className="bg-[#FAFAFA] rounded-2xl p-5 border border-gray-100 hover:border-[#FF7F00]/30 hover:shadow-lg transition-all duration-300 text-center"
@@ -1055,7 +901,7 @@ function LandingContent() {
           />
           
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
+            {FAQS.map((faq, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}

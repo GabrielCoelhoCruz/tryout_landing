@@ -82,6 +82,21 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 @layer utilities {

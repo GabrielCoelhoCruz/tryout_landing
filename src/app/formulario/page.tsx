@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,10 +10,6 @@ import {
   ArrowRight,
   CheckCircle2,
   Loader2,
-  User,
-  Trophy,
-  Calendar,
-  Heart,
   Sparkles,
   ChevronRight,
   ChevronDown,
@@ -22,13 +18,22 @@ import {
   MapPin,
   Send,
   Clock,
-  Star
+  Star,
+  User,
+  Trophy,
+  Calendar,
+  Heart
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { AnimatedBackground, GlowingButton } from '@/components/ui'
+import { useIntersectionTracker } from '@/hooks/useIntersectionTracker'
+import { createFormSections } from '@/constants/form-sections'
+import { isMinor, validateForm } from '@/lib/form-validation'
+import { logger } from '@/lib/error-logger'
+import type { FormData, FormErrors, FormField } from '@/types/form'
 
 // ============================================
 // FLOATING HEADER COMPONENT
@@ -208,23 +213,14 @@ function MobileProgressBar({ currentSection, totalSections }: {
 // ============================================
 // FORM SECTION COMPONENT
 // ============================================
-interface FormField {
-  name: string
-  label: string
-  type: 'text' | 'email' | 'tel' | 'date' | 'number' | 'textarea' | 'select' | 'checkbox' | 'checkbox-group'
-  required?: boolean
-  placeholder?: string
-  options?: { value: string; label: string }[]
-}
-
 interface FormSectionProps {
   title: string
   subtitle?: string
   icon: React.ReactNode
   fields: FormField[]
-  formData: Record<string, any>
-  errors: Record<string, string>
-  onChange: (name: string, value: any) => void
+  formData: Partial<FormData>
+  errors: FormErrors
+  onChange: (name: keyof FormData, value: unknown) => void
   index: number
   isActive: boolean
   showMinorNotice?: boolean
@@ -313,7 +309,7 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                   id={field.name}
                   name={field.name}
                   placeholder={field.placeholder}
-                  value={formData[field.name] || ''}
+                  value={(formData[field.name] as string) || ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
                   className={`bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FF7F00] focus:ring-[#FF7F00]/20 transition-all rounded-xl ${
                     errors[field.name] ? 'border-red-500' : ''
@@ -323,7 +319,7 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                 <select
                   id={field.name}
                   name={field.name}
-                  value={formData[field.name] || ''}
+                  value={(formData[field.name] as string) || ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
                   className={`flex h-12 w-full rounded-xl border ${
                     errors[field.name] ? 'border-red-500' : 'border-white/10'
@@ -348,7 +344,7 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                     id={field.name}
                     name={field.name}
                     label=""
-                    checked={formData[field.name] || false}
+                    checked={Boolean(formData[field.name])}
                     onChange={(e) => onChange(field.name, e.target.checked)}
                   />
                   <label htmlFor={field.name} className="text-white/70 text-sm cursor-pointer flex-1">
@@ -357,48 +353,52 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                 </div>
               ) : field.type === 'checkbox-group' ? (
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-                  {field.options?.map((option) => (
-                    <label
-                      key={option.value}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-300 ${
-                        formData[field.name]?.[option.value]
-                          ? 'bg-[#FF7F00]/10 border-[#FF7F00]/50 text-white'
-                          : 'bg-white/5 border-white/10 text-white/70 hover:border-white/20'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData[field.name]?.[option.value] || false}
-                        onChange={(e) => {
-                          const currentValues = formData[field.name] || {}
-                          onChange(field.name, {
-                            ...currentValues,
-                            [option.value]: e.target.checked,
-                          })
-                        }}
-                        className="sr-only"
-                      />
-                      <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                        formData[field.name]?.[option.value]
-                          ? 'bg-[#FF7F00] border-[#FF7F00]'
-                          : 'border-white/30'
-                      }`}>
-                        {formData[field.name]?.[option.value] && (
-                          <motion.svg
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-3 h-3 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </motion.svg>
-                        )}
-                      </div>
-                      <span className="text-sm">{option.label}</span>
-                    </label>
-                  ))}
+                  {field.options?.map((option) => {
+                    const currentValues = (formData[field.name] as string[]) || []
+                    const isChecked = currentValues.includes(option.value)
+
+                    return (
+                      <label
+                        key={option.value}
+                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-300 ${
+                          isChecked
+                            ? 'bg-[#FF7F00]/10 border-[#FF7F00]/50 text-white'
+                            : 'bg-white/5 border-white/10 text-white/70 hover:border-white/20'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={(e) => {
+                            const newValues = e.target.checked
+                              ? [...currentValues, option.value]
+                              : currentValues.filter(v => v !== option.value)
+                            onChange(field.name, newValues)
+                          }}
+                          className="sr-only"
+                        />
+                        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                          isChecked
+                            ? 'bg-[#FF7F00] border-[#FF7F00]'
+                            : 'border-white/30'
+                        }`}>
+                          {isChecked && (
+                            <motion.svg
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-3 h-3 text-white"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </motion.svg>
+                          )}
+                        </div>
+                        <span className="text-sm">{option.label}</span>
+                      </label>
+                    )
+                  })}
                 </div>
               ) : (
                 <Input
@@ -406,7 +406,7 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                   name={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
-                  value={formData[field.name] || ''}
+                  value={(formData[field.name] as string | number) || ''}
                   onChange={(e) => onChange(field.name, e.target.value)}
                   className={`bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-[#FF7F00] focus:ring-[#FF7F00]/20 transition-all rounded-xl h-12 ${
                     errors[field.name] ? 'border-red-500' : ''
@@ -587,174 +587,20 @@ function SuccessState() {
   )
 }
 
-// ============================================
-// HELPER: Check if user is minor (under 18)
-// ============================================
-function isMinor(formData: Record<string, any>): boolean {
-  // Calculate from birth date (single source of truth)
-  const birthDate = formData['data-nascimento']
-  if (birthDate) {
-    const today = new Date()
-    const birth = new Date(birthDate)
-    let age = today.getFullYear() - birth.getFullYear()
-    const monthDiff = today.getMonth() - birth.getMonth()
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--
-    }
-    return age < 18
-  }
-
-  return false
-}
-
-// ============================================
-// FORM SECTIONS FACTORY
-// ============================================
-function createFormSections(userIsMinor: boolean) {
-  return [
-    {
-      id: 'dados-pessoais',
-      title: 'Dados Pessoais',
-      subtitle: 'Informações básicas do atleta',
-      icon: <User className="w-6 h-6 text-white" />,
-      fields: [
-        { name: 'nome-completo', label: 'Nome Completo', type: 'text' as const, required: true, placeholder: 'Seu nome completo' },
-        { name: 'data-nascimento', label: 'Data de Nascimento', type: 'date' as const, required: true },
-        { name: 'idade', label: 'Idade', type: 'number' as const, required: true, placeholder: '18' },
-        { name: 'genero', label: 'Gênero', type: 'select' as const, required: true, options: [
-          { value: 'feminino', label: 'Feminino' },
-          { value: 'masculino', label: 'Masculino' },
-          { value: 'outro', label: 'Outro' },
-        ]},
-        { name: 'telefone', label: 'Telefone/WhatsApp', type: 'tel' as const, required: true, placeholder: '(11) 99999-9999' },
-        { name: 'email', label: 'E-mail', type: 'email' as const, required: true, placeholder: 'seu@email.com' },
-        { name: 'nome-responsavel', label: `Nome do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'text' as const, required: userIsMinor, placeholder: 'Nome completo do responsável' },
-        { name: 'contato-responsavel', label: `Telefone do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'tel' as const, required: userIsMinor, placeholder: '(11) 99999-9999' },
-        { name: 'email-responsavel', label: `E-mail do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'email' as const, required: userIsMinor, placeholder: 'responsavel@email.com' },
-      ],
-    },
-    {
-      id: 'experiencia',
-      title: 'Experiência Esportiva',
-      subtitle: 'Seu histórico e habilidades',
-      icon: <Trophy className="w-6 h-6 text-white" />,
-      fields: [
-        { name: 'pratica-cheerleading', label: 'Já praticou cheerleading?', type: 'select' as const, required: true, options: [
-          { value: 'sim', label: 'Sim' },
-          { value: 'nao', label: 'Não' },
-        ]},
-        { name: 'tempo-experiencia', label: 'Tempo de experiência em cheerleading', type: 'select' as const, required: true, options: [
-          { value: 'menos-6-meses', label: 'Menos de 6 meses' },
-          { value: '6-12-meses', label: '6 a 12 meses' },
-          { value: '1-2-anos', label: '1 a 2 anos' },
-          { value: '2-anos-mais', label: 'Mais de 2 anos' },
-        ]},
-        { name: 'equipe-anterior', label: 'Equipe anterior (se aplicável)', type: 'text' as const, placeholder: 'Nome da equipe' },
-        { name: 'experiencia-ginastica', label: 'Tem experiência em ginástica/tumbling/dança?', type: 'select' as const, options: [
-          { value: 'ginastica', label: 'Ginástica Artística' },
-          { value: 'tumbling', label: 'Tumbling' },
-          { value: 'danca', label: 'Dança' },
-          { value: 'nenhuma', label: 'Nenhuma' },
-        ]},
-        { name: 'posicao-interesse', label: 'Posição de interesse', type: 'checkbox-group' as const, options: [
-          { value: 'base', label: 'Base' },
-          { value: 'flyer', label: 'Flyer' },
-          { value: 'back', label: 'Back' },
-        ]},
-        { name: 'nivel-interesse', label: 'Nível de interesse', type: 'checkbox-group' as const, required: true, options: [
-          { value: 'n2', label: 'N2 (Nível 2)' },
-          { value: 'n3', label: 'N3 (Nível 3)' },
-        ]},
-        { name: 'nivel-habilidades', label: 'Nível atual de habilidades', type: 'select' as const, required: true, options: [
-          { value: 'basico', label: 'Básico' },
-          { value: 'intermediario', label: 'Intermediário' },
-          { value: 'avancado', label: 'Avançado' },
-        ]},
-      ],
-    },
-    {
-      id: 'disponibilidade',
-      title: 'Disponibilidade',
-      subtitle: 'Horários e logística',
-      icon: <Calendar className="w-6 h-6 text-white" />,
-      fields: [
-        { name: 'dias-disponiveis', label: 'Dias disponíveis para treinar', type: 'checkbox-group' as const, required: true, options: [
-          { value: 'segunda', label: 'Segunda' },
-          { value: 'terca', label: 'Terça' },
-          { value: 'quarta', label: 'Quarta' },
-          { value: 'quinta', label: 'Quinta' },
-          { value: 'sexta', label: 'Sexta' },
-          { value: 'sabado', label: 'Sábado' },
-          { value: 'domingo', label: 'Domingo' },
-        ]},
-        { name: 'periodo-preferencia', label: 'Período de preferência', type: 'select' as const, options: [
-          { value: 'manha', label: 'Manhã' },
-          { value: 'tarde', label: 'Tarde' },
-          { value: 'noite', label: 'Noite' },
-        ]},
-        { name: 'participa-campeonatos', label: 'Pode participar de campeonatos fora da cidade/estado?', type: 'select' as const, required: true, options: [
-          { value: 'sim', label: 'Sim' },
-          { value: 'nao', label: 'Não' },
-          { value: 'talvez', label: 'Talvez, dependendo da data' },
-        ]},
-        { name: 'outros-esportes', label: 'Pratica outros esportes? Quais?', type: 'text' as const, placeholder: 'Exemplo: Natação, Futebol...' },
-      ],
-    },
-    {
-      id: 'saude',
-      title: 'Saúde e Autorização',
-      subtitle: 'Informações importantes',
-      icon: <Heart className="w-6 h-6 text-white" />,
-      fields: [
-        { name: 'condicoes-medicas', label: 'Condições médicas relevantes (alergias, lesões, etc.)', type: 'textarea' as const, placeholder: 'Descreva qualquer condição que precisamos saber...' },
-        { name: 'medicacoes', label: 'Uso de medicações contínuas', type: 'textarea' as const, placeholder: 'Liste as medicações, se houver...' },
-        { name: 'autorizacao-responsavel', label: 'Confirmo que o responsável está ciente (para menores de 18 anos)', type: 'checkbox' as const, required: true },
-        { name: 'aceite-termos', label: 'Li e aceito o termo de responsabilidade', type: 'checkbox' as const, required: true },
-      ],
-    },
-  ]
-}
-
-// ============================================
-// MAIN PAGE COMPONENT
-// ============================================
 export default function FormularioPage() {
-  const [formData, setFormData] = useState<Record<string, any>>({})
-  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [formData, setFormData] = useState<Partial<FormData>>({})
+  const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [submissionError, setSubmissionError] = useState<string | null>(null)
-  const [currentSection, setCurrentSection] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   
-  // Check if user is minor to make guardian fields required
   const userIsMinor = isMinor(formData)
-
-  // Create form sections based on userIsMinor status
   const formSections = useMemo(() => createFormSections(userIsMinor), [userIsMinor])
 
-  // Update current section based on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = formSections.map((_, i) => document.getElementById(`section-${i}`))
-      const scrollPosition = window.scrollY + window.innerHeight / 2
-      
-      sections.forEach((section, index) => {
-        if (section) {
-          const top = section.offsetTop
-          const bottom = top + section.offsetHeight
-          if (scrollPosition >= top && scrollPosition < bottom) {
-            setCurrentSection(index)
-          }
-        }
-      })
-    }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [formSections])
+  const currentSection = useIntersectionTracker(formSections.length)
 
-  const handleChange = (name: string, value: any) => {
+  const handleChange = (name: keyof FormData, value: unknown) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
     if (errors[name]) {
       setErrors((prev) => {
@@ -765,46 +611,29 @@ export default function FormularioPage() {
     }
   }
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
-    const checkIsMinor = isMinor(formData)
-    
-    formSections.forEach((section) => {
-      section.fields.forEach((field) => {
-        // Check if field is required (considering dynamic requirements for minors)
-        let isRequired = field.required
-        
-        // Guardian fields are required for minors
-        if (['nome-responsavel', 'contato-responsavel', 'email-responsavel'].includes(field.name)) {
-          isRequired = checkIsMinor
-        }
-        
-        if (isRequired && !formData[field.name]) {
-          newErrors[field.name] = 'Este campo é obrigatório'
-        }
-        
-        // Validate email format for all email fields
-        if (field.type === 'email' && formData[field.name]) {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          if (!emailRegex.test(formData[field.name])) {
-            newErrors[field.name] = 'Email inválido'
-          }
-        }
-      })
-    })
-    return newErrors
-  }
+  const allFields = useMemo(
+    () => formSections.flatMap((section) => section.fields),
+    [formSections]
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const newErrors = validateForm()
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
-      // Scroll to first error
-      const firstErrorField = Object.keys(newErrors)[0]
+    const validationErrors = validateForm(formData, allFields)
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+
+      const firstErrorField = Object.keys(validationErrors)[0]
       const element = document.querySelector(`[name="${firstErrorField}"]`)
       element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      logger.warn('Form validation failed', {
+        component: 'FormularioPage',
+        action: 'handleSubmit',
+        metadata: { errorCount: Object.keys(validationErrors).length },
+      })
+
       return
     }
 
@@ -812,8 +641,14 @@ export default function FormularioPage() {
     setSubmissionError(null)
 
     try {
-      // Simulate submission - replace with actual API call
+      // TODO: Replace with actual API call
       await new Promise<void>((resolve) => setTimeout(resolve, 2000))
+
+      logger.info('Form submitted successfully', {
+        component: 'FormularioPage',
+        action: 'handleSubmit',
+      })
+
       setIsSuccess(true)
     } catch (error) {
       const errorMessage = error instanceof Error
@@ -821,9 +656,12 @@ export default function FormularioPage() {
         : 'Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.'
 
       setSubmissionError(errorMessage)
-      console.error('Error submitting form:', error)
 
-      // Scroll to top to show error message
+      logger.error('Form submission failed', error as Error, {
+        component: 'FormularioPage',
+        action: 'handleSubmit',
+      })
+
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       setIsSubmitting(false)
