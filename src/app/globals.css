@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Design System Tokens - Cores do Logo SkyHigh AllStar */
+    --color-primary: #FF7F00; /* Laranja vibrante (letras e borda do escudo) */
+    --color-primary-dark: #CC6600;
+    --color-primary-light: #FF9933;
+
+    --color-royal: #1E3A8A; /* Azul royal (uniformes e fundo do logo) */
+    --color-royal-light: #2563EB;
+    --color-royal-lighter: #3B82F6;
+    --color-royal-dark: #1E40AF;
+    --color-royal-darker: #1E293B;
+
+    --color-coral: #FF8C69; /* Coral (detalhes dos uniformes) */
+    --color-coral-light: #FFA07A;
+    --color-coral-dark: #FF6B6B;
+
+    --color-secondary-1: #0A1B4D; /* Azul escuro/navy (camada interna do escudo) */
+    --color-secondary-1-light: #0F2A6B;
+    --color-secondary-1-dark: #050E2E;
+
+    --color-secondary-2: #00BFFF; /* Azul elétrico/ciano (efeitos de raios) */
+    --color-secondary-2-dark: #0099CC;
+    --color-secondary-2-light: #33CCFF;
+
+    --color-dark: #0A0A2A; /* Azul muito escuro (fundo externo) */
+    --color-dark-light: #14143A;
+    --color-dark-lighter: #1E1E4A;
+
+    --color-bg: #FAFAFA;
+    --color-bg-alt: #FFFFFF;
+    --color-ink: #0A0A0A;
+    --color-ink-muted: #4A4A4A;
+    --color-muted: #E5E5E5;
+
+    --color-success: #10B981;
+    --color-error: #EF4444;
+    --color-warning: #F59E0B;
+
+    /* Typography */
+    --font-display: 'Bebas Neue', 'Oswald', 'Impact', sans-serif;
+    --font-body: 'Work Sans', 'Nunito Sans', 'Inter', sans-serif;
+
+    /* Spacing */
+    --space-unit: 0.5rem;
+    --section-spacing: calc(var(--space-unit) * 12);
+
+    /* Animation */
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-in-out-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --duration-fast: 150ms;
+    --duration-base: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 800ms;
+
+    --stagger-delay: 80ms;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-muted);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-ink font-body;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .container-padding {
+    @apply px-4 md:px-8 lg:px-16;
+  }
+}
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap');

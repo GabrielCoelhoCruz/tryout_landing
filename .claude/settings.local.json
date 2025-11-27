@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude /plugin marketplace add anthropics/claude-code)",
+      "Bash(claude /plugin install:*)",
+      "Bash(claude update:*)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm outdated:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
