@@ -10,7 +10,9 @@
       "Bash(npm run dev:*)",
       "Bash(npm outdated:*)",
       "Bash(npm run build:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git -C \"c:\\Users\\Loira\\Desktop\\tryout_landing\" diff HEAD \"src/app/landing-improvedOpus/page.tsx\")",
+      "Skill(frontend-design)"
     ],
     "deny": [],
     "ask": []

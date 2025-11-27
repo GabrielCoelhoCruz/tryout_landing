@@ -1,16 +1,16 @@
 'use client'
 
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { 
-  ChevronDown, 
-  Star, 
-  Trophy, 
-  Users, 
-  Calendar, 
+import {
+  ChevronDown,
+  Star,
+  Trophy,
+  Users,
+  Calendar,
   ArrowRight,
   Sparkles,
   Zap,
@@ -18,23 +18,53 @@ import {
   Heart,
   Play,
   Instagram,
-  Mail,
   Phone,
   MapPin,
   ChevronRight,
   Quote
 } from 'lucide-react'
 
+// Novos componentes de animação
+import { AnimatedH1, AnimatedText, MixedStormParticles } from '@/components/animations'
+import { MagneticButton, GlowingMagneticButton, ScrollProgress } from '@/components/ui'
+import { StormWeatherProvider, useStormWeather } from '@/context/StormWeatherContext'
+import type { StormType } from '@/context/StormWeatherContext'
+
 // ============================================
 // ANIMATED BACKGROUND COMPONENT
 // ============================================
+
+// Deterministic particle positions to avoid hydration mismatch
+const PARTICLE_POSITIONS = [
+  { left: 5, top: 12 },
+  { left: 15, top: 78 },
+  { left: 25, top: 34 },
+  { left: 35, top: 89 },
+  { left: 45, top: 23 },
+  { left: 55, top: 67 },
+  { left: 65, top: 45 },
+  { left: 75, top: 91 },
+  { left: 85, top: 8 },
+  { left: 95, top: 56 },
+  { left: 10, top: 42 },
+  { left: 20, top: 73 },
+  { left: 30, top: 19 },
+  { left: 40, top: 85 },
+  { left: 50, top: 31 },
+  { left: 60, top: 62 },
+  { left: 70, top: 15 },
+  { left: 80, top: 48 },
+  { left: 90, top: 77 },
+  { left: 3, top: 95 },
+]
+
 function AnimatedBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Gradient base */}
+      {/* Gradient base - Deep storm atmosphere */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A2A] via-[#1E3A8A] to-[#0A1B4D]" />
-      
-      {/* Animated gradient orbs */}
+
+      {/* Animated gradient orbs - Storm energy cores */}
       <motion.div
         className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-radial from-[#FF7F00]/20 via-transparent to-transparent rounded-full blur-3xl"
         animate={{
@@ -61,9 +91,9 @@ function AnimatedBackground() {
           ease: "easeInOut",
         }}
       />
-      
-      {/* Grid pattern overlay */}
-      <div 
+
+      {/* Grid pattern overlay - Electric field */}
+      <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `
@@ -73,24 +103,27 @@ function AnimatedBackground() {
           backgroundSize: '60px 60px',
         }}
       />
-      
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
+
+      {/* Storm Particles - Mixed weather system (preview de todos os storms) */}
+      <MixedStormParticles intensity={0.25} className="opacity-60" />
+
+      {/* Floating particles - using deterministic positions (mantido para camadas) */}
+      {PARTICLE_POSITIONS.map((pos, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-white/30 rounded-full"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${pos.left}%`,
+            top: `${pos.top}%`,
           }}
           animate={{
             y: [0, -30, 0],
             opacity: [0.3, 0.8, 0.3],
           }}
           transition={{
-            duration: 3 + Math.random() * 4,
+            duration: 3 + (i % 5) * 0.8,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: (i % 10) * 0.2,
             ease: "easeInOut",
           }}
         />
@@ -100,33 +133,33 @@ function AnimatedBackground() {
 }
 
 // ============================================
-// GLOWING BUTTON COMPONENT
+// GLOWING BUTTON COMPONENT (Enhanced with Magnetic Effect)
 // ============================================
-function GlowingButton({ 
-  children, 
-  onClick, 
+function GlowingButton({
+  children,
+  onClick,
   className = '',
-  variant = 'primary' 
-}: { 
+  variant = 'primary'
+}: {
   children: React.ReactNode
   onClick?: () => void
   className?: string
   variant?: 'primary' | 'secondary' | 'ghost'
 }) {
   const baseStyles = "relative group px-8 py-4 font-bold text-lg rounded-full transition-all duration-300 overflow-hidden"
-  
+
   const variants = {
     primary: "bg-gradient-to-r from-[#FF7F00] to-[#FF9933] text-white hover:shadow-[0_0_40px_rgba(255,127,0,0.5)]",
     secondary: "bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:border-white/40",
     ghost: "bg-transparent text-white hover:bg-white/10"
   }
-  
+
   return (
-    <motion.button
+    <MagneticButton
       onClick={onClick}
       className={`${baseStyles} ${variants[variant]} ${className}`}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      attractRadius={100}
+      strength={0.25}
     >
       <span className="relative z-10 flex items-center gap-2 justify-center">
         {children}
@@ -136,7 +169,7 @@ function GlowingButton({
           className="absolute inset-0 bg-gradient-to-r from-[#FF9933] to-[#FF7F00] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         />
       )}
-    </motion.button>
+    </MagneticButton>
   )
 }
 
@@ -231,21 +264,24 @@ function AnimatedCounter({ value, suffix = '' }: { value: string, suffix?: strin
 }
 
 // ============================================
-// MAIN PAGE COMPONENT
+// LANDING CONTENT COMPONENT (uses storm context)
 // ============================================
-export default function LandingImprovedOpus() {
+function LandingContent() {
   const router = useRouter()
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"]
   })
-  
+
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8, 1], [1, 1, 0])
-  
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5, 0.7], [1, 0.5, 0])
+
   const [activeTeam, setActiveTeam] = useState(0)
   const [activeFaq, setActiveFaq] = useState<number | null>(null)
+
+  // Storm weather context for dynamic background
+  const { setStorm, setIntensity } = useStormWeather()
   
   // Data
   const stats = [
@@ -281,8 +317,8 @@ export default function LandingImprovedOpus() {
       gradient: 'from-[#2563EB] to-[#3B82F6]',
     },
   ]
-  
-  const teams = [
+
+  const teams = useMemo(() => [
     {
       name: 'N2 Coed',
       level: 'Nível 2',
@@ -291,6 +327,7 @@ export default function LandingImprovedOpus() {
       requirements: ['Idade: 14-25 anos', 'Experiência mínima: 1 ano em cheerleading', 'Disponibilidade: 3x por semana', 'Habilidades: Stunts básicos, tumbling iniciante'],
       vacancies: 5,
       color: '#FF7F00',
+      storm: 'fire' as StormType,
     },
     {
       name: 'N3 Coed',
@@ -300,6 +337,7 @@ export default function LandingImprovedOpus() {
       requirements: ['Idade: 15-25 anos', 'Experiência mínima: 2 anos em cheerleading', 'Disponibilidade: 4x por semana', 'Habilidades: Stunts intermediários, tumbling avançado'],
       vacancies: 3,
       color: '#00BFFF',
+      storm: 'rain' as StormType,
     },
     {
       name: 'N2 All Girl',
@@ -309,6 +347,7 @@ export default function LandingImprovedOpus() {
       requirements: ['Idade: 14-25 anos (feminino)', 'Experiência mínima: 1 ano em cheerleading', 'Disponibilidade: 3x por semana', 'Habilidades: Stunts femininos, tumbling básico'],
       vacancies: 6,
       color: '#FF8C69',
+      storm: 'hail' as StormType,
     },
     {
       name: 'N3 All Girl',
@@ -318,9 +357,10 @@ export default function LandingImprovedOpus() {
       requirements: ['Idade: 15-25 anos (feminino)', 'Experiência mínima: 2 anos em cheerleading', 'Disponibilidade: 4x por semana', 'Habilidades: Stunts avançados, tumbling intermediário'],
       vacancies: 4,
       color: '#2563EB',
+      storm: 'thunder' as StormType,
     },
-  ]
-  
+  ], [])
+
   const testimonials = [
     {
       name: 'Maria Silva',
@@ -361,7 +401,7 @@ export default function LandingImprovedOpus() {
     },
     {
       question: 'Tem custo para participar do tryout?',
-      answer: 'Não, o tryout é totalmente gratuito. Após a aprovação, há mensalidade para manutenção dos treinos, uniformes e participação em campeonatos.',
+      answer: 'Sim, o investimento para participar do tryout é de R$ 50,00. Após a aprovação, há mensalidade para manutenção dos treinos, uniformes e participação em campeonatos.',
     },
     {
       question: 'Qual a frequência dos treinos?',
@@ -380,10 +420,22 @@ export default function LandingImprovedOpus() {
   const tryoutInfo = {
     date: '15 de Março, 2026',
     time: '9h às 17h',
-    location: 'Ginásio Principal',
-    address: 'Rua Exemplo, 123 - Centro',
+    location: 'Ginásio SkyHigh All Star - Centro Esportivo Tietê',
+    address: 'Av. Santos Dumont, 843 - Luz, São Paulo/SP',
+    metro: 'Próximo à estação Armênia (Linha 1 - Azul)',
+    parking: 'Estacionamento no local',
+    price: 'R$ 50,00',
   }
-  
+
+  // Effect: Update storm when active team changes
+  useEffect(() => {
+    const selectedTeam = teams[activeTeam]
+    if (selectedTeam?.storm) {
+      setStorm(selectedTeam.storm)
+      setIntensity(0.8) // Increase intensity for dramatic effect
+    }
+  }, [activeTeam, setStorm, setIntensity, teams])
+
   return (
     <main className="min-h-screen bg-[#FAFAFA] overflow-hidden">
       {/* ============================================ */}
@@ -451,13 +503,16 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* HERO - Immersive Full-Screen Experience */}
       {/* ============================================ */}
-      <section ref={heroRef} className="relative min-h-[105vh] flex items-center justify-center overflow-hidden">
+      <section id="hero" ref={heroRef} className="relative min-h-[105vh] flex items-center justify-center overflow-hidden">
         <AnimatedBackground />
-        
+
         {/* Main content */}
         <motion.div
-          className="relative z-10 text-center px-4 pt-28 pb-16"
-          style={{ y: heroY, opacity: heroOpacity }}
+          className="relative z-0 text-center px-4 pt-28 pb-16 pointer-events-auto"
+          style={{
+            y: heroY,
+            opacity: heroOpacity,
+          }}
         >
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -478,25 +533,23 @@ export default function LandingImprovedOpus() {
               Inscrições Abertas para 2026
             </motion.div>
             
-            {/* Main headline */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-display text-white leading-[0.9] tracking-tight mb-6">
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+            {/* Main headline com AnimatedText */}
+            <div className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-display leading-[0.9] tracking-tight mb-6">
+              <AnimatedH1
+                variant="letter-reveal"
+                className="block text-white"
+                delay={0.3}
               >
                 TRYOUT
-              </motion.span>
-              <motion.span
-                className="block bg-gradient-to-r from-[#FF7F00] via-[#FF9933] to-[#00BFFF] bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+              </AnimatedH1>
+              <AnimatedH1
+                variant="gradient-shift"
+                className="block"
+                gradientColors={['#FF7F00', '#FF9933', '#00BFFF']}
               >
                 2026
-              </motion.span>
-            </h1>
+              </AnimatedH1>
+            </div>
             
             {/* Subtitle */}
             <motion.p
@@ -586,7 +639,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* BENEFITS - Why Join Section */}
       {/* ============================================ */}
-      <section id="sobre" className="py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
+      <section id="sobre" className="relative z-10 py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Por que escolher a SkyHigh"
@@ -630,7 +683,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* TEAMS - Interactive Team Showcase */}
       {/* ============================================ */}
-      <section id="times" className="py-24 md:py-32 bg-[#0A0A2A] scroll-mt-20 relative overflow-hidden">
+      <section id="times" className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] scroll-mt-20 overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent" />
@@ -741,7 +794,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* JOURNEY - Visual Timeline */}
       {/* ============================================ */}
-      <section id="jornada" className="py-24 md:py-32 bg-gradient-to-b from-[#FAFAFA] to-white scroll-mt-20">
+      <section id="jornada" className="relative z-10 py-24 md:py-32 bg-gradient-to-b from-[#FAFAFA] to-white scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Sua Jornada"
@@ -823,7 +876,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* TESTIMONIALS - Social Proof */}
       {/* ============================================ */}
-      <section className="py-24 md:py-32 bg-[#0A0A2A] relative overflow-hidden">
+      <section className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent" />
         </div>
@@ -883,7 +936,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* TRYOUT INFO - Key Details */}
       {/* ============================================ */}
-      <section className="py-24 md:py-32 bg-[#FAFAFA]">
+      <section className="relative z-10 py-24 md:py-32 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Info cards */}
@@ -907,6 +960,8 @@ export default function LandingImprovedOpus() {
                   { icon: Zap, label: 'Horário', value: tryoutInfo.time },
                   { icon: MapPin, label: 'Local', value: tryoutInfo.location },
                   { icon: Target, label: 'Endereço', value: tryoutInfo.address },
+                  { icon: Users, label: 'Metrô', value: tryoutInfo.metro },
+                  { icon: Star, label: 'Investimento', value: tryoutInfo.price },
                 ].map((item, index) => (
                   <motion.div
                     key={item.label}
@@ -930,7 +985,7 @@ export default function LandingImprovedOpus() {
               <div className="bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 rounded-2xl p-6 border border-[#FF7F00]/20">
                 <h4 className="font-display text-lg text-[#0A0A2A] mb-3">O que levar</h4>
                 <ul className="space-y-2 text-[#4A4A4A]">
-                  {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve'].map((item) => (
+                  {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve', 'Comprovante de pagamento (R$ 50)'].map((item) => (
                     <li key={item} className="flex items-center gap-2">
                       <ChevronRight className="w-4 h-4 text-[#FF7F00]" />
                       {item}
@@ -953,8 +1008,9 @@ export default function LandingImprovedOpus() {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#FF7F00]/20 to-[#00BFFF]/20 rounded-full blur-3xl" />
                 <div className="relative bg-gradient-to-br from-[#0A0A2A] to-[#1E3A8A] rounded-3xl p-8 h-full flex flex-col items-center justify-center text-center">
                   <div className="text-8xl mb-4">🏆</div>
-                  <h3 className="text-3xl font-display text-white mb-2">TRYOUT GRATUITO</h3>
-                  <p className="text-white/70 mb-6">Sem taxas de inscrição. Venha mostrar seu talento!</p>
+                  <h3 className="text-3xl font-display text-white mb-2">TRYOUT 2026</h3>
+                  <p className="text-white/70 mb-2">Investimento: <span className="text-[#FF7F00] font-bold">R$ 50,00</span></p>
+                  <p className="text-white/50 text-sm mb-6">Estacionamento no local</p>
                   <div className="flex items-center gap-2 text-[#FF7F00]">
                     <Sparkles className="w-5 h-5" />
                     <span className="font-semibold">Vagas limitadas</span>
@@ -969,7 +1025,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* FAQ - Accordion Section */}
       {/* ============================================ */}
-      <section id="faq" className="py-24 md:py-32 bg-white scroll-mt-20">
+      <section id="faq" className="relative z-10 py-24 md:py-32 bg-white scroll-mt-20">
         <div className="max-w-3xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Dúvidas"
@@ -1035,7 +1091,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* FINAL CTA - Conversion Section */}
       {/* ============================================ */}
-      <section className="py-24 md:py-32 bg-gradient-to-br from-[#FF7F00] via-[#FF9933] to-[#00BFFF] relative overflow-hidden">
+      <section id="cta" className="relative z-10 py-24 md:py-32 bg-gradient-to-br from-[#FF7F00] via-[#FF9933] to-[#00BFFF] overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div 
@@ -1078,7 +1134,7 @@ export default function LandingImprovedOpus() {
       {/* ============================================ */}
       {/* FOOTER */}
       {/* ============================================ */}
-      <footer className="bg-[#0A0A2A] text-white py-16">
+      <footer className="relative z-10 bg-[#0A0A2A] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Brand */}
@@ -1107,17 +1163,13 @@ export default function LandingImprovedOpus() {
             <div>
               <h4 className="font-display text-lg mb-4">Contato</h4>
               <div className="space-y-3">
-                <a href="mailto:tryout@skyhigh.com" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
-                  <Mail className="w-4 h-4" />
-                  tryout@skyhigh.com
-                </a>
-                <a href="tel:+5511999999999" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                <a href="https://wa.me/5511913311920" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
                   <Phone className="w-4 h-4" />
-                  (11) 99999-9999
+                  (11) 91331-1920
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                <a href="https://instagram.com/skyhigh.allstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
                   <Instagram className="w-4 h-4" />
-                  @skyhighallstar
+                  @skyhigh.allstar
                 </a>
               </div>
             </div>
@@ -1128,11 +1180,15 @@ export default function LandingImprovedOpus() {
               <div className="flex items-start gap-2 text-white/60">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
                 <address className="not-italic">
-                  Rua Exemplo, 123<br />
-                  Bairro - Cidade, Estado<br />
-                  CEP 00000-000
+                  Ginásio SkyHigh All Star<br />
+                  Centro Esportivo Tietê<br />
+                  Av. Santos Dumont, 843 - Luz<br />
+                  São Paulo - SP
                 </address>
               </div>
+              <p className="text-white/40 text-sm mt-2 ml-6">
+                🚇 Metrô Armênia (Linha 1 - Azul)
+              </p>
             </div>
           </div>
           
@@ -1148,7 +1204,32 @@ export default function LandingImprovedOpus() {
           </div>
         </div>
       </footer>
+
+      {/* Storm-Themed Scroll Progress Indicator */}
+      <ScrollProgress
+        sections={[
+          { id: 'hero', label: 'Início', color: '#FF7F00' },
+          { id: 'sobre', label: 'Sobre', color: '#00BFFF' },
+          { id: 'times', label: 'Times', color: '#9D00FF' },
+          { id: 'jornada', label: 'Jornada', color: '#FF8C69' },
+          { id: 'faq', label: 'FAQ', color: '#1E90FF' },
+          { id: 'cta', label: 'Inscreva-se', color: '#FFD700' },
+        ]}
+        showTopBar={true}
+        showSideDots={true}
+      />
     </main>
+  )
+}
+
+// ============================================
+// MAIN PAGE COMPONENT (wraps with provider)
+// ============================================
+export default function LandingImprovedOpus() {
+  return (
+    <StormWeatherProvider defaultStorm="mixed" defaultIntensity={0.6}>
+      <LandingContent />
+    </StormWeatherProvider>
   )
 }
 
