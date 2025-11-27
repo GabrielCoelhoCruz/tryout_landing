@@ -3,9 +3,9 @@ import { StormType } from '@/context/StormWeatherContext'
 // Re-export StormType for convenience
 export type { StormType }
 
-export type ParticleShape = 'circle' | 'hexagon' | 'irregular' | 'line' | 'spark'
+export type ParticleShape = 'circle' | 'hexagon' | 'irregular' | 'line' | 'spark' | 'bolt'
 export type MovementDirection = 'up' | 'down' | 'down-drift' | 'down-steep' | 'erratic'
-export type MouseBehavior = 'repel' | 'attract-slow' | 'avoid' | 'split' | 'attract-magnetic'
+export type MouseBehavior = 'repel' | 'attract-slow' | 'avoid' | 'split' | 'attract-magnetic' | 'none'
 
 interface ParticleConfig {
   count: {
@@ -115,68 +115,22 @@ type StormConfigs = {
 }
 
 /**
- * Configurações completas para cada tipo de storm
- * Define partículas, comportamentos e efeitos visuais
+ * Configurações MINIMALISTAS para cada tipo de storm
+ * Poucas partículas, sem interação, apenas atmosfera sutil
  */
 export const stormConfigs: StormConfigs = {
-  // HailStorm - Gelo: Rápido, cristalino, impactante
+  // HailStorm - Poucos cristais caindo suavemente
   hail: {
     particles: {
-      count: { desktop: 20, mobile: 10 },
+      count: { desktop: 5, mobile: 3 },
       shape: 'circle',
-      colors: ['#E0F4FF', '#B8E0F6', '#FFFFFF'],
-      size: { min: 3, max: 8 },
-      speed: { min: 2, max: 5 },
+      colors: ['#E0F4FF', '#FFFFFF'],
+      size: { min: 3, max: 6 },
+      speed: { min: 0.8, max: 1.5 },
       direction: 'down',
-      bounce: true,
     },
     effects: {
-      mouseBehavior: 'repel',
-      repelRadius: 120,
-      trail: {
-        enabled: true,
-        length: 15,
-        fade: true,
-      },
-      crystallize: {
-        duration: 300,
-        onStop: true,
-      },
-      glow: {
-        intensity: 'low',
-        radius: 10,
-        pulse: false,
-      },
-    },
-    theme: {
-      name: 'HailStorm',
-      description: 'Gelo caindo com impacto e cristalização',
-      mood: 'Preciso, impactante, cristalino',
-    },
-  },
-
-  // SnowStorm - Neve: Suave, elegante, hipnótico
-  snow: {
-    particles: {
-      count: { desktop: 25, mobile: 12 },
-      shape: 'hexagon',
-      colors: ['#FFFFFF', '#F0F8FF'],
-      size: { min: 4, max: 10 },
-      speed: { min: 0.3, max: 1.2 },
-      direction: 'down-drift',
-      drift: {
-        amplitude: 30,
-        frequency: 0.5,
-      },
-      blur: 1,
-    },
-    effects: {
-      mouseBehavior: 'attract-slow',
-      attractRadius: 150,
-      accumulation: {
-        enabled: true,
-        bottom: true,
-      },
+      mouseBehavior: 'none',
       glow: {
         intensity: 'low',
         radius: 8,
@@ -184,122 +138,117 @@ export const stormConfigs: StormConfigs = {
       },
     },
     theme: {
-      name: 'SnowStorm',
-      description: 'Neve flutuante suave com drift lateral',
-      mood: 'Elegante, profissional, calmante',
+      name: 'HailStorm',
+      description: 'Cristais sutis',
+      mood: 'Preciso, elegante',
     },
   },
 
-  // FireStorm - Fogo: Intenso, energético, ascendente
-  fire: {
+  // SnowStorm - Poucos flocos flutuando
+  snow: {
     particles: {
-      count: { desktop: 18, mobile: 9 },
-      shape: 'irregular',
-      colors: ['#FF7F00', '#FF4500', '#FFD700'],
-      size: { min: 5, max: 12 },
-      speed: { min: 1.5, max: 4 },
-      direction: 'up',
-      turbulence: {
-        enabled: true,
-        intensity: 0.7,
+      count: { desktop: 6, mobile: 4 },
+      shape: 'hexagon',
+      colors: ['#FFFFFF', '#F0F8FF'],
+      size: { min: 4, max: 8 },
+      speed: { min: 0.3, max: 0.6 },
+      direction: 'down-drift',
+      drift: {
+        amplitude: 15,
+        frequency: 0.3,
       },
     },
     effects: {
-      mouseBehavior: 'avoid',
-      avoidRadius: 100,
+      mouseBehavior: 'none',
       glow: {
-        intensity: 'high',
-        radius: 20,
-        pulse: true,
+        intensity: 'low',
+        radius: 6,
+        pulse: false,
+      },
+    },
+    theme: {
+      name: 'SnowStorm',
+      description: 'Flocos sutis',
+      mood: 'Elegante, sereno',
+    },
+  },
+
+  // FireStorm - Poucas faíscas subindo
+  fire: {
+    particles: {
+      count: { desktop: 5, mobile: 3 },
+      shape: 'circle',
+      colors: ['#FF7F00', '#FFD700'],
+      size: { min: 3, max: 6 },
+      speed: { min: 0.6, max: 1.2 },
+      direction: 'up',
+    },
+    effects: {
+      mouseBehavior: 'none',
+      glow: {
+        intensity: 'medium',
+        radius: 10,
+        pulse: false,
       },
       fadeOut: {
         enabled: true,
         top: true,
       },
-      heatDistortion: {
-        enabled: true,
-        intensity: 0.3,
-      },
     },
     theme: {
       name: 'FireStorm',
-      description: 'Fogo subindo com turbulência e calor',
-      mood: 'Paixão, energia, vitória',
+      description: 'Faíscas sutis',
+      mood: 'Energia, paixão',
     },
   },
 
-  // RainStorm - Chuva: Rápido, fluido, refrescante
+  // RainStorm - Poucas gotas caindo
   rain: {
     particles: {
-      count: { desktop: 30, mobile: 15 },
+      count: { desktop: 6, mobile: 4 },
       shape: 'line',
-      colors: ['#00BFFF', '#1E90FF', '#4682B4'],
+      colors: ['#00BFFF', '#1E90FF'],
       size: { width: 1, length: { min: 15, max: 25 }, min: 1, max: 2 },
-      speed: { min: 8, max: 15 },
+      speed: { min: 2, max: 3.5 },
       direction: 'down-steep',
-      angle: -15,
+      angle: -10,
     },
     effects: {
-      mouseBehavior: 'split',
-      splitRadius: 80,
-      ripple: {
-        enabled: true,
-        onGround: true,
-        duration: 600,
-      },
-      splash: {
-        enabled: true,
-        particles: 5,
-      },
+      mouseBehavior: 'none',
     },
     theme: {
       name: 'RainStorm',
-      description: 'Chuva rápida com ripples e splashes',
-      mood: 'Crescimento, renovação, fluidez',
+      description: 'Gotas sutis',
+      mood: 'Fluidez, renovação',
     },
   },
 
-  // ThunderStorm - Trovão: Errático, elétrico, poderoso
+  // ThunderStorm - Apenas poucos raios sutis
   thunder: {
     particles: {
-      count: { desktop: 15, mobile: 8 },
-      shape: 'spark',
-      colors: ['#9D00FF', '#FFD700', '#FFFFFF'],
-      size: { min: 2, max: 6 },
-      speed: { min: 3, max: 8 },
-      direction: 'erratic',
-      zigzag: {
-        enabled: true,
-        amplitude: 50,
-      },
+      count: { desktop: 4, mobile: 2 },
+      shape: 'bolt',
+      colors: ['#9D00FF', '#E0B0FF', '#FFFFFF'],
+      size: { min: 25, max: 45 },
+      speed: { min: 0.3, max: 0.8 },
+      direction: 'down',
     },
     effects: {
-      mouseBehavior: 'attract-magnetic',
-      attractRadius: 200,
+      mouseBehavior: 'none',
       glow: {
-        intensity: 'very-high',
-        radius: 25,
-        pulse: true,
-      },
-      lightning: {
-        enabled: true,
-        frequency: 0.02,
-        duration: 100,
-        flash: true,
-      },
-      electricArcs: {
-        enabled: true,
-        between: 'particles',
+        intensity: 'medium',
+        radius: 12,
+        pulse: false,
       },
     },
     theme: {
       name: 'ThunderStorm',
-      description: 'Sparks elétricos com relâmpagos e arcos',
-      mood: 'Energia máxima, poder, urgência',
+      description: 'Raios sutis',
+      mood: 'Energia, poder',
     },
   },
 
-  // Mixed - Combinação de todos os storms (preview mode)
+  // Mixed - Combinação (não usado mais)
   mixed: {
     description: 'Combinação de todos os storms em preview',
     components: ['hail', 'snow', 'fire', 'rain', 'thunder'],

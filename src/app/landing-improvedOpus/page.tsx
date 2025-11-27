@@ -25,7 +25,7 @@ import {
 } from 'lucide-react'
 
 // Novos componentes de animação
-import { AnimatedH1, AnimatedText, MixedStormParticles } from '@/components/animations'
+import { AnimatedH1, AnimatedText, StormShowcase } from '@/components/animations'
 import { MagneticButton, GlowingMagneticButton, ScrollProgress } from '@/components/ui'
 import { StormWeatherProvider, useStormWeather } from '@/context/StormWeatherContext'
 import type { StormType } from '@/context/StormWeatherContext'
@@ -61,29 +61,16 @@ const PARTICLE_POSITIONS = [
 function AnimatedBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Gradient base - Deep storm atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A2A] via-[#1E3A8A] to-[#0A1B4D]" />
+      {/* Gradient base - Deep storm atmosphere - Athletic/Premium feel */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A2A] via-[#0F1A3D] to-[#0A1B4D]" />
 
-      {/* Animated gradient orbs - Storm energy cores */}
+      {/* Subtle animated gradient orbs - Premium ambient glow */}
       <motion.div
-        className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-radial from-[#FF7F00]/20 via-transparent to-transparent rounded-full blur-3xl"
+        className="absolute -top-1/4 -left-1/4 w-3/4 h-3/4 bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent rounded-full blur-[100px]"
         animate={{
-          x: [0, 100, 0],
-          y: [0, 50, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-radial from-[#00BFFF]/15 via-transparent to-transparent rounded-full blur-3xl"
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -60, 0],
-          scale: [1.2, 1, 1.2],
+          x: [0, 60, 0],
+          y: [0, 30, 0],
+          scale: [1, 1.1, 1],
         }}
         transition={{
           duration: 25,
@@ -91,43 +78,78 @@ function AnimatedBackground() {
           ease: "easeInOut",
         }}
       />
+      <motion.div
+        className="absolute -bottom-1/4 -right-1/4 w-3/4 h-3/4 bg-gradient-radial from-[#00BFFF]/08 via-transparent to-transparent rounded-full blur-[100px]"
+        animate={{
+          x: [0, -40, 0],
+          y: [0, -30, 0],
+          scale: [1.1, 1, 1.1],
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-gradient-radial from-[#9D00FF]/05 via-transparent to-transparent rounded-full blur-[80px]"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
-      {/* Grid pattern overlay - Electric field */}
+      {/* Subtle grid pattern - Editorial/Premium texture */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px',
+          backgroundSize: '80px 80px',
         }}
       />
 
-      {/* Storm Particles - Mixed weather system (preview de todos os storms) */}
-      <MixedStormParticles intensity={0.25} className="opacity-60" />
-
-      {/* Floating particles - using deterministic positions (mantido para camadas) */}
-      {PARTICLE_POSITIONS.map((pos, i) => (
+      {/* Clean floating particles - minimal, purposeful */}
+      {PARTICLE_POSITIONS.slice(0, 12).map((pos, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-white/30 rounded-full"
+          className="absolute rounded-full"
           style={{
             left: `${pos.left}%`,
             top: `${pos.top}%`,
+            width: i % 3 === 0 ? '3px' : '2px',
+            height: i % 3 === 0 ? '3px' : '2px',
+            background: i % 2 === 0 
+              ? 'rgba(255, 127, 0, 0.4)' 
+              : 'rgba(0, 191, 255, 0.3)',
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.8, 0.3],
+            y: [0, -20, 0],
+            opacity: [0.2, 0.5, 0.2],
           }}
           transition={{
-            duration: 3 + (i % 5) * 0.8,
+            duration: 4 + (i % 4) * 1,
             repeat: Infinity,
-            delay: (i % 10) * 0.2,
+            delay: (i % 8) * 0.3,
             ease: "easeInOut",
           }}
         />
       ))}
+
+      {/* Subtle noise texture overlay for premium feel */}
+      <div 
+        className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
     </div>
   )
 }
@@ -260,6 +282,241 @@ function AnimatedCounter({ value, suffix = '' }: { value: string, suffix?: strin
     <span>
       {count}{hasPlus ? '+' : ''}{suffix}
     </span>
+  )
+}
+
+// ============================================
+// MOBILE HEADER COMPONENT with Hamburger Menu
+// ============================================
+
+const NAV_ITEMS = [
+  { label: 'Sobre', id: 'sobre' },
+  { label: 'Times', id: 'times' },
+  { label: 'Jornada', id: 'jornada' },
+  { label: 'Depoimentos', id: 'depoimentos' },
+  { label: 'Tryout Info', id: 'tryout-info' },
+  { label: 'FAQ', id: 'faq' },
+]
+
+function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+  
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
+  
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId)
+    section?.scrollIntoView({ behavior: 'smooth' })
+    setMobileMenuOpen(false)
+  }
+  
+  return (
+    <>
+      <motion.header
+        className="fixed top-0 left-0 right-0 z-50"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+      >
+        <div className="mx-2 sm:mx-4 mt-2 sm:mt-4">
+          <div className={`max-w-7xl mx-auto backdrop-blur-xl rounded-2xl border border-white/10 px-4 sm:px-6 py-3 transition-all duration-300 ${
+            isScrolled ? 'bg-[#0A0A2A]/95' : 'bg-[#0A0A2A]/80'
+          }`}>
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+                <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50 group-hover:ring-[#FF7F00] transition-all">
+                  <Image
+                    src="/logo/logo-shield.jpg"
+                    alt="SkyHigh AllStar"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="hidden xs:block sm:block">
+                  <h1 className="text-lg sm:text-xl font-display text-[#FF7F00] leading-none tracking-wider">
+                    SKYHIGH
+                  </h1>
+                  <p className="text-[10px] sm:text-xs font-display text-[#00BFFF] leading-none tracking-widest">
+                    ALLSTAR
+                  </p>
+                </div>
+              </Link>
+              
+              {/* Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1">
+                {NAV_ITEMS.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className="px-3 xl:px-4 py-2 text-white/70 hover:text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+              
+              {/* Right Side - CTA + Mobile Menu Button */}
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* CTA Button - Always visible but smaller on mobile */}
+                <GlowingButton
+                  variant="primary"
+                  className="!px-3 sm:!px-6 !py-2 sm:!py-2.5 !text-xs sm:!text-sm"
+                  onClick={() => router.push('/formulario')}
+                >
+                  <span className="hidden sm:inline">Inscreva-se</span>
+                  <span className="sm:hidden">Inscrição</span>
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                </GlowingButton>
+                
+                {/* Hamburger Menu Button - Only on Mobile/Tablet */}
+                <motion.button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+                >
+                  <div className="relative w-5 h-4 flex flex-col justify-between">
+                    <motion.span
+                      className="absolute w-5 h-0.5 bg-white rounded-full"
+                      animate={mobileMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <motion.span
+                      className="absolute w-5 h-0.5 bg-white rounded-full top-1/2 -translate-y-1/2"
+                      animate={mobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <motion.span
+                      className="absolute w-5 h-0.5 bg-white rounded-full bottom-0"
+                      animate={mobileMenuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </div>
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.header>
+      
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            
+            {/* Menu Panel */}
+            <motion.div
+              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm bg-gradient-to-b from-[#0A0A2A] to-[#0F1A3D] lg:hidden shadow-2xl"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            >
+              {/* Menu Header */}
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50">
+                    <Image
+                      src="/logo/logo-shield.jpg"
+                      alt="SkyHigh AllStar"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-display text-[#FF7F00] leading-none">SKYHIGH</h2>
+                    <p className="text-[10px] font-display text-[#00BFFF] tracking-widest">ALLSTAR</p>
+                  </div>
+                </div>
+                <motion.button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                  whileTap={{ scale: 0.95 }}
+                  aria-label="Fechar menu"
+                >
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              </div>
+              
+              {/* Navigation Links */}
+              <nav className="px-4 py-6">
+                <ul className="space-y-2">
+                  {NAV_ITEMS.map((item, index) => (
+                    <motion.li
+                      key={item.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <button
+                        onClick={() => scrollToSection(item.id)}
+                        className="w-full flex items-center gap-4 px-4 py-4 rounded-xl text-white/80 hover:text-white hover:bg-white/5 transition-all group"
+                      >
+                        <span className="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#FF7F00]/20 to-[#00BFFF]/20 text-[#FF7F00] group-hover:from-[#FF7F00]/30 group-hover:to-[#00BFFF]/30 transition-colors">
+                          <span className="text-sm font-bold">{String(index + 1).padStart(2, '0')}</span>
+                        </span>
+                        <span className="text-lg font-medium">{item.label}</span>
+                        <ChevronRight className="w-5 h-5 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      </button>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+              
+              {/* CTA Section */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10 bg-[#0A0A2A]/80 backdrop-blur-sm">
+                <motion.button
+                  onClick={() => {
+                    router.push('/formulario')
+                    setMobileMenuOpen(false)
+                  }}
+                  className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-[#FF7F00] to-[#FF9933] text-white font-bold text-lg rounded-xl hover:shadow-[0_0_30px_rgba(255,127,0,0.4)] transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Inscreva-se no Tryout
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+                <p className="text-center text-white/40 text-sm mt-3">
+                  Vagas limitadas para 2026
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
@@ -439,66 +696,9 @@ function LandingContent() {
   return (
     <main className="min-h-screen bg-[#FAFAFA] overflow-hidden">
       {/* ============================================ */}
-      {/* HEADER - Floating Glass Navigation */}
+      {/* HEADER - Floating Glass Navigation with Mobile Menu */}
       {/* ============================================ */}
-      <motion.header
-        className="fixed top-0 left-0 right-0 z-50"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-      >
-        <div className="mx-4 mt-4">
-          <div className="max-w-7xl mx-auto bg-[#0A0A2A]/80 backdrop-blur-xl rounded-2xl border border-white/10 px-6 py-3">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50 group-hover:ring-[#FF7F00] transition-all">
-                  <Image
-                    src="/logo/logo-shield.jpg"
-                    alt="SkyHigh AllStar"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="hidden sm:block">
-                  <h1 className="text-xl font-display text-[#FF7F00] leading-none tracking-wider">
-                    SKYHIGH
-                  </h1>
-                  <p className="text-xs font-display text-[#00BFFF] leading-none tracking-widest">
-                    ALLSTAR
-                  </p>
-                </div>
-              </Link>
-              
-              {/* Navigation */}
-              <nav className="hidden md:flex items-center gap-1">
-                {['Sobre', 'Times', 'Jornada', 'FAQ'].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      const section = document.getElementById(item.toLowerCase())
-                      section?.scrollIntoView({ behavior: 'smooth' })
-                    }}
-                    className="px-4 py-2 text-white/70 hover:text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
-                  >
-                    {item}
-                  </button>
-                ))}
-              </nav>
-              
-              {/* CTA */}
-              <GlowingButton
-                variant="primary"
-                className="!px-6 !py-2.5 !text-sm"
-                onClick={() => router.push('/formulario')}
-              >
-                Inscreva-se
-                <ArrowRight className="w-4 h-4" />
-              </GlowingButton>
-            </div>
-          </div>
-        </div>
-      </motion.header>
+      <MobileHeader router={router} />
       
       {/* ============================================ */}
       {/* HERO - Immersive Full-Screen Experience */}
@@ -679,6 +879,11 @@ function LandingContent() {
           </div>
         </div>
       </section>
+      
+      {/* ============================================ */}
+      {/* STORM SHOWCASE - Storm Identity System */}
+      {/* ============================================ */}
+      <StormShowcase />
       
       {/* ============================================ */}
       {/* TEAMS - Interactive Team Showcase */}
@@ -876,7 +1081,7 @@ function LandingContent() {
       {/* ============================================ */}
       {/* TESTIMONIALS - Social Proof */}
       {/* ============================================ */}
-      <section className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] overflow-hidden">
+      <section id="depoimentos" className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] overflow-hidden scroll-mt-20">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent" />
         </div>
@@ -936,7 +1141,7 @@ function LandingContent() {
       {/* ============================================ */}
       {/* TRYOUT INFO - Key Details */}
       {/* ============================================ */}
-      <section className="relative z-10 py-24 md:py-32 bg-[#FAFAFA]">
+      <section id="tryout-info" className="relative z-10 py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Info cards */}
@@ -1212,6 +1417,8 @@ function LandingContent() {
           { id: 'sobre', label: 'Sobre', color: '#00BFFF' },
           { id: 'times', label: 'Times', color: '#9D00FF' },
           { id: 'jornada', label: 'Jornada', color: '#FF8C69' },
+          { id: 'depoimentos', label: 'Depoimentos', color: '#FF7F00' },
+          { id: 'tryout-info', label: 'Tryout', color: '#00BFFF' },
           { id: 'faq', label: 'FAQ', color: '#1E90FF' },
           { id: 'cta', label: 'Inscreva-se', color: '#FFD700' },
         ]}

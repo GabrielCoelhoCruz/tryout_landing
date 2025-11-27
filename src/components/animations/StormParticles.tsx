@@ -1,15 +1,14 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import { useMousePosition, useReducedMotion, useMediaQuery, breakpoints } from '@/hooks'
+import { useReducedMotion, useMediaQuery, breakpoints } from '@/hooks'
 import {
-  stormConfigs,
   getStormConfig,
   getParticleCount,
   StormType,
   ParticleShape,
 } from '@/lib/animations/storm-configs'
-import { randomInRange, distance, clamp } from '@/lib/animations/utils'
+import { randomInRange, clamp } from '@/lib/animations/utils'
 
 interface Particle {
   id: number
@@ -31,8 +30,8 @@ interface StormParticlesProps {
 }
 
 /**
- * Sistema de partículas por storm
- * Renderiza e anima partículas baseado no tipo de storm
+ * Sistema de partículas por storm - SIMPLIFICADO
+ * Renderiza partículas sutis sem interação com mouse
  */
 export function StormParticles({
   storm,
@@ -42,7 +41,6 @@ export function StormParticles({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const animationFrameRef = useRef<number | undefined>(undefined)
-  const { x: mouseX, y: mouseY } = useMousePosition()
   const prefersReduced = useReducedMotion()
   const isMobile = useMediaQuery(breakpoints.mobile)
 
@@ -100,7 +98,7 @@ export function StormParticles({
           vy = -speed
           break
         case 'down-drift':
-          vx = randomInRange(-1, 1)
+          vx = randomInRange(-0.5, 0.5)
           vy = speed * 0.5
           break
         case 'down-steep':
@@ -108,8 +106,8 @@ export function StormParticles({
           vy = speed
           break
         case 'erratic':
-          vx = randomInRange(-speed, speed)
-          vy = randomInRange(-speed, speed)
+          vx = randomInRange(-speed * 0.3, speed * 0.3)
+          vy = speed
           break
       }
 
@@ -127,73 +125,20 @@ export function StormParticles({
       }
     }
 
-    // Update particle position and physics
+    // Update particle position - SEM INTERAÇÃO COM MOUSE
     const updateParticle = (particle: Particle, width: number, height: number) => {
-      const dist = distance(mouseX, mouseY, particle.x, particle.y)
-
-      switch (effectsConfig.mouseBehavior) {
-        case 'repel':
-          if (dist < (effectsConfig.repelRadius || 120)) {
-            const angle = Math.atan2(particle.y - mouseY, particle.x - mouseX)
-            const force = (1 - dist / (effectsConfig.repelRadius || 120)) * 2
-            particle.vx += Math.cos(angle) * force
-            particle.vy += Math.sin(angle) * force
-          }
-          break
-        case 'attract-slow':
-        case 'attract-magnetic':
-          if (dist < (effectsConfig.attractRadius || 150)) {
-            const angle = Math.atan2(mouseY - particle.y, mouseX - particle.x)
-            const force = (1 - dist / (effectsConfig.attractRadius || 150)) * 0.5
-            particle.vx += Math.cos(angle) * force
-            particle.vy += Math.sin(angle) * force
-          }
-          break
-        case 'avoid':
-          if (dist < (effectsConfig.avoidRadius || 100)) {
-            const angle = Math.atan2(particle.y - mouseY, particle.x - mouseX)
-            const force = (1 - dist / (effectsConfig.avoidRadius || 100)) * 3
-            particle.vx += Math.cos(angle) * force
-            particle.vy += Math.sin(angle) * force
-          }
-          break
-        case 'split':
-          if (dist < (effectsConfig.splitRadius || 80)) {
-            const angle = Math.atan2(particle.y - mouseY, particle.x - mouseX) + Math.PI / 2
-            particle.vx += Math.cos(angle) * 0.5
-          }
-          break
-      }
-
-      if (particleConfig.turbulence?.enabled) {
-        particle.vx += (Math.random() - 0.5) * particleConfig.turbulence.intensity
-        particle.vy += (Math.random() - 0.5) * particleConfig.turbulence.intensity
-      }
-
+      // Drift sutil (se configurado)
       if (particleConfig.drift) {
-        particle.vx += Math.sin(Date.now() * 0.001 * particleConfig.drift.frequency) * particleConfig.drift.amplitude * 0.01
+        particle.vx += Math.sin(Date.now() * 0.001 * particleConfig.drift.frequency) * particleConfig.drift.amplitude * 0.005
       }
 
-      if (particleConfig.zigzag?.enabled) {
-        particle.vx += Math.sin(particle.y * 0.02) * particleConfig.zigzag.amplitude * 0.02
-      }
-
+      // Movimento simples
       particle.x += particle.vx
       particle.y += particle.vy
-      particle.vx *= 0.98
-      particle.vy *= 0.98
 
-      if (particleConfig.bounce && particle.y >= height - particle.size) {
-        particle.vy *= -0.7
-        particle.y = height - particle.size
-      }
-
+      // Fade out no topo (para fire)
       if (effectsConfig.fadeOut?.enabled && effectsConfig.fadeOut.top && particle.y < height * 0.2) {
         particle.life = clamp(particle.y / (height * 0.2), 0, 1)
-      }
-
-      if (effectsConfig.accumulation?.enabled && effectsConfig.accumulation.bottom && particle.y > height * 0.9) {
-        particle.life = clamp(1 - (particle.y - height * 0.9) / (height * 0.1), 0, 1)
       }
     }
 
@@ -211,51 +156,53 @@ export function StormParticles({
       ctx.fill()
     }
 
-    const drawIrregular = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number) => {
+    // Draw lightning bolt - raio de relâmpago
+    const drawBolt = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string) => {
+      const segments = 4 + Math.floor(Math.random() * 3)
+      const segmentLength = size / segments
+      const jitter = size * 0.12
+      
+      ctx.strokeStyle = color
+      ctx.lineWidth = 2
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      
+      // Main bolt
       ctx.beginPath()
-      const points = 5 + Math.floor(Math.random() * 3)
-      for (let i = 0; i < points; i++) {
-        const angle = (Math.PI * 2 / points) * i + Math.random() * 0.5
-        const radius = size * (0.7 + Math.random() * 0.6)
-        const px = x + radius * Math.cos(angle)
-        const py = y + radius * Math.sin(angle)
-        if (i === 0) ctx.moveTo(px, py)
-        else ctx.lineTo(px, py)
+      let currentX = x
+      let currentY = y
+      ctx.moveTo(currentX, currentY)
+      
+      for (let i = 0; i < segments; i++) {
+        const offsetX = (Math.random() - 0.5) * jitter * 2
+        currentX += offsetX
+        currentY += segmentLength
+        ctx.lineTo(currentX, currentY)
       }
-      ctx.closePath()
-      ctx.fill()
-    }
-
-    const drawSpark = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number) => {
-      const spikes = 4
-      for (let i = 0; i < spikes; i++) {
-        const angle = (Math.PI * 2 / spikes) * i + Date.now() * 0.001
-        ctx.beginPath()
-        ctx.moveTo(x, y)
-        ctx.lineTo(x + size * 2 * Math.cos(angle), y + size * 2 * Math.sin(angle))
-        ctx.stroke()
-      }
+      ctx.stroke()
+      
+      // Glow effect
+      ctx.lineWidth = 4
+      ctx.globalAlpha = 0.2
+      ctx.stroke()
+      ctx.globalAlpha = 1
     }
 
     // Draw particle
     const drawParticle = (ctx: CanvasRenderingContext2D, particle: Particle) => {
       ctx.save()
-      ctx.globalAlpha = particle.life
+      ctx.globalAlpha = particle.life * 0.7 // Mais sutil
       ctx.fillStyle = particle.color
 
+      // Glow sutil
       if (effectsConfig.glow) {
-        const glowRadius = effectsConfig.glow.radius
+        const glowRadius = effectsConfig.glow.radius * 0.5
         const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, glowRadius)
-        const glowAlpha = effectsConfig.glow.pulse ? 0.3 + Math.sin(Date.now() * 0.003) * 0.2 : 0.3
         gradient.addColorStop(0, particle.color)
         gradient.addColorStop(1, `${particle.color}00`)
         ctx.fillStyle = gradient
         ctx.fillRect(particle.x - glowRadius, particle.y - glowRadius, glowRadius * 2, glowRadius * 2)
         ctx.fillStyle = particle.color
-      }
-
-      if (particleConfig.blur) {
-        ctx.filter = `blur(${particleConfig.blur}px)`
       }
 
       switch (particle.shape) {
@@ -268,7 +215,9 @@ export function StormParticles({
           drawHexagon(ctx, particle.x, particle.y, particle.size)
           break
         case 'irregular':
-          drawIrregular(ctx, particle.x, particle.y, particle.size)
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+          ctx.fill()
           break
         case 'line':
           const length = (particleConfig.size.length?.min || 15) + Math.random() * ((particleConfig.size.length?.max || 25) - (particleConfig.size.length?.min || 15))
@@ -276,11 +225,16 @@ export function StormParticles({
           ctx.lineWidth = particleConfig.size.width || 1
           ctx.beginPath()
           ctx.moveTo(particle.x, particle.y)
-          ctx.lineTo(particle.x + (particle.vx / Math.abs(particle.vx || 1)) * 2, particle.y + length)
+          ctx.lineTo(particle.x + particle.vx * 2, particle.y + length)
           ctx.stroke()
           break
         case 'spark':
-          drawSpark(ctx, particle.x, particle.y, particle.size)
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+          ctx.fill()
+          break
+        case 'bolt':
+          drawBolt(ctx, particle.x, particle.y, particle.size, particle.color)
           break
       }
 
@@ -324,8 +278,7 @@ export function StormParticles({
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storm, intensity, isMobile, prefersReduced, mouseX, mouseY])
+  }, [storm, intensity, isMobile, prefersReduced])
 
   if (prefersReduced) {
     return null
