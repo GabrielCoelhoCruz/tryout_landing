@@ -1,2 +1,5 @@
 export { MagneticButton, GlowingMagneticButton } from './MagneticButton'
 export { ScrollProgress, MinimalScrollProgress } from './ScrollProgress'
+export { AnimatedBackground } from './AnimatedBackground'
+export { GlowingButton } from './GlowingButton'
+export { AnimatedCounter } from './AnimatedCounter'

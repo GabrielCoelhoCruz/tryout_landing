@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,168 +28,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
-import { MagneticButton } from '@/components/ui'
-
-// ============================================
-// ANIMATED BACKGROUND (matching landing page)
-// ============================================
-const PARTICLE_POSITIONS = [
-  { left: 5, top: 12 },
-  { left: 15, top: 78 },
-  { left: 25, top: 34 },
-  { left: 35, top: 89 },
-  { left: 45, top: 23 },
-  { left: 55, top: 67 },
-  { left: 65, top: 45 },
-  { left: 75, top: 91 },
-  { left: 85, top: 8 },
-  { left: 95, top: 56 },
-  { left: 10, top: 42 },
-  { left: 20, top: 73 },
-  { left: 30, top: 19 },
-  { left: 40, top: 85 },
-]
-
-function AnimatedBackground() {
-  return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      {/* Gradient base - Deep storm atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A2A] via-[#0F1A3D] to-[#0A1B4D]" />
-
-      {/* Animated gradient orbs */}
-      <motion.div
-        className="absolute -top-1/4 -left-1/4 w-3/4 h-3/4 bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent rounded-full blur-[100px]"
-        animate={{
-          x: [0, 60, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute -bottom-1/4 -right-1/4 w-3/4 h-3/4 bg-gradient-radial from-[#00BFFF]/08 via-transparent to-transparent rounded-full blur-[100px]"
-        animate={{
-          x: [0, -40, 0],
-          y: [0, -30, 0],
-          scale: [1.1, 1, 1.1],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-gradient-radial from-[#9D00FF]/05 via-transparent to-transparent rounded-full blur-[80px]"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* Grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px',
-        }}
-      />
-
-      {/* Floating particles */}
-      {PARTICLE_POSITIONS.map((pos, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            left: `${pos.left}%`,
-            top: `${pos.top}%`,
-            width: i % 3 === 0 ? '3px' : '2px',
-            height: i % 3 === 0 ? '3px' : '2px',
-            background: i % 2 === 0 
-              ? 'rgba(255, 127, 0, 0.4)' 
-              : 'rgba(0, 191, 255, 0.3)',
-          }}
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 4 + (i % 4) * 1,
-            repeat: Infinity,
-            delay: (i % 8) * 0.3,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Noise texture */}
-      <div 
-        className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
-    </div>
-  )
-}
-
-// ============================================
-// GLOWING BUTTON COMPONENT
-// ============================================
-function GlowingButton({
-  children,
-  onClick,
-  className = '',
-  variant = 'primary',
-  type = 'button',
-  disabled = false
-}: {
-  children: React.ReactNode
-  onClick?: () => void
-  className?: string
-  variant?: 'primary' | 'secondary' | 'ghost'
-  type?: 'button' | 'submit'
-  disabled?: boolean
-}) {
-  const baseStyles = "relative group px-8 py-4 font-bold text-lg rounded-full transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
-
-  const variants = {
-    primary: "bg-gradient-to-r from-[#FF7F00] to-[#FF9933] text-white hover:shadow-[0_0_40px_rgba(255,127,0,0.5)]",
-    secondary: "bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:border-white/40",
-    ghost: "bg-transparent text-white hover:bg-white/10"
-  }
-
-  return (
-    <MagneticButton
-      onClick={onClick}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
-      attractRadius={100}
-      strength={0.25}
-    >
-      <span className="relative z-10 flex items-center gap-2 justify-center">
-        {children}
-      </span>
-      {variant === 'primary' && !disabled && (
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-[#FF9933] to-[#FF7F00] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        />
-      )}
-    </MagneticButton>
-  )
-}
+import { AnimatedBackground, GlowingButton } from '@/components/ui'
 
 // ============================================
 // FLOATING HEADER COMPONENT
@@ -219,7 +58,7 @@ function FloatingHeader() {
         }`}>
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/landing-improvedOpus" className="flex items-center gap-2 sm:gap-3 group">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50 group-hover:ring-[#FF7F00] transition-all">
                 <Image
                   src="/logo/logo-shield.jpg"
@@ -241,7 +80,7 @@ function FloatingHeader() {
             {/* Back Button + CTA */}
             <div className="flex items-center gap-3">
               <Link
-                href="/landing-improvedOpus"
+                href="/"
                 className="flex items-center gap-2 px-4 py-2 text-white/70 hover:text-white text-sm font-medium rounded-lg hover:bg-white/5 transition-all"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -736,7 +575,7 @@ function SuccessState() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
         >
-          <Link href="/landing-improvedOpus">
+          <Link href="/">
             <GlowingButton variant="secondary">
               <ArrowLeft className="w-5 h-5" />
               Voltar ao Site
@@ -752,13 +591,7 @@ function SuccessState() {
 // HELPER: Check if user is minor (under 18)
 // ============================================
 function isMinor(formData: Record<string, any>): boolean {
-  // Check from age field first
-  const ageValue = parseInt(formData['idade'])
-  if (!isNaN(ageValue) && ageValue > 0) {
-    return ageValue < 18
-  }
-  
-  // Calculate from birth date if age not provided
+  // Calculate from birth date (single source of truth)
   const birthDate = formData['data-nascimento']
   if (birthDate) {
     const today = new Date()
@@ -770,25 +603,15 @@ function isMinor(formData: Record<string, any>): boolean {
     }
     return age < 18
   }
-  
+
   return false
 }
 
 // ============================================
-// MAIN PAGE COMPONENT
+// FORM SECTIONS FACTORY
 // ============================================
-export default function FormularioPage() {
-  const [formData, setFormData] = useState<Record<string, any>>({})
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [currentSection, setCurrentSection] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
-  
-  // Check if user is minor to make guardian fields required
-  const userIsMinor = isMinor(formData)
-
-  const formSections = [
+function createFormSections(userIsMinor: boolean) {
+  return [
     {
       id: 'dados-pessoais',
       title: 'Dados Pessoais',
@@ -890,6 +713,25 @@ export default function FormularioPage() {
       ],
     },
   ]
+}
+
+// ============================================
+// MAIN PAGE COMPONENT
+// ============================================
+export default function FormularioPage() {
+  const [formData, setFormData] = useState<Record<string, any>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
+  const [currentSection, setCurrentSection] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Check if user is minor to make guardian fields required
+  const userIsMinor = isMinor(formData)
+
+  // Create form sections based on userIsMinor status
+  const formSections = useMemo(() => createFormSections(userIsMinor), [userIsMinor])
 
   // Update current section based on scroll
   useEffect(() => {
@@ -910,8 +752,7 @@ export default function FormularioPage() {
     
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formSections.length])
+  }, [formSections])
 
   const handleChange = (name: string, value: any) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -968,12 +809,22 @@ export default function FormularioPage() {
     }
 
     setIsSubmitting(true)
+    setSubmissionError(null)
+
     try {
-      // Simulate submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
+      // Simulate submission - replace with actual API call
+      await new Promise<void>((resolve) => setTimeout(resolve, 2000))
       setIsSuccess(true)
     } catch (error) {
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Ocorreu um erro ao enviar o formulário. Por favor, tente novamente.'
+
+      setSubmissionError(errorMessage)
       console.error('Error submitting form:', error)
+
+      // Scroll to top to show error message
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } finally {
       setIsSubmitting(false)
     }
@@ -982,7 +833,7 @@ export default function FormularioPage() {
   if (isSuccess) {
     return (
       <>
-        <AnimatedBackground />
+        <AnimatedBackground fixed />
         <FloatingHeader />
         <SuccessState />
       </>
@@ -991,7 +842,7 @@ export default function FormularioPage() {
 
   return (
     <>
-      <AnimatedBackground />
+      <AnimatedBackground fixed />
       <FloatingHeader />
       
       {/* Progress indicators */}
@@ -1039,6 +890,38 @@ export default function FormularioPage() {
           currentSection={currentSection}
           totalSections={formSections.length}
         />
+
+        {/* Error Message Banner */}
+        <AnimatePresence>
+          {submissionError && (
+            <motion.div
+              className="max-w-4xl mx-auto px-4 md:px-8 mb-8"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="bg-red-500/10 border-2 border-red-500/50 rounded-2xl p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-red-400 font-bold text-lg mb-1">Erro ao enviar formulário</h3>
+                  <p className="text-white/70">{submissionError}</p>
+                  <button
+                    type="button"
+                    onClick={() => setSubmissionError(null)}
+                    className="mt-3 text-red-400 hover:text-red-300 text-sm font-semibold underline"
+                  >
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Form sections */}
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto px-4 md:px-8 lg:pl-24">
