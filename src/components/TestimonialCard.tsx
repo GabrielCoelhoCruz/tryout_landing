@@ -63,7 +63,7 @@ export function TestimonialCard({
 
       {/* Quote */}
       <blockquote className="text-ink-muted italic leading-relaxed">
-        "{text}"
+        &ldquo;{text}&rdquo;
       </blockquote>
     </motion.div>
   )

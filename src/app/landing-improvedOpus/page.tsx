@@ -859,7 +859,7 @@ export default function LandingImprovedOpus() {
                   
                   {/* Quote text */}
                   <p className="text-white/80 leading-relaxed mb-6 italic">
-                    "{testimonial.text}"
+                    &ldquo;{testimonial.text}&rdquo;
                   </p>
                   
                   {/* Author */}
