@@ -21,7 +21,14 @@ import {
   Phone,
   MapPin,
   ChevronRight,
-  Quote
+  Quote,
+  FileText,
+  CheckCircle,
+  Handshake,
+  Dumbbell,
+  Medal,
+  ClipboardList,
+  DollarSign,
 } from 'lucide-react'
 
 // Novos componentes de animação
@@ -643,12 +650,12 @@ function LandingContent() {
   ]
   
   const journeySteps = [
-    { number: '01', title: 'Inscrição', description: 'Preencha o formulário online', icon: '📝' },
-    { number: '02', title: 'Tryout', description: 'Demonstre suas habilidades', icon: '🎯' },
-    { number: '03', title: 'Resultado', description: 'Acompanhe a seleção', icon: '✅' },
-    { number: '04', title: 'Integração', description: 'Conheça a equipe', icon: '🤝' },
-    { number: '05', title: 'Treinos', description: 'Prepare-se para competir', icon: '💪' },
-    { number: '06', title: 'Campeonatos', description: 'Represente a equipe', icon: '🏆' },
+    { number: '01', title: 'Inscrição', description: 'Preencha o formulário online', icon: FileText },
+    { number: '02', title: 'Tryout', description: 'Demonstre suas habilidades', icon: Target },
+    { number: '03', title: 'Resultado', description: 'Acompanhe a seleção', icon: CheckCircle },
+    { number: '04', title: 'Integração', description: 'Conheça a equipe', icon: Handshake },
+    { number: '05', title: 'Treinos', description: 'Prepare-se para competir', icon: Dumbbell },
+    { number: '06', title: 'Campeonatos', description: 'Represente a equipe', icon: Medal },
   ]
   
   const faqs = [
@@ -1021,59 +1028,65 @@ function LandingContent() {
               />
               
               <div className="grid grid-cols-6 gap-4">
-                {journeySteps.map((step, index) => (
-                  <motion.div
-                    key={step.number}
-                    className="flex flex-col items-center text-center"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.15 }}
-                  >
-                    {/* Step number */}
-                    <div className="text-sm font-bold text-[#FF7F00] mb-3">
-                      {step.number}
-                    </div>
-                    
-                    {/* Icon circle */}
-                    <div className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-4xl mb-6 shadow-xl shadow-[#FF7F00]/20">
-                      {step.icon}
-                    </div>
-                    
-                    {/* Content */}
-                    <h4 className="font-display text-lg text-[#0A0A2A] mb-1">
-                      {step.title}
-                    </h4>
-                    <p className="text-sm text-[#4A4A4A]">
-                      {step.description}
-                    </p>
-                  </motion.div>
-                ))}
+                {journeySteps.map((step, index) => {
+                  const Icon = step.icon
+                  return (
+                    <motion.div
+                      key={step.number}
+                      className="flex flex-col items-center text-center"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.15 }}
+                    >
+                      {/* Step number */}
+                      <div className="text-sm font-bold text-[#FF7F00] mb-3">
+                        {step.number}
+                      </div>
+                      
+                      {/* Icon circle */}
+                      <div className="relative z-10 w-20 h-20 rounded-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center mb-6 shadow-xl shadow-[#FF7F00]/20 text-white">
+                        <Icon className="w-9 h-9" strokeWidth={2} />
+                      </div>
+                      
+                      {/* Content */}
+                      <h4 className="font-display text-lg text-[#0A0A2A] mb-1">
+                        {step.title}
+                      </h4>
+                      <p className="text-sm text-[#4A4A4A]">
+                        {step.description}
+                      </p>
+                    </motion.div>
+                  )
+                })}
               </div>
             </div>
           </div>
           
           {/* Mobile timeline */}
           <div className="md:hidden space-y-4">
-            {journeySteps.map((step, index) => (
-              <motion.div
-                key={step.number}
-                className="flex gap-4 items-start bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-2xl">
-                  {step.icon}
-                </div>
-                <div className="flex-1">
-                  <div className="text-xs font-bold text-[#FF7F00] mb-1">PASSO {step.number}</div>
-                  <h4 className="font-display text-lg text-[#0A0A2A]">{step.title}</h4>
-                  <p className="text-sm text-[#4A4A4A]">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
+            {journeySteps.map((step, index) => {
+              const Icon = step.icon
+              return (
+                <motion.div
+                  key={step.number}
+                  className="flex gap-4 items-start bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white">
+                    <Icon className="w-6 h-6" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-[#FF7F00] mb-1">PASSO {step.number}</div>
+                    <h4 className="font-display text-lg text-[#0A0A2A]">{step.title}</h4>
+                    <p className="text-sm text-[#4A4A4A]">{step.description}</p>
+                  </div>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -1142,85 +1155,79 @@ function LandingContent() {
       {/* TRYOUT INFO - Key Details */}
       {/* ============================================ */}
       <section id="tryout-info" className="relative z-10 py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Info cards */}
+        <div className="max-w-5xl mx-auto px-4 md:px-8">
+          {/* Header centralizado */}
+          <SectionHeader
+            badge="Informações"
+            title="DETALHES DO TRYOUT"
+            subtitle="Tudo que você precisa saber para participar."
+          />
+          
+          {/* Info cards - grid centralizado */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            {[
+              { icon: Calendar, label: 'Data', value: tryoutInfo.date },
+              { icon: Zap, label: 'Horário', value: tryoutInfo.time },
+              { icon: MapPin, label: 'Local', value: tryoutInfo.location },
+              { icon: Target, label: 'Endereço', value: tryoutInfo.address },
+              { icon: Users, label: 'Metrô', value: tryoutInfo.metro },
+              { icon: Star, label: 'Investimento', value: tryoutInfo.price },
+            ].map((item, index) => (
+              <motion.div
+                key={item.label}
+                className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-[#FF7F00]/30 hover:shadow-lg transition-all duration-300 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="flex justify-center mb-3">
+                  <item.icon className="w-6 h-6 text-[#FF7F00]" />
+                </div>
+                <div className="text-xs font-semibold text-[#4A4A4A] uppercase tracking-wider mb-1">
+                  {item.label}
+                </div>
+                <div className="font-display text-lg text-[#0A0A2A]">
+                  {item.value}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* O que levar e visual element lado a lado */}
+          <div className="grid md:grid-cols-2 gap-6">
             <motion.div
-              className="space-y-6"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 rounded-2xl p-6 border border-[#FF7F00]/20"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
-              <SectionHeader
-                badge="Informações"
-                title="DETALHES DO TRYOUT"
-                subtitle="Tudo que você precisa saber para participar."
-                center={false}
-              />
-              
-              <div className="grid sm:grid-cols-2 gap-4">
-                {[
-                  { icon: Calendar, label: 'Data', value: tryoutInfo.date },
-                  { icon: Zap, label: 'Horário', value: tryoutInfo.time },
-                  { icon: MapPin, label: 'Local', value: tryoutInfo.location },
-                  { icon: Target, label: 'Endereço', value: tryoutInfo.address },
-                  { icon: Users, label: 'Metrô', value: tryoutInfo.metro },
-                  { icon: Star, label: 'Investimento', value: tryoutInfo.price },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    className="bg-white rounded-2xl p-5 border border-gray-100 hover:border-[#FF7F00]/30 hover:shadow-lg transition-all duration-300"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    <item.icon className="w-6 h-6 text-[#FF7F00] mb-3" />
-                    <div className="text-xs font-semibold text-[#4A4A4A] uppercase tracking-wider mb-1">
-                      {item.label}
-                    </div>
-                    <div className="font-display text-lg text-[#0A0A2A]">
-                      {item.value}
-                    </div>
-                  </motion.div>
+              <h4 className="font-display text-lg text-[#0A0A2A] mb-3 text-center">O que levar</h4>
+              <ul className="space-y-2 text-[#4A4A4A]">
+                {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve', 'Comprovante de pagamento (R$ 50)'].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <ChevronRight className="w-4 h-4 text-[#FF7F00] flex-shrink-0" />
+                    {item}
+                  </li>
                 ))}
-              </div>
-              
-              <div className="bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 rounded-2xl p-6 border border-[#FF7F00]/20">
-                <h4 className="font-display text-lg text-[#0A0A2A] mb-3">O que levar</h4>
-                <ul className="space-y-2 text-[#4A4A4A]">
-                  {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve', 'Comprovante de pagamento (R$ 50)'].map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <ChevronRight className="w-4 h-4 text-[#FF7F00]" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              </ul>
             </motion.div>
             
-            {/* Visual element */}
             <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="bg-gradient-to-br from-[#0A0A2A] to-[#1E3A8A] rounded-2xl p-6 flex flex-col items-center justify-center text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div className="relative aspect-square max-w-md mx-auto">
-                {/* Decorative circles */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF7F00]/20 to-[#00BFFF]/20 rounded-full blur-3xl" />
-                <div className="relative bg-gradient-to-br from-[#0A0A2A] to-[#1E3A8A] rounded-3xl p-8 h-full flex flex-col items-center justify-center text-center">
-                  <div className="text-8xl mb-4">🏆</div>
-                  <h3 className="text-3xl font-display text-white mb-2">TRYOUT 2026</h3>
-                  <p className="text-white/70 mb-2">Investimento: <span className="text-[#FF7F00] font-bold">R$ 50,00</span></p>
-                  <p className="text-white/50 text-sm mb-6">Estacionamento no local</p>
-                  <div className="flex items-center gap-2 text-[#FF7F00]">
-                    <Sparkles className="w-5 h-5" />
-                    <span className="font-semibold">Vagas limitadas</span>
-                  </div>
-                </div>
+              <div className="text-6xl mb-3">🏆</div>
+              <h3 className="text-2xl font-display text-white mb-2">TRYOUT 2026</h3>
+              <p className="text-white/70 mb-1">Investimento: <span className="text-[#FF7F00] font-bold">R$ 50,00</span></p>
+              <p className="text-white/50 text-sm mb-4">Estacionamento no local</p>
+              <div className="flex items-center gap-2 text-[#FF7F00]">
+                <Sparkles className="w-5 h-5" />
+                <span className="font-semibold">Vagas limitadas</span>
               </div>
             </motion.div>
           </div>

@@ -14,22 +14,22 @@ import { Footer } from '@/components/Footer'
 export default function Home() {
   const benefits = [
     {
-      icon: '🏆',
+      icon: 'Trophy',
       title: 'Treinamento de Elite',
       description: 'Metodologia comprovada com técnicos certificados e acompanhamento individualizado para desenvolvimento técnico e pessoal.',
     },
     {
-      icon: '💪',
+      icon: 'Dumbbell',
       title: 'Performance de Alto Nível',
       description: 'Programa focado em excelência técnica, condicionamento físico e preparação mental para competições nacionais e internacionais.',
     },
     {
-      icon: '🤝',
+      icon: 'Handshake',
       title: 'Espírito de Equipe',
       description: 'Ambiente de união, respeito e crescimento coletivo. Aqui você constrói amizades para toda a vida enquanto evolui no esporte.',
     },
     {
-      icon: '🎯',
+      icon: 'Target',
       title: 'Conquistas Reais',
       description: 'Histórico comprovado de pódios em campeonatos estaduais, nacionais e internacionais. Faça parte de uma equipe vencedora.',
     },
@@ -116,12 +116,12 @@ export default function Home() {
   ]
 
   const journeySteps = [
-    { icon: '📝', title: 'Inscrição', description: 'Preencha o formulário online' },
-    { icon: '🎯', title: 'Tryout', description: 'Demonstre suas habilidades' },
-    { icon: '✅', title: 'Resultado', description: 'Acompanhe a seleção' },
-    { icon: '🤝', title: 'Integração', description: 'Conheça a equipe' },
-    { icon: '💪', title: 'Treinos', description: 'Prepare-se para competir' },
-    { icon: '🏆', title: 'Campeonatos', description: 'Represente a equipe' },
+    { icon: 'FileText', title: 'Inscrição', description: 'Preencha o formulário online' },
+    { icon: 'Target', title: 'Tryout', description: 'Demonstre suas habilidades' },
+    { icon: 'CheckCircle', title: 'Resultado', description: 'Acompanhe a seleção' },
+    { icon: 'Handshake', title: 'Integração', description: 'Conheça a equipe' },
+    { icon: 'Dumbbell', title: 'Treinos', description: 'Prepare-se para competir' },
+    { icon: 'Medal', title: 'Campeonatos', description: 'Represente a equipe' },
   ]
 
   const testimonials = [
@@ -153,32 +153,32 @@ export default function Home() {
 
   const tryoutInfo = [
     {
-      icon: '📅',
+      icon: 'Calendar',
       title: 'Data e Horário',
       content: '15 de Março, 2026 - 9h às 17h',
     },
     {
-      icon: '📍',
+      icon: 'MapPin',
       title: 'Local',
       content: 'Ginásio Principal - Rua Exemplo, 123, Centro',
     },
     {
-      icon: '👥',
+      icon: 'Users',
       title: 'Faixa Etária',
       content: '14 a 25 anos (varia por categoria)',
     },
     {
-      icon: '📋',
+      icon: 'ClipboardList',
       title: 'O que levar',
       content: 'Roupa esportiva, tênis, documento de identidade, água',
     },
     {
-      icon: '⚡',
+      icon: 'Zap',
       title: 'Requisitos',
       content: 'Experiência mínima de 6 meses em cheerleading ou ginástica',
     },
     {
-      icon: '💰',
+      icon: 'DollarSign',
       title: 'Investimento',
       content: 'Tryout gratuito. Mensalidade após aprovação.',
     },
