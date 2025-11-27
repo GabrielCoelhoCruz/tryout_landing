@@ -388,9 +388,10 @@ interface FormSectionProps {
   onChange: (name: string, value: any) => void
   index: number
   isActive: boolean
+  showMinorNotice?: boolean
 }
 
-function FormSection({ title, subtitle, icon, fields, formData, errors, onChange, index, isActive }: FormSectionProps) {
+function FormSection({ title, subtitle, icon, fields, formData, errors, onChange, index, isActive, showMinorNotice }: FormSectionProps) {
   return (
     <motion.div
       id={`section-${index}`}
@@ -424,6 +425,33 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
             )}
           </div>
         </div>
+        
+        {/* Minor notice */}
+        <AnimatePresence>
+          {showMinorNotice && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="bg-gradient-to-r from-[#FF7F00]/20 to-[#00BFFF]/10 rounded-xl p-4 border border-[#FF7F00]/30 flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[#FF7F00]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <User className="w-4 h-4 text-[#FF7F00]" />
+                </div>
+                <div>
+                  <p className="text-[#FF7F00] font-semibold text-sm mb-1">
+                    Atleta menor de 18 anos identificado
+                  </p>
+                  <p className="text-white/60 text-xs leading-relaxed">
+                    Como você tem menos de 18 anos, os dados do responsável legal são obrigatórios para completar a inscrição.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Fields grid */}
         <div className="grid md:grid-cols-2 gap-5">
@@ -721,6 +749,32 @@ function SuccessState() {
 }
 
 // ============================================
+// HELPER: Check if user is minor (under 18)
+// ============================================
+function isMinor(formData: Record<string, any>): boolean {
+  // Check from age field first
+  const ageValue = parseInt(formData['idade'])
+  if (!isNaN(ageValue) && ageValue > 0) {
+    return ageValue < 18
+  }
+  
+  // Calculate from birth date if age not provided
+  const birthDate = formData['data-nascimento']
+  if (birthDate) {
+    const today = new Date()
+    const birth = new Date(birthDate)
+    let age = today.getFullYear() - birth.getFullYear()
+    const monthDiff = today.getMonth() - birth.getMonth()
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--
+    }
+    return age < 18
+  }
+  
+  return false
+}
+
+// ============================================
 // MAIN PAGE COMPONENT
 // ============================================
 export default function FormularioPage() {
@@ -730,6 +784,9 @@ export default function FormularioPage() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [currentSection, setCurrentSection] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  
+  // Check if user is minor to make guardian fields required
+  const userIsMinor = isMinor(formData)
 
   const formSections = [
     {
@@ -748,8 +805,9 @@ export default function FormularioPage() {
         ]},
         { name: 'telefone', label: 'Telefone/WhatsApp', type: 'tel' as const, required: true, placeholder: '(11) 99999-9999' },
         { name: 'email', label: 'E-mail', type: 'email' as const, required: true, placeholder: 'seu@email.com' },
-        { name: 'nome-responsavel', label: 'Nome do Responsável (se menor de idade)', type: 'text' as const, placeholder: 'Nome do responsável' },
-        { name: 'contato-responsavel', label: 'Contato do Responsável', type: 'tel' as const, placeholder: '(11) 99999-9999' },
+        { name: 'nome-responsavel', label: `Nome do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'text' as const, required: userIsMinor, placeholder: 'Nome completo do responsável' },
+        { name: 'contato-responsavel', label: `Telefone do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'tel' as const, required: userIsMinor, placeholder: '(11) 99999-9999' },
+        { name: 'email-responsavel', label: `E-mail do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`, type: 'email' as const, required: userIsMinor, placeholder: 'responsavel@email.com' },
       ],
     },
     {
@@ -852,6 +910,7 @@ export default function FormularioPage() {
     
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formSections.length])
 
   const handleChange = (name: string, value: any) => {
@@ -867,11 +926,23 @@ export default function FormularioPage() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
+    const checkIsMinor = isMinor(formData)
+    
     formSections.forEach((section) => {
       section.fields.forEach((field) => {
-        if (field.required && !formData[field.name]) {
+        // Check if field is required (considering dynamic requirements for minors)
+        let isRequired = field.required
+        
+        // Guardian fields are required for minors
+        if (['nome-responsavel', 'contato-responsavel', 'email-responsavel'].includes(field.name)) {
+          isRequired = checkIsMinor
+        }
+        
+        if (isRequired && !formData[field.name]) {
           newErrors[field.name] = 'Este campo é obrigatório'
         }
+        
+        // Validate email format for all email fields
         if (field.type === 'email' && formData[field.name]) {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
           if (!emailRegex.test(formData[field.name])) {
@@ -899,7 +970,7 @@ export default function FormularioPage() {
     setIsSubmitting(true)
     try {
       // Simulate submission
-      await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 2000))
       setIsSuccess(true)
     } catch (error) {
       console.error('Error submitting form:', error)
@@ -954,15 +1025,15 @@ export default function FormularioPage() {
                 <span className="bg-gradient-to-r from-[#FF7F00] to-[#00BFFF] bg-clip-text text-transparent">
                   Inscrição
                 </span>
-              </h1>
+          </h1>
               
               <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto">
                 Preencha seus dados abaixo para participar do processo seletivo. Vagas limitadas!
-              </p>
+          </p>
             </motion.div>
-          </div>
-        </section>
-        
+        </div>
+      </section>
+
         {/* Mobile progress bar */}
         <MobileProgressBar
           currentSection={currentSection}
@@ -984,6 +1055,7 @@ export default function FormularioPage() {
                 onChange={handleChange}
                 index={index}
                 isActive={index === currentSection}
+                showMinorNotice={index === 0 && userIsMinor}
               />
             ))}
           </div>

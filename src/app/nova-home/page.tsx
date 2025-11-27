@@ -31,22 +31,22 @@ import {
 export default function HomeV2() {
   const benefits = [
     {
-      icon: Trophy,
+      icon: 'Trophy',
       title: 'Treinamento de Elite',
       description: 'Metodologia comprovada com técnicos certificados e acompanhamento individualizado para desenvolvimento técnico e pessoal.',
     },
     {
-      icon: Dumbbell,
+      icon: 'Dumbbell',
       title: 'Performance de Alto Nível',
       description: 'Programa focado em excelência técnica, condicionamento físico e preparação mental para competições nacionais e internacionais.',
     },
     {
-      icon: Handshake,
+      icon: 'Handshake',
       title: 'Espírito de Equipe',
       description: 'Ambiente de união, respeito e crescimento coletivo. Aqui você constrói amizades para toda a vida enquanto evolui no esporte.',
     },
     {
-      icon: Target,
+      icon: 'Target',
       title: 'Conquistas Reais',
       description: 'Histórico comprovado de pódios em campeonatos estaduais, nacionais e internacionais. Faça parte de uma equipe vencedora.',
     },
