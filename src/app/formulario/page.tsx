@@ -100,7 +100,7 @@ function FloatingHeader() {
 }
 
 // ============================================
-// PROGRESS INDICATOR
+// PROGRESS INDICATOR (Desktop - Lateral)
 // ============================================
 function ProgressIndicator({ currentSection, totalSections, sectionTitles }: {
   currentSection: number
@@ -179,31 +179,101 @@ function ProgressIndicator({ currentSection, totalSections, sectionTitles }: {
 }
 
 // ============================================
-// MOBILE PROGRESS BAR
+// MOBILE PROGRESS BAR (Fixed Bottom)
 // ============================================
-function MobileProgressBar({ currentSection, totalSections }: {
+function MobileProgressBar({ currentSection, totalSections, sectionTitles }: {
   currentSection: number
   totalSections: number
+  sectionTitles: string[]
 }) {
   const progress = ((currentSection + 1) / totalSections) * 100
+  const icons = [User, Trophy, Calendar, Heart]
   
   return (
-    <div className="lg:hidden sticky top-20 z-30 px-4 pb-4">
-      <div className="bg-[#0A0A2A]/90 backdrop-blur-xl rounded-xl border border-white/10 p-3">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-white/60">Progresso</span>
-          <span className="text-xs font-semibold text-[#FF7F00]">{Math.round(progress)}%</span>
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3 pt-2 safe-area-inset-bottom">
+      <div className="bg-[#0A0A2A]/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 sm:p-4 shadow-2xl shadow-black/30">
+        {/* Section dots - horizontal stepper */}
+        <div className="flex items-center justify-between mb-3">
+          {sectionTitles.map((title, index) => {
+            const Icon = icons[index % icons.length]
+            const isActive = index <= currentSection
+            const isCurrent = index === currentSection
+            const isCompleted = index < currentSection
+            
+            return (
+              <div key={index} className="flex items-center flex-1">
+                {/* Step indicator */}
+                <motion.div
+                  className="relative flex flex-col items-center"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: index * 0.05, type: "spring" }}
+                >
+                  <div
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                      isCurrent
+                        ? 'bg-gradient-to-br from-[#FF7F00] to-[#FF9933] shadow-lg shadow-[#FF7F00]/30'
+                        : isCompleted
+                        ? 'bg-[#FF7F00]/20 border-2 border-[#FF7F00]'
+                        : 'bg-white/5 border border-white/20'
+                    }`}
+                  >
+                    {isCompleted ? (
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-[#FF7F00]" />
+                    ) : (
+                      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isCurrent ? 'text-white' : isActive ? 'text-white/70' : 'text-white/30'}`} />
+                    )}
+                  </div>
+                  
+                  {/* Step title - only show on larger mobile */}
+                  <span className={`hidden xs:block text-[8px] sm:text-[10px] mt-1 text-center max-w-[60px] sm:max-w-[80px] truncate ${
+                    isCurrent ? 'text-[#FF7F00] font-semibold' : isActive ? 'text-white/60' : 'text-white/30'
+                  }`}>
+                    {title}
+                  </span>
+                </motion.div>
+                
+                {/* Connector line */}
+                {index < totalSections - 1 && (
+                  <div className="flex-1 h-0.5 mx-1 sm:mx-2 rounded-full overflow-hidden bg-white/10">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-[#FF7F00] to-[#FF9933]"
+                      initial={{ width: 0 }}
+                      animate={{ width: isCompleted ? '100%' : isCurrent ? '50%' : '0%' }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
-        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-gradient-to-r from-[#FF7F00] to-[#00BFFF] rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          />
-        </div>
-        <div className="flex justify-between mt-2">
-          <span className="text-xs text-white/40">Seção {currentSection + 1} de {totalSections}</span>
+        
+        {/* Progress info row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-white/60 text-xs sm:text-sm">
+              {sectionTitles[currentSection]}
+            </span>
+            <span className="text-white/30 text-[10px] sm:text-xs">
+              ({currentSection + 1}/{totalSections})
+            </span>
+          </div>
+          
+          {/* Progress percentage with mini bar */}
+          <div className="flex items-center gap-2">
+            <div className="w-16 sm:w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-[#FF7F00] to-[#00BFFF] rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
+            </div>
+            <span className="text-sm sm:text-base font-bold text-[#FF7F00] min-w-[40px] text-right">
+              {Math.round(progress)}%
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -690,7 +760,14 @@ export default function FormularioPage() {
         sectionTitles={formSections.map(s => s.title)}
       />
       
-      <main ref={containerRef} className="relative z-10 min-h-screen pt-24 pb-16">
+      {/* Mobile progress bar - Fixed bottom */}
+      <MobileProgressBar
+        currentSection={currentSection}
+        totalSections={formSections.length}
+        sectionTitles={formSections.map(s => s.title)}
+      />
+      
+      <main ref={containerRef} className="relative z-10 min-h-screen pt-24 pb-32 lg:pb-16">
         {/* Hero section */}
         <section className="py-12 md:py-20">
           <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
@@ -722,12 +799,6 @@ export default function FormularioPage() {
             </motion.div>
         </div>
       </section>
-
-        {/* Mobile progress bar */}
-        <MobileProgressBar
-          currentSection={currentSection}
-          totalSections={formSections.length}
-        />
 
         {/* Error Message Banner */}
         <AnimatePresence>
