@@ -26,3 +26,7 @@ export const INTERSECTION_OBSERVER_CONFIG = {
   threshold: 0.5,
   rootMargin: '-50% 0px',
 } as const
+
+// Section spacing standardization - Increased for better separation
+export const SECTION_SPACING = 'py-32 md:py-40 lg:py-48' as const
+export const SECTION_SPACING_SM = 'py-20 md:py-24 lg:py-32' as const

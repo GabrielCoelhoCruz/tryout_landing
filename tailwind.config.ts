@@ -61,14 +61,14 @@ const config: Config = {
           '2-light': '#33CCFF', // Azul elétrico mais claro
         },
         dark: {
-          DEFAULT: '#0A0A2A',  // Azul muito escuro (fundo externo)
-          light: '#14143A',
-          lighter: '#1E1E4A',
+          DEFAULT: '#000c1f',  // Navy profundo (extraído do fundo do logo SkyHigh)
+          light: '#001428',    // Navy ligeiramente mais claro
+          lighter: '#001a33',  // Navy mais claro
         },
         bg: {
           DEFAULT: '#FAFAFA',
           alt: '#FFFFFF',
-          dark: '#0A0A2A',     // Para seções escuras
+          dark: '#000c1f',     // Navy profundo (match com logo)
         },
         ink: {
           DEFAULT: '#0A0A0A',

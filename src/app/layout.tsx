@@ -15,17 +15,27 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://skyhighallstar.com.br'),
   title: "SkyHigh AllStar - Tryout 2026 | Inscreva-se Agora",
-  description: "Faça parte da equipe SkyHigh AllStar que está elevando o nível do cheerleading. Inscrições abertas para times N2 e N3 (Coed, All Girl, All Boy). Tryout 2026.",
-  keywords: "cheerleading, tryout, 2026, N2, N3, Coed, All Girl, All Boy, competição, equipe, SkyHigh AllStar",
+  description: "Seu talento merece ir mais alto. Venha elevar o nível com a gente. Inscrições abertas para times N2 e N3 (Coed, All Girl, Youth). Tryout 2026.",
+  keywords: "cheerleading, tryout, 2026, N2, N3, Coed, All Girl, Youth, competição, equipe, SkyHigh AllStar, São Paulo",
   icons: {
-    icon: '/logo/logo-shield.jpg',
-    apple: '/logo/logo-shield.jpg',
+    icon: '/logo/SkyHigh_Logo novo.png',
+    apple: '/logo/SkyHigh_Logo novo.png',
   },
   openGraph: {
     title: "SkyHigh AllStar - Tryout 2026",
-    description: "Faça parte da equipe que está elevando o nível do cheerleading",
-    images: ['/logo/logo-shield.jpg'],
+    description: "Seu talento merece ir mais alto. Venha elevar o nível com a gente.",
+    images: ['/logo/SkyHigh_Logo novo.png'],
+    locale: 'pt_BR',
+    type: 'website',
+    siteName: 'SkyHigh AllStar',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "SkyHigh AllStar - Tryout 2026",
+    description: "Seu talento merece ir mais alto. Venha elevar o nível com a gente.",
+    images: ['/logo/SkyHigh_Logo novo.png'],
   },
 };
 

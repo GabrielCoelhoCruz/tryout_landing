@@ -1,10 +1,10 @@
 'use client'
 
-import { Instagram, Mail, Phone, MapPin } from 'lucide-react'
+import { Instagram, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-dark text-white py-12">
+    <footer className="bg-[#000c1f] text-white py-12">
       <div className="container mx-auto px-4 md:px-8 lg:px-16">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Branding */}
@@ -16,7 +16,8 @@ export function Footer() {
               TRYOUT 2026
             </h4>
             <p className="text-white/70 text-sm leading-relaxed">
-              Faça parte da equipe que está elevando o nível do cheerleading brasileiro.
+              Seu talento merece ir mais alto. Venha elevar o nível com a gente.
+              Tradição, excelência e paixão pelo esporte.
             </p>
           </div>
 
@@ -25,27 +26,22 @@ export function Footer() {
             <h4 className="text-lg font-display mb-4">Contato</h4>
             <div className="space-y-3 text-sm">
               <a
-                href="mailto:tryout@equipe.com"
-                className="flex items-center gap-2 text-white/70 hover:text-royal-light transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                tryout@equipe.com
-              </a>
-              <a
-                href="tel:+5511999999999"
+                href="https://wa.me/5511913311920"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white/70 hover:text-royal-light transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                (11) 99999-9999
+                (11) 91331-1920
               </a>
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/skyhigh.allstar"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-white/70 hover:text-royal-light transition-colors"
               >
                 <Instagram className="w-4 h-4" />
-                @equipecheer
+                @skyhigh.allstar
               </a>
             </div>
           </div>
@@ -56,11 +52,15 @@ export function Footer() {
             <div className="flex items-start gap-2 text-sm text-white/70">
               <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
               <address className="not-italic">
-                Rua Exemplo, 123<br />
-                Bairro - Cidade, Estado<br />
-                CEP 00000-000
+                Ginásio SkyHigh All Star<br />
+                Centro Esportivo Tietê<br />
+                Av. Santos Dumont, 843 - Luz<br />
+                São Paulo - SP
               </address>
             </div>
+            <p className="text-white/40 text-xs mt-2 ml-6">
+              🚇 Metrô Armênia (Linha 1 - Azul)
+            </p>
           </div>
         </div>
 

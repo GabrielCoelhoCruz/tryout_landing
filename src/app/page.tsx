@@ -10,7 +10,7 @@ import {
   ArrowRight,
   Sparkles,
   Play,
-  Instagram,
+  Instagram, // Note: Deprecated icon but still functional
   Phone,
   MapPin,
   ChevronRight,
@@ -20,7 +20,7 @@ import {
   CheckCircle,
 } from 'lucide-react'
 
-import { AnimatedH1, StormShowcase } from '@/components/animations'
+import { AnimatedH1 } from '@/components/animations'
 import { AnimatedBackground, AnimatedCounter, GlowingButton, ScrollProgress } from '@/components/ui'
 import { StormWeatherProvider, useStormWeather } from '@/context/StormWeatherContext'
 import {
@@ -32,7 +32,7 @@ import {
   FAQS,
   TRYOUT_INFO,
 } from '@/constants/landing-data'
-import { SCROLL_THRESHOLD } from '@/constants/animation-config'
+import { SCROLL_THRESHOLD, SECTION_SPACING } from '@/constants/animation-config'
 
 // ============================================
 // SECTION HEADER COMPONENT
@@ -52,7 +52,7 @@ function SectionHeader({
 }) {
   return (
     <motion.div
-      className={`${center ? 'text-center' : ''} mb-16`}
+      className={`${center ? 'text-center' : ''} mb-20`}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -60,7 +60,7 @@ function SectionHeader({
     >
       {badge && (
         <motion.span
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-6 ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-8 ${
             light 
               ? 'bg-white/10 text-white/90 backdrop-blur-sm border border-white/10' 
               : 'bg-[#FF7F00]/10 text-[#FF7F00] border border-[#FF7F00]/20'
@@ -75,7 +75,7 @@ function SectionHeader({
         </motion.span>
       )}
       <h2 className={`text-4xl md:text-5xl lg:text-6xl font-display tracking-tight mb-4 ${
-        light ? 'text-white' : 'text-[#0A0A2A]'
+        light ? 'text-white' : 'text-[#000c1f]'
       }`}>
         {title}
       </h2>
@@ -142,17 +142,19 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
       >
         <div className="mx-2 sm:mx-4 mt-2 sm:mt-4">
           <div className={`max-w-7xl mx-auto backdrop-blur-xl rounded-2xl border border-white/10 px-4 sm:px-6 py-3 transition-all duration-300 ${
-            isScrolled ? 'bg-[#0A0A2A]/95' : 'bg-[#0A0A2A]/80'
+            isScrolled ? 'bg-[#000c1f]/95' : 'bg-[#000c1f]/80'
           }`}>
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50 group-hover:ring-[#FF7F00] transition-all">
                   <Image
-                    src="/logo/logo-shield.jpg"
+                    src="/logo/SkyHigh_Logo novo.png"
                     alt="SkyHigh AllStar"
                     fill
                     className="object-cover"
+                    priority
+                    sizes="(max-width: 640px) 40px, 48px"
                   />
                 </div>
                 <div className="hidden xs:block sm:block">
@@ -237,7 +239,7 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
             
             {/* Menu Panel - WITH GRADIENT (RESTORED) */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm bg-gradient-to-b from-[#0A0A2A] to-[#0F1A3D] lg:hidden shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm bg-gradient-to-b from-[#000c1f] to-[#001a33] lg:hidden shadow-2xl"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -248,10 +250,11 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
                 <div className="flex items-center gap-3">
                   <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50">
                     <Image
-                      src="/logo/logo-shield.jpg"
+                      src="/logo/SkyHigh_Logo novo.png"
                       alt="SkyHigh AllStar"
                       fill
                       className="object-cover"
+                      sizes="40px"
                     />
                   </div>
                   <div>
@@ -298,7 +301,7 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
               </nav>
               
               {/* CTA Section */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10 bg-[#0A0A2A]/80 backdrop-blur-sm">
+              <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10 bg-[#000c1f]/80 backdrop-blur-sm">
                 <motion.button
                   onClick={() => {
                     router.push('/formulario')
@@ -311,9 +314,6 @@ function MobileHeader({ router }: { router: ReturnType<typeof useRouter> }) {
                   Inscreva-se no Tryout
                   <ArrowRight className="w-5 h-5" />
                 </motion.button>
-                <p className="text-center text-white/40 text-sm mt-3">
-                  Vagas limitadas para 2026
-                </p>
               </div>
             </motion.div>
           </>
@@ -400,9 +400,9 @@ function LandingContent() {
                 TRYOUT
               </AnimatedH1>
               <AnimatedH1
-                variant="gradient-shift"
-                className="block"
-                gradientColors={['#FF7F00', '#FF9933', '#00BFFF']}
+                variant="letter-reveal"
+                className="block text-[#FF7F00]"
+                delay={0.4}
               >
                 2026
               </AnimatedH1>
@@ -415,9 +415,8 @@ function LandingContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Faça parte da equipe que está{' '}
-              <span className="text-[#FF7F00] font-semibold">elevando o nível</span>{' '}
-              do cheerleading brasileiro.
+              Seu talento merece ir mais alto.{' '}
+              <span className="text-[#FF7F00] font-semibold">Venha elevar o nível com a gente.</span>
             </motion.p>
             
             {/* CTA Buttons - WITH GRADIENTS (RESTORED) */}
@@ -494,21 +493,24 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* BENEFITS - Clean White Section (NO GRADIENT) */}
+      {/* BENEFITS - Clean White Section */}
       {/* ============================================ */}
-      <section id="sobre" className="relative z-10 py-24 md:py-32 bg-white scroll-mt-20">
+      {/* Smooth transition from hero to benefits */}
+      <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-[#000c1f] via-[#1a1a4a] to-white" />
+
+      <section id="sobre" className={`relative z-10 ${SECTION_SPACING} bg-white scroll-mt-20`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Por que escolher a SkyHigh"
             title="FAÇA PARTE DE ALGO MAIOR"
             subtitle="Muito mais do que um time, somos uma família comprometida com a excelência e com o seu desenvolvimento pessoal."
           />
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 max-w-5xl mx-auto">
             {BENEFITS.map((benefit, index) => (
               <motion.div
                 key={benefit.title}
-                className="group relative"
+                className="group relative w-full"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -524,7 +526,7 @@ function LandingContent() {
                   </div>
                   
                   {/* Content */}
-                  <h3 className="relative text-xl font-display text-[#0A0A2A] mb-3">
+                  <h3 className="relative text-xl font-display text-[#000c1f] mb-3">
                     {benefit.title}
                   </h3>
                   <p className="relative text-[#4A4A4A] leading-relaxed text-sm">
@@ -538,14 +540,12 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* STORM SHOWCASE - Storm Identity System */}
+      {/* TEAMS - Dark Section with Smooth Transition */}
       {/* ============================================ */}
-      <StormShowcase />
-      
-      {/* ============================================ */}
-      {/* TEAMS - Clean Dark Section (NO GRADIENT) */}
-      {/* ============================================ */}
-      <section id="times" className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] scroll-mt-20 overflow-hidden">
+      {/* Smooth transition from white to dark */}
+      <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-white via-gray-100 to-[#000c1f]" />
+
+      <section id="times" className={`relative z-10 ${SECTION_SPACING} bg-[#000c1f] scroll-mt-20 overflow-hidden`}>
         {/* Subtle background accent */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF7F00]/5 rounded-full blur-[150px]" />
         
@@ -558,7 +558,7 @@ function LandingContent() {
           />
           
           {/* Team selector tabs - Clean solid */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mb-16">
             {TEAMS.map((team, index) => (
               <motion.button
                 key={team.name}
@@ -587,66 +587,50 @@ function LandingContent() {
               className="max-w-3xl mx-auto"
             >
               <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/10">
-                <div className="flex flex-col md:flex-row gap-8">
-                  {/* Team info */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span 
-                        className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border"
-                        style={{ 
-                          borderColor: `${TEAMS[activeTeam].color}40`,
-                          color: TEAMS[activeTeam].color,
-                          backgroundColor: `${TEAMS[activeTeam].color}10`
-                        }}
-                      >
-                        {TEAMS[activeTeam].level}
-                      </span>
-                      <span className="text-white/50 text-sm flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {TEAMS[activeTeam].category}
-                      </span>
-                    </div>
-                    
-                    <h3 className="text-4xl md:text-5xl font-display text-white mb-4">
-                      {TEAMS[activeTeam].name}
-                    </h3>
-                    
-                    <p className="text-white/60 text-lg leading-relaxed mb-6">
-                      {TEAMS[activeTeam].description}
-                    </p>
-                    
-                    {/* Requirements */}
-                    <div className="space-y-2 mb-8">
-                      {TEAMS[activeTeam].requirements.map((req, idx) => (
-                        <div key={idx} className="flex items-center gap-3 text-white/50">
-                          <ChevronRight className="w-4 h-4" style={{ color: TEAMS[activeTeam].color }} />
-                          <span>{req}</span>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <GlowingButton
-                      variant="primary"
-                      onClick={() => router.push('/formulario')}
+                {/* Team info */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span
+                      className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border"
+                      style={{
+                        borderColor: `${TEAMS[activeTeam].color}40`,
+                        color: TEAMS[activeTeam].color,
+                        backgroundColor: `${TEAMS[activeTeam].color}10`
+                      }}
                     >
-                      Inscrever-se para {TEAMS[activeTeam].name}
-                      <ArrowRight className="w-5 h-5" />
-                    </GlowingButton>
+                      {TEAMS[activeTeam].level}
+                    </span>
+                    <span className="text-white/50 text-sm flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      {TEAMS[activeTeam].category}
+                    </span>
                   </div>
-                  
-                  {/* Vacancies indicator */}
-                  <div className="md:w-48 flex md:flex-col items-center justify-center gap-4 p-6 bg-white/5 rounded-2xl border border-white/5">
-                    <div 
-                      className="text-6xl md:text-7xl font-display"
-                      style={{ color: TEAMS[activeTeam].color }}
-                    >
-                      {TEAMS[activeTeam].vacancies}
-                    </div>
-                    <div className="text-white/50 text-center">
-                      <div className="font-semibold text-white">vagas</div>
-                      <div className="text-sm">disponíveis</div>
-                    </div>
+
+                  <h3 className="text-4xl md:text-5xl font-display text-white mb-4">
+                    {TEAMS[activeTeam].name}
+                  </h3>
+
+                  <p className="text-white/60 text-lg leading-relaxed mb-6">
+                    {TEAMS[activeTeam].description}
+                  </p>
+
+                  {/* Requirements */}
+                  <div className="space-y-2 mb-8">
+                    {TEAMS[activeTeam].requirements.map((req, idx) => (
+                      <div key={idx} className="flex items-center gap-3 text-white/50">
+                        <ChevronRight className="w-4 h-4" style={{ color: TEAMS[activeTeam].color }} />
+                        <span>{req}</span>
+                      </div>
+                    ))}
                   </div>
+
+                  <GlowingButton
+                    variant="primary"
+                    onClick={() => router.push('/formulario')}
+                  >
+                    Inscrever-se para {TEAMS[activeTeam].name}
+                    <ArrowRight className="w-5 h-5" />
+                  </GlowingButton>
                 </div>
               </div>
             </motion.div>
@@ -655,9 +639,12 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* JOURNEY - Clean White Section (NO GRADIENT) */}
+      {/* JOURNEY - Clean Light Section with Transition */}
       {/* ============================================ */}
-      <section id="jornada" className="relative z-10 py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
+      {/* Smooth transition from dark to light */}
+      <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-[#000c1f] via-gray-800 to-[#FAFAFA]" />
+
+      <section id="jornada" className={`relative z-10 ${SECTION_SPACING} bg-[#FAFAFA] scroll-mt-20`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Sua Jornada"
@@ -705,7 +692,7 @@ function LandingContent() {
                       </div>
                       
                       {/* Content */}
-                      <h4 className="font-display text-lg text-[#0A0A2A] mb-1">
+                      <h4 className="font-display text-lg text-[#000c1f] mb-1">
                         {step.title}
                       </h4>
                       <p className="text-sm text-[#4A4A4A]">
@@ -740,7 +727,7 @@ function LandingContent() {
                   </div>
                   <div className="flex-1">
                     <div className="text-xs font-bold text-[#FF7F00] mb-1">PASSO {step.number}</div>
-                    <h4 className="font-display text-lg text-[#0A0A2A]">{step.title}</h4>
+                    <h4 className="font-display text-lg text-[#000c1f]">{step.title}</h4>
                     <p className="text-sm text-[#4A4A4A]">{step.description}</p>
                   </div>
                 </motion.div>
@@ -751,9 +738,12 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* TESTIMONIALS - WITH GRADIENTS (RESTORED) */}
+      {/* TESTIMONIALS - Dark Section with Transition */}
       {/* ============================================ */}
-      <section id="depoimentos" className="relative z-10 py-24 md:py-32 bg-[#0A0A2A] overflow-hidden scroll-mt-20">
+      {/* Smooth transition from light to dark */}
+      <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-[#FAFAFA] via-gray-200 to-[#000c1f]" />
+
+      <section id="depoimentos" className={`relative z-10 ${SECTION_SPACING} bg-[#000c1f] overflow-hidden scroll-mt-20`}>
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#FF7F00]/10 via-transparent to-transparent" />
         </div>
@@ -766,7 +756,7 @@ function LandingContent() {
             light
           />
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-10">
             {TESTIMONIALS.map((testimonial, index) => (
               <motion.div
                 key={testimonial.name}
@@ -811,9 +801,12 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* TRYOUT INFO - Clean White Section (NO GRADIENT) */}
+      {/* TRYOUT INFO - Clean White Section with Transition */}
       {/* ============================================ */}
-      <section id="tryout-info" className="relative z-10 py-24 md:py-32 bg-white scroll-mt-20">
+      {/* Smooth transition from dark to light */}
+      <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-[#000c1f] via-gray-800 to-white" />
+
+      <section id="tryout-info" className={`relative z-10 ${SECTION_SPACING} bg-white scroll-mt-20`}>
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Informações"
@@ -840,7 +833,7 @@ function LandingContent() {
                 <div className="text-xs font-semibold text-[#4A4A4A] uppercase tracking-wider mb-1">
                   {item.label}
                 </div>
-                <div className="font-display text-lg text-[#0A0A2A]">
+                <div className="font-display text-lg text-[#000c1f]">
                   {item.value}
                 </div>
               </motion.div>
@@ -856,7 +849,7 @@ function LandingContent() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h4 className="font-display text-lg text-[#0A0A2A] mb-4 text-center">O que levar</h4>
+              <h4 className="font-display text-lg text-[#000c1f] mb-4 text-center">O que levar</h4>
               <ul className="space-y-3 text-[#4A4A4A]">
                 {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve', 'Comprovante de pagamento (R$ 50)'].map((item) => (
                   <li key={item} className="flex items-center gap-3">
@@ -870,7 +863,7 @@ function LandingContent() {
             </motion.div>
             
             <motion.div
-              className="bg-[#0A0A2A] rounded-2xl p-6 flex flex-col items-center justify-center text-center"
+              className="bg-[#000c1f] rounded-2xl p-6 flex flex-col items-center justify-center text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -882,7 +875,7 @@ function LandingContent() {
               <p className="text-white/40 text-sm mb-4">Estacionamento no local</p>
               <div className="flex items-center gap-2 text-[#FF7F00]">
                 <Sparkles className="w-5 h-5" />
-                <span className="font-semibold">Vagas limitadas</span>
+                <span className="font-semibold">Vagas ilimitadas</span>
               </div>
             </motion.div>
           </div>
@@ -890,9 +883,9 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* FAQ - WITH GRADIENTS (RESTORED) */}
+      {/* FAQ - Clean Light Section */}
       {/* ============================================ */}
-      <section id="faq" className="relative z-10 py-24 md:py-32 bg-[#FAFAFA] scroll-mt-20">
+      <section id="faq" className={`relative z-10 ${SECTION_SPACING} !pt-22 md:!pt-24 lg:!pt-28 !pb-24 md:!pb-28 lg:!pb-40 bg-[#FAFAFA] scroll-mt-20`}>
         <div className="max-w-3xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Dúvidas"
@@ -919,7 +912,7 @@ function LandingContent() {
                 >
                   <div className="flex items-center justify-between gap-4">
                     <h3 className={`font-display text-lg ${
-                      activeFaq === index ? 'text-[#FF7F00]' : 'text-[#0A0A2A]'
+                      activeFaq === index ? 'text-[#FF7F00]' : 'text-[#000c1f]'
                     }`}>
                       {faq.question}
                     </h3>
@@ -956,9 +949,9 @@ function LandingContent() {
       </section>
       
       {/* ============================================ */}
-      {/* FINAL CTA - WITH GRADIENT (RESTORED) */}
+      {/* FINAL CTA - Gradient Section */}
       {/* ============================================ */}
-      <section id="cta" className="relative z-10 py-24 md:py-32 bg-gradient-to-br from-[#FF7F00] via-[#FF9933] to-[#00BFFF] overflow-hidden">
+      <section id="cta" className="relative z-10 py-12 md:py-16 lg:py-20 bg-gradient-to-br from-[#FF7F00] via-[#FF9933] to-[#00BFFF] overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div 
@@ -987,7 +980,7 @@ function LandingContent() {
             
             <motion.button
               onClick={() => router.push('/formulario')}
-              className="inline-flex items-center gap-3 px-10 py-5 bg-white text-[#FF7F00] font-bold text-lg rounded-full hover:bg-[#0A0A2A] hover:text-white transition-all duration-300 shadow-2xl shadow-black/20"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-white text-[#FF7F00] font-bold text-lg rounded-full hover:bg-[#000c1f] hover:text-white transition-all duration-300 shadow-2xl shadow-black/20"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -1001,7 +994,7 @@ function LandingContent() {
       {/* ============================================ */}
       {/* FOOTER */}
       {/* ============================================ */}
-      <footer className="relative z-10 bg-[#0A0A2A] text-white py-16">
+      <footer className="relative z-10 bg-[#000c1f] text-white py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Brand */}
@@ -1009,10 +1002,12 @@ function LandingContent() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative w-14 h-14 rounded-xl overflow-hidden">
                   <Image
-                    src="/logo/logo-shield.jpg"
+                    src="/logo/SkyHigh_Logo novo.png"
                     alt="SkyHigh AllStar"
                     fill
                     className="object-cover"
+                    loading="lazy"
+                    sizes="56px"
                   />
                 </div>
                 <div>
@@ -1021,7 +1016,7 @@ function LandingContent() {
                 </div>
               </div>
               <p className="text-white/60 max-w-sm leading-relaxed">
-                Faça parte da equipe que está elevando o nível do cheerleading brasileiro. 
+                Seu talento merece ir mais alto. Venha elevar o nível com a gente.
                 Tradição, excelência e paixão pelo esporte.
               </p>
             </div>

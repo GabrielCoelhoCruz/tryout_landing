@@ -59,14 +59,14 @@ function FloatingHeader() {
     >
       <div className="mx-2 sm:mx-4 mt-2 sm:mt-4">
         <div className={`max-w-7xl mx-auto backdrop-blur-xl rounded-2xl border border-white/10 px-4 sm:px-6 py-3 transition-all duration-300 ${
-          isScrolled ? 'bg-[#0A0A2A]/95' : 'bg-[#0A0A2A]/80'
+          isScrolled ? 'bg-[#000c1f]/95' : 'bg-[#000c1f]/80'
         }`}>
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden ring-2 ring-[#FF7F00]/50 group-hover:ring-[#FF7F00] transition-all">
                 <Image
-                  src="/logo/logo-shield.jpg"
+                  src="/logo/SkyHigh_Logo novo.png"
                   alt="SkyHigh AllStar"
                   fill
                   className="object-cover"
@@ -112,18 +112,22 @@ function ProgressIndicator({ currentSection, totalSections, sectionTitles }: {
   const icons = [User, Trophy, Calendar, Heart]
   
   return (
-    <div className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-40">
-      <div className="relative flex flex-col items-center gap-2">
-        {/* Progress bar background */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-5 bottom-5 w-0.5 bg-white/10" />
-        
-        {/* Animated progress bar */}
-        <motion.div 
-          className="absolute left-1/2 -translate-x-1/2 top-5 w-0.5 bg-gradient-to-b from-[#FF7F00] to-[#00BFFF]"
-          style={{ originY: 0 }}
-          initial={{ height: 0 }}
-          animate={{ height: `${progress}%` }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+    <div className="hidden lg:flex fixed left-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3 px-2.5 py-4 rounded-xl bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50">
+      <div className="relative flex flex-col items-center gap-4">
+        {/* Storm Energy Visual Indicator - Background Line */}
+        <motion.div
+          className="absolute left-1/2 -translate-x-1/2 top-0 bottom-6 w-px rounded-full"
+          style={{
+            background: `linear-gradient(180deg, transparent, #FF7F00, transparent)`,
+          }}
+          animate={{
+            opacity: [0.3, 0.8, 0.3],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
         />
         
         {/* Section dots */}
@@ -141,22 +145,38 @@ function ProgressIndicator({ currentSection, totalSections, sectionTitles }: {
               transition={{ delay: index * 0.1 }}
             >
               <motion.div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer border-2 relative ${
                   isCurrent
-                    ? 'bg-gradient-to-br from-[#FF7F00] to-[#FF9933] shadow-lg shadow-[#FF7F00]/30'
+                    ? 'bg-gradient-to-br from-[#FF7F00] to-[#FF9933] border-[#FF7F00] shadow-lg shadow-[#FF7F00]/30 z-20'
                     : isActive
-                    ? 'bg-white/20 border border-[#FF7F00]/50'
-                    : 'bg-white/5 border border-white/10'
+                    ? 'bg-[#000c1f] border-[#FF7F00] z-10'
+                    : 'bg-black/40 border-white/10 z-10'
                 }`}
                 whileHover={{ scale: 1.1 }}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-white/40'}`} />
+                {/* Active Glow for current step */}
+                {isCurrent && (
+                  <motion.div
+                    className="absolute inset-0 rounded-lg bg-[#FF7F00]"
+                    initial={{ opacity: 0.5, scale: 1 }}
+                    animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    style={{ filter: 'blur(6px)', zIndex: -1 }}
+                  />
+                )}
+                
+                <Icon className={`w-4 h-4 ${isCurrent ? 'text-white' : isActive ? 'text-[#FF7F00]' : 'text-white/30'}`} />
               </motion.div>
               
               {/* Tooltip */}
-              <div className="absolute left-14 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <div className="bg-[#0A0A2A] border border-white/10 rounded-lg px-3 py-2 whitespace-nowrap">
-                  <span className="text-xs font-semibold text-white">{title}</span>
+              <div className="absolute left-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                <div className="bg-black/90 backdrop-blur-md border border-[#FF7F00]/30 rounded-lg px-2.5 py-1.5 whitespace-nowrap shadow-xl">
+                  <span className="text-xs font-semibold text-[#FF7F00]">{title}</span>
+                  {/* Arrow */}
+                  <div
+                    className="absolute left-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[6px]"
+                    style={{ borderRightColor: 'rgba(255, 127, 0, 0.3)' }}
+                  />
                 </div>
               </div>
             </motion.div>
@@ -165,13 +185,12 @@ function ProgressIndicator({ currentSection, totalSections, sectionTitles }: {
         
         {/* Percentage */}
         <motion.div
-          className="mt-4 text-center"
+          className="mt-1 text-center relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <div className="text-2xl font-display text-[#FF7F00]">{Math.round(progress)}%</div>
-          <div className="text-xs text-white/40">concluído</div>
+          <div className="text-xs font-bold text-[#FF7F00] tabular-nums">{Math.round(progress)}%</div>
         </motion.div>
       </div>
     </div>
@@ -191,7 +210,7 @@ function MobileProgressBar({ currentSection, totalSections, sectionTitles }: {
   
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3 pt-2 safe-area-inset-bottom">
-      <div className="bg-[#0A0A2A]/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 sm:p-4 shadow-2xl shadow-black/30">
+      <div className="bg-[#000c1f]/95 backdrop-blur-xl rounded-2xl border border-white/10 p-3 sm:p-4 shadow-2xl shadow-black/30">
         {/* Section dots - horizontal stepper */}
         <div className="flex items-center justify-between mb-3">
           {sectionTitles.map((title, index) => {
@@ -401,9 +420,9 @@ function FormSection({ title, subtitle, icon, fields, formData, errors, onChange
                     backgroundSize: '16px'
                   }}
                 >
-                  <option value="" className="bg-[#0A0A2A] text-white">Selecione...</option>
+                  <option value="" className="bg-[#000c1f] text-white">Selecione...</option>
                   {field.options?.map((option) => (
-                    <option key={option.value} value={option.value} className="bg-[#0A0A2A] text-white">
+                    <option key={option.value} value={option.value} className="bg-[#000c1f] text-white">
                       {option.label}
                     </option>
                   ))}
@@ -744,6 +763,79 @@ export default function FormularioPage() {
         <AnimatedBackground fixed />
         <FloatingHeader />
         <SuccessState />
+        {/* FOOTER */}
+        <footer className="relative z-10 bg-[#000c1f] text-white py-16">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <div className="grid md:grid-cols-4 gap-12 mb-12">
+              {/* Brand */}
+              <div className="md:col-span-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden">
+                    <Image
+                      src="/logo/SkyHigh_Logo novo.png"
+                      alt="SkyHigh AllStar"
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                      sizes="56px"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-display text-[#FF7F00]">SKYHIGH</h3>
+                    <p className="text-sm font-display text-[#00BFFF]">ALLSTAR</p>
+                  </div>
+                </div>
+                <p className="text-white/60 max-w-sm leading-relaxed">
+                  Seu talento merece ir mais alto. Venha elevar o nível com a gente.
+                  Tradição, excelência e paixão pelo esporte.
+                </p>
+              </div>
+              
+              {/* Contact */}
+              <div>
+                <h4 className="font-display text-lg mb-4">Contato</h4>
+                <div className="space-y-3">
+                  <a href="https://wa.me/5511913311920" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                    <Phone className="w-4 h-4" />
+                    (11) 91331-1920
+                  </a>
+                  <a href="https://instagram.com/skyhigh.allstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                    <Instagram className="w-4 h-4" />
+                    @skyhigh.allstar
+                  </a>
+                </div>
+              </div>
+              
+              {/* Location */}
+              <div>
+                <h4 className="font-display text-lg mb-4">Localização</h4>
+                <div className="flex items-start gap-2 text-white/60">
+                  <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                  <address className="not-italic">
+                    Ginásio SkyHigh All Star<br />
+                    Centro Esportivo Tietê<br />
+                    Av. Santos Dumont, 843 - Luz<br />
+                    São Paulo - SP
+                  </address>
+                </div>
+                <p className="text-white/40 text-sm mt-2 ml-6">
+                  🚇 Metrô Armênia (Linha 1 - Azul)
+                </p>
+              </div>
+            </div>
+            
+            {/* Bottom bar */}
+            <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-white/40 text-sm">
+                © {new Date().getFullYear()} SkyHigh AllStar. Todos os direitos reservados.
+              </p>
+              <div className="flex items-center gap-6 text-sm text-white/40">
+                <Link href="#" className="hover:text-white transition-colors">Política de Privacidade</Link>
+                <Link href="#" className="hover:text-white transition-colors">Termos de Uso</Link>
+              </div>
+            </div>
+          </div>
+        </footer>
       </>
     )
   }
@@ -767,9 +859,9 @@ export default function FormularioPage() {
         sectionTitles={formSections.map(s => s.title)}
       />
       
-      <main ref={containerRef} className="relative z-10 min-h-screen pt-24 pb-32 lg:pb-16">
+      <main ref={containerRef} className="relative z-10 min-h-screen pt-20 pb-32 lg:pb-16">
         {/* Hero section */}
-        <section className="py-12 md:py-20">
+        <section className="py-8 md:py-12">
           <div className="max-w-4xl mx-auto px-4 md:px-8 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -777,7 +869,7 @@ export default function FormularioPage() {
               transition={{ duration: 0.8 }}
             >
               <motion.span
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium mb-4"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -788,7 +880,7 @@ export default function FormularioPage() {
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display text-white leading-tight mb-4">
                 Formulário de{' '}
-                <span className="bg-gradient-to-r from-[#FF7F00] to-[#00BFFF] bg-clip-text text-transparent">
+                <span className="text-[#FF7F00]">
                   Inscrição
                 </span>
           </h1>
@@ -932,6 +1024,80 @@ export default function FormularioPage() {
           </div>
         </motion.div>
       </main>
+      
+      {/* FOOTER */}
+      <footer className="relative z-10 bg-[#000c1f] text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative w-14 h-14 rounded-xl overflow-hidden">
+                  <Image
+                    src="/logo/SkyHigh_Logo novo.png"
+                    alt="SkyHigh AllStar"
+                    fill
+                    className="object-cover"
+                    loading="lazy"
+                    sizes="56px"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-display text-[#FF7F00]">SKYHIGH</h3>
+                  <p className="text-sm font-display text-[#00BFFF]">ALLSTAR</p>
+                </div>
+              </div>
+              <p className="text-white/60 max-w-sm leading-relaxed">
+                Seu talento merece ir mais alto. Venha elevar o nível com a gente.
+                Tradição, excelência e paixão pelo esporte.
+              </p>
+            </div>
+            
+            {/* Contact */}
+            <div>
+              <h4 className="font-display text-lg mb-4">Contato</h4>
+              <div className="space-y-3">
+                <a href="https://wa.me/5511913311920" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                  <Phone className="w-4 h-4" />
+                  (11) 91331-1920
+                </a>
+                <a href="https://instagram.com/skyhigh.allstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-[#FF7F00] transition-colors">
+                  <Instagram className="w-4 h-4" />
+                  @skyhigh.allstar
+                </a>
+              </div>
+            </div>
+            
+            {/* Location */}
+            <div>
+              <h4 className="font-display text-lg mb-4">Localização</h4>
+              <div className="flex items-start gap-2 text-white/60">
+                <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                <address className="not-italic">
+                  Ginásio SkyHigh All Star<br />
+                  Centro Esportivo Tietê<br />
+                  Av. Santos Dumont, 843 - Luz<br />
+                  São Paulo - SP
+                </address>
+              </div>
+              <p className="text-white/40 text-sm mt-2 ml-6">
+                🚇 Metrô Armênia (Linha 1 - Azul)
+              </p>
+            </div>
+          </div>
+          
+          {/* Bottom bar */}
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-white/40 text-sm">
+              © {new Date().getFullYear()} SkyHigh AllStar. Todos os direitos reservados.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-white/40">
+              <Link href="#" className="hover:text-white transition-colors">Política de Privacidade</Link>
+              <Link href="#" className="hover:text-white transition-colors">Termos de Uso</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   )
 }

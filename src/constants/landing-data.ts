@@ -18,9 +18,9 @@ import type { StormType } from '@/context/StormWeatherContext'
 
 export const STATS = [
   { number: '15+', label: 'Campeonatos', icon: Trophy, color: '#FF7F00' },
-  { number: '8', label: 'Anos de Equipe', icon: Calendar, color: '#00BFFF' },
+  { number: '6', label: 'Anos de Equipe', icon: Calendar, color: '#00BFFF' },
   { number: '100+', label: 'Atletas Formados', icon: Users, color: '#FF8C69' },
-  { number: '25+', label: 'Pódios', icon: Star, color: '#2563EB' },
+  { number: '10', label: 'Conquistas', icon: Star, color: '#2563EB' },
 ] as const
 
 export const BENEFITS = [
@@ -45,13 +45,6 @@ export const BENEFITS = [
       'Ambiente de união, respeito e crescimento coletivo. Aqui você constrói amizades para toda a vida enquanto evolui no esporte.',
     color: '#FF7F00',
   },
-  {
-    icon: Trophy,
-    title: 'Conquistas Reais',
-    description:
-      'Histórico comprovado de pódios em campeonatos estaduais, nacionais e internacionais. Faça parte de uma equipe vencedora.',
-    color: '#00BFFF',
-  },
 ] as const
 
 type Team = {
@@ -67,67 +60,73 @@ type Team = {
 
 export const TEAMS: readonly Team[] = [
   {
-    name: 'N2 Coed',
+    name: 'HAILSTORM COED 2 NT',
     level: 'Nível 2',
+    category: 'Coed',
+    description:
+      'Time misto, ideal para atletas iniciantes que buscam evolução técnica na base do cheerleading.',
+    requirements: [
+      'Idade mínimo: 12 anos',
+      'Habilidades: (à confirmar)',
+    ],
+    vacancies: 0,
+    color: '#E0F4FF',
+    storm: 'hail',
+  },
+  {
+    name: 'SNOWSTORM ALL GIRL 2 NT',
+    level: 'Nível 2',
+    category: 'All Girl',
+    description:
+      'Time feminino, com foco em técnica, sincronia e performance.',
+    requirements: [
+      'Idade mínimo: 8 anos',
+      'Habilidades: (à confirmar)',
+    ],
+    vacancies: 0,
+    color: '#FFFFFF',
+    storm: 'snow',
+  },
+  {
+    name: 'RAINSTORM COED 3 NT',
+    level: 'Nível 3',
     category: 'Coed',
     description:
       'Time misto de nível intermediário, ideal para atletas com experiência prévia que buscam evolução técnica.',
     requirements: [
-      'Idade: 14-25 anos',
-      'Experiência mínima: 1 ano em cheerleading',
-      'Disponibilidade: 3x por semana',
-      'Habilidades: Stunts básicos, tumbling iniciante',
+      'Idade mínimo: 12 anos',
+      'Habilidades: (à confirmar)',
     ],
-    vacancies: 5,
-    color: '#FF7F00',
-    storm: 'fire',
-  },
-  {
-    name: 'N3 Coed',
-    level: 'Nível 3',
-    category: 'Coed',
-    description:
-      'Time misto avançado com foco em rotinas complexas e competições de alto nível.',
-    requirements: [
-      'Idade: 15-25 anos',
-      'Experiência mínima: 2 anos em cheerleading',
-      'Disponibilidade: 4x por semana',
-      'Habilidades: Stunts intermediários, tumbling avançado',
-    ],
-    vacancies: 3,
+    vacancies: 0,
     color: '#00BFFF',
     storm: 'rain',
   },
   {
-    name: 'N2 All Girl',
-    level: 'Nível 2',
-    category: 'All Girl',
+    name: 'THUNDERSTORM COED 3',
+    level: 'Nível 3',
+    category: 'Coed',
     description:
-      'Time feminino de nível intermediário, com foco em técnica, sincronia e performance.',
+      'Time misto de nível intermediário, ideal para atletas com experiência prévia que buscam evolução técnica.',
     requirements: [
-      'Idade: 14-25 anos (feminino)',
-      'Experiência mínima: 1 ano em cheerleading',
-      'Disponibilidade: 3x por semana',
-      'Habilidades: Stunts femininos, tumbling básico',
+      'Idade mínimo: 12 anos',
+      'Habilidades: (à confirmar) tumbling jump flic, rodante mortal, rodante flic mortal, estrela sem mãos e híber',
     ],
-    vacancies: 6,
-    color: '#FF7F00',
-    storm: 'hail',
+    vacancies: 0,
+    color: '#9D00FF',
+    storm: 'thunder',
   },
   {
-    name: 'N3 All Girl',
-    level: 'Nível 3',
-    category: 'All Girl',
+    name: 'LIGHTNINGSTORM COED 4',
+    level: 'Nível 4',
+    category: 'Coed',
     description:
-      'Time feminino avançado, preparado para competir nas maiores competições do país.',
+      'Time misto avançado com foco em rotinas complexas e competições de alto nível.',
     requirements: [
-      'Idade: 15-25 anos (feminino)',
-      'Experiência mínima: 2 anos em cheerleading',
-      'Disponibilidade: 4x por semana',
-      'Habilidades: Stunts avançados, tumbling intermediário',
+      'Idade mínimo: 12 anos',
+      'Habilidades: (à confirmar) tumbling mortal parado, rodante mortal estendido',
     ],
-    vacancies: 4,
-    color: '#00BFFF',
+    vacancies: 0,
+    color: '#FFD700',
     storm: 'thunder',
   },
 ] as const
@@ -232,20 +231,14 @@ export const TRYOUT_INFO = [
   {
     icon: ClipboardList,
     label: 'Inscrições abertas',
-    value: '15 Jan - 15 Fev 2026',
+    value: '14/12 a 30/01',
     color: '#FF7F00',
   },
   {
     icon: Calendar,
     label: 'Data do Tryout',
-    value: '22 de Fevereiro, 2026',
+    value: '31/01 e 01/02 de 2026',
     color: '#00BFFF',
-  },
-  {
-    icon: Users,
-    label: 'Vagas Disponíveis',
-    value: '18 vagas totais',
-    color: '#FF8C69',
   },
   {
     icon: DollarSign,

@@ -24,8 +24,8 @@ export function AnimatedBackground({
 
   return (
     <div className={containerClass}>
-      {/* Gradient base - Deep storm atmosphere - Athletic/Premium feel */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A2A] via-[#0F1A3D] to-[#0A1B4D]" />
+      {/* Gradient base - Deep storm atmosphere - Matching logo background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#000c1f] via-[#001428] to-[#001a4d]" />
 
       {/* Subtle animated gradient orbs - Premium ambient glow */}
       <motion.div

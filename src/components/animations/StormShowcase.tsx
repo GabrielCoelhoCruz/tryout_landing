@@ -263,7 +263,7 @@ function StormPreview({ storm, isMobile = false }: StormPreviewProps) {
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A2A]/95 via-[#0A0A2A]/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#000c1f]/95 via-[#000c1f]/50 to-transparent" />
 
       {/* Content */}
       <div className={`relative h-full flex flex-col ${isMobile ? 'p-5' : 'p-8'}`}>
@@ -461,7 +461,7 @@ export function StormShowcase() {
   }
 
   return (
-    <section className="relative py-16 md:py-24 lg:py-32 bg-[#0A0A2A] overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 bg-[#000c1f] overflow-hidden">
       {/* Ambient Background */}
       <div className="absolute inset-0">
         <div 
@@ -495,7 +495,7 @@ export function StormShowcase() {
             transition={{ delay: 0.1 }}
           >
             CONHEÇA OS{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF7F00] via-[#00BFFF] to-[#9D00FF]">
+            <span className="text-[#FF7F00]">
               STORMS
             </span>
           </motion.h2>
@@ -531,8 +531,8 @@ export function StormShowcase() {
             </div>
             
             {/* Gradient fade indicators */}
-            <div className="absolute left-0 top-0 bottom-2 w-8 bg-gradient-to-r from-[#0A0A2A] to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-[#0A0A2A] to-transparent pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-2 w-8 bg-gradient-to-r from-[#000c1f] to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-[#000c1f] to-transparent pointer-events-none" />
           </div>
 
           {/* Mobile Preview with Navigation */}

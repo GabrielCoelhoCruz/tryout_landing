@@ -144,7 +144,7 @@ export function ScrollProgress({
 
       {/* Side Navigation Dots - Storm Indicators */}
       {showSideDots && (
-        <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4">
+        <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4 px-3 py-4 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50">
           {sections.map((section, index) => {
             const isActive = index === activeSection
             const isPast = index < activeSection
@@ -237,12 +237,12 @@ export function ScrollProgress({
 
           {/* Storm Energy Visual Indicator */}
           <motion.div
-            className="absolute -left-8 top-0 bottom-0 w-px"
+            className="absolute left-0 top-4 bottom-4 w-px rounded-full"
             style={{
-              background: `linear-gradient(180deg, transparent, ${activeColor}60, transparent)`,
+              background: `linear-gradient(180deg, transparent, ${activeColor}, transparent)`,
             }}
             animate={{
-              opacity: [0.3, 0.7, 0.3],
+              opacity: [0.4, 0.9, 0.4],
             }}
             transition={{
               duration: 2,
