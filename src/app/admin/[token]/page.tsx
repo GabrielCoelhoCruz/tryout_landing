@@ -205,43 +205,69 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* Secondary Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* Secondary Stats - Grouped */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Níveis */}
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.n2_interest_count || 0}
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Interesse por Nível</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-display text-[#FF7F00]">
+                {stats?.n2_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-sm">N2</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-display text-[#00BFFF]">
+                {stats?.n3_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-sm">N3</div>
+            </div>
           </div>
-          <div className="text-white/50 text-sm">Interesse N2</div>
         </div>
+
+        {/* Posições */}
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.n3_interest_count || 0}
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Interesse por Posição</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="text-center">
+              <div className="text-2xl font-display text-pink-400">
+                {stats?.flyer_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-xs">Flyer</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-display text-emerald-400">
+                {stats?.base_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-xs">Base</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-display text-purple-400">
+                {stats?.back_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-xs">Back</div>
+            </div>
           </div>
-          <div className="text-white/50 text-sm">Interesse N3</div>
         </div>
+
+        {/* Idade */}
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.flyer_interest_count || 0}
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Por Idade</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-display text-sky-400">
+                {stats?.minors_count || 0}
+              </div>
+              <div className="text-white/50 text-sm">Menores</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-display text-white">
+                {stats?.adults_count || 0}
+              </div>
+              <div className="text-white/50 text-sm">Adultos</div>
+            </div>
           </div>
-          <div className="text-white/50 text-sm">Flyers</div>
-        </div>
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.base_interest_count || 0}
-          </div>
-          <div className="text-white/50 text-sm">Bases</div>
-        </div>
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.minors_count || 0}
-          </div>
-          <div className="text-white/50 text-sm">Menores</div>
-        </div>
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-2xl font-display text-white">
-            {stats?.adults_count || 0}
-          </div>
-          <div className="text-white/50 text-sm">Adultos</div>
         </div>
       </div>
 

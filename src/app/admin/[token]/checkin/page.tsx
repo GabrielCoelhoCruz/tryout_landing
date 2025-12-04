@@ -52,7 +52,10 @@ export default function CheckinPage() {
     total: number
     paid: number
     paymentPending: number
-  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0 })
+    flyers: number
+    bases: number
+    backs: number
+  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0 })
 
   // Debounce search
   useEffect(() => {
@@ -88,6 +91,9 @@ export default function CheckinPage() {
           total: s.total_registrations || 0,
           paid: s.paid_count || 0,
           paymentPending: s.payment_pending_count || 0,
+          flyers: s.flyer_interest_count || 0,
+          bases: s.base_interest_count || 0,
+          backs: s.back_interest_count || 0,
         })
       }
     },
@@ -204,36 +210,66 @@ export default function CheckinPage() {
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10 text-center">
-          <div className="text-3xl font-display text-white">{stats.total}</div>
-          <div className="text-white/50 text-sm">Total</div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Main stats row */}
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
+          <div className="text-2xl font-display text-white">{stats.total}</div>
+          <div className="text-white/50 text-xs">Total</div>
         </div>
-        <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/20 text-center">
-          <div className="text-3xl font-display text-green-400">{stats.present}</div>
-          <div className="text-green-400/70 text-sm">Presentes</div>
+        <div className="bg-green-500/10 rounded-xl p-3 border border-green-500/20 text-center">
+          <div className="text-2xl font-display text-green-400">{stats.present}</div>
+          <div className="text-green-400/70 text-xs">Presentes</div>
         </div>
-        <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/20 text-center">
-          <div className="text-3xl font-display text-red-400">{stats.absent}</div>
-          <div className="text-red-400/70 text-sm">Ausentes</div>
+        <div className="bg-red-500/10 rounded-xl p-3 border border-red-500/20 text-center">
+          <div className="text-2xl font-display text-red-400">{stats.absent}</div>
+          <div className="text-red-400/70 text-xs">Ausentes</div>
         </div>
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10 text-center">
-          <div className="text-3xl font-display text-white/60">{stats.notChecked}</div>
-          <div className="text-white/50 text-sm">Aguardando</div>
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
+          <div className="text-2xl font-display text-white/60">{stats.notChecked}</div>
+          <div className="text-white/50 text-xs">Aguardando</div>
         </div>
-        <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/20 text-center">
-          <div className="text-3xl font-display text-green-400 flex items-center justify-center gap-1">
-            <DollarSign className="w-6 h-6" />
-            {stats.paid}
+      </div>
+
+      {/* Secondary stats: Payment & Positions */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Payment stats */}
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Pagamento</div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="text-center bg-green-500/10 rounded-lg p-2 border border-green-500/20">
+              <div className="text-xl font-display text-green-400 flex items-center justify-center gap-1">
+                <DollarSign className="w-4 h-4" />
+                {stats.paid}
+              </div>
+              <div className="text-green-400/70 text-xs">Pagos</div>
+            </div>
+            <div className="text-center bg-yellow-500/10 rounded-lg p-2 border border-yellow-500/20">
+              <div className="text-xl font-display text-yellow-400 flex items-center justify-center gap-1">
+                <AlertCircle className="w-4 h-4" />
+                {stats.paymentPending}
+              </div>
+              <div className="text-yellow-400/70 text-xs">Pendente</div>
+            </div>
           </div>
-          <div className="text-green-400/70 text-sm">Pagos</div>
         </div>
-        <div className="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/20 text-center">
-          <div className="text-3xl font-display text-yellow-400 flex items-center justify-center gap-1">
-            <AlertCircle className="w-6 h-6" />
-            {stats.paymentPending}
+
+        {/* Position stats */}
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Posições</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="text-center">
+              <div className="text-xl font-display text-pink-400">{stats.flyers}</div>
+              <div className="text-white/50 text-xs">Flyer</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-display text-emerald-400">{stats.bases}</div>
+              <div className="text-white/50 text-xs">Base</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-display text-purple-400">{stats.backs}</div>
+              <div className="text-white/50 text-xs">Back</div>
+            </div>
           </div>
-          <div className="text-yellow-400/70 text-sm">Pend. Pgto</div>
         </div>
       </div>
 
