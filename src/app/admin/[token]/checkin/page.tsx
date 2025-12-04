@@ -55,7 +55,10 @@ export default function CheckinPage() {
     flyers: number
     bases: number
     backs: number
-  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0 })
+    n2: number
+    n3: number
+    n4: number
+  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0, n2: 0, n3: 0, n4: 0 })
 
   // Debounce search
   useEffect(() => {
@@ -94,6 +97,9 @@ export default function CheckinPage() {
           flyers: s.flyer_interest_count || 0,
           bases: s.base_interest_count || 0,
           backs: s.back_interest_count || 0,
+          n2: s.n2_interest_count || 0,
+          n3: s.n3_interest_count || 0,
+          n4: s.n4_interest_count || 0,
         })
       }
     },
@@ -230,8 +236,8 @@ export default function CheckinPage() {
         </div>
       </div>
 
-      {/* Secondary stats: Payment & Positions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* Secondary stats: Payment, Positions & Levels */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Payment stats */}
         <div className="bg-white/5 rounded-xl p-3 border border-white/10">
           <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Pagamento</div>
@@ -268,6 +274,25 @@ export default function CheckinPage() {
             <div className="text-center">
               <div className="text-xl font-display text-purple-400">{stats.backs}</div>
               <div className="text-white/50 text-xs">Back</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Level stats */}
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Níveis</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="text-center">
+              <div className="text-xl font-display text-[#FF7F00]">{stats.n2}</div>
+              <div className="text-white/50 text-xs">N2</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-display text-[#00BFFF]">{stats.n3}</div>
+              <div className="text-white/50 text-xs">N3</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xl font-display text-yellow-400">{stats.n4}</div>
+              <div className="text-white/50 text-xs">N4</div>
             </div>
           </div>
         </div>

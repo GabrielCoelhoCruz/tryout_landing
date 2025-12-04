@@ -140,6 +140,7 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           options: [
             { value: 'n2', label: 'N2 (Nível 2)' },
             { value: 'n3', label: 'N3 (Nível 3)' },
+            { value: 'n4', label: 'N4 (Nível 4)' },
           ],
         },
         {

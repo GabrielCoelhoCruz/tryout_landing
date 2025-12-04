@@ -201,6 +201,7 @@ export type Database = {
           minors_count: number | null
           n2_interest_count: number | null
           n3_interest_count: number | null
+          n4_interest_count: number | null
           not_checked_count: number | null
           paid_count: number | null
           payment_pending_count: number | null
@@ -353,7 +354,7 @@ export type Database = {
     }
     Enums: {
       attendance_status_type: "not_checked" | "present" | "absent"
-      cheer_level_type: "n2" | "n3"
+      cheer_level_type: "n2" | "n3" | "n4"
       cheer_position_type: "base" | "flyer" | "back"
       day_period_type: "manha" | "tarde" | "noite"
       experience_time_type:
@@ -509,7 +510,7 @@ export const Constants = {
   public: {
     Enums: {
       attendance_status_type: ["not_checked", "present", "absent"],
-      cheer_level_type: ["n2", "n3"],
+      cheer_level_type: ["n2", "n3", "n4"],
       cheer_position_type: ["base", "flyer", "back"],
       day_period_type: ["manha", "tarde", "noite"],
       experience_time_type: [

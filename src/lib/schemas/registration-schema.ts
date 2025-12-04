@@ -17,7 +17,7 @@ export const sportsExperienceSchema = z.enum([
   'nenhuma',
 ])
 export const cheerPositionSchema = z.enum(['base', 'flyer', 'back'])
-export const cheerLevelSchema = z.enum(['n2', 'n3'])
+export const cheerLevelSchema = z.enum(['n2', 'n3', 'n4'])
 export const skillLevelSchema = z.enum(['basico', 'intermediario', 'avancado'])
 export const weekdaySchema = z.enum([
   'segunda',

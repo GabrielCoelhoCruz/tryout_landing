@@ -210,18 +210,24 @@ export default function AdminDashboard() {
         {/* Níveis */}
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
           <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Interesse por Nível</div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-2">
             <div className="text-center">
               <div className="text-2xl font-display text-[#FF7F00]">
                 {stats?.n2_interest_count || 0}
               </div>
-              <div className="text-white/50 text-sm">N2</div>
+              <div className="text-white/50 text-xs">N2</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-display text-[#00BFFF]">
                 {stats?.n3_interest_count || 0}
               </div>
-              <div className="text-white/50 text-sm">N3</div>
+              <div className="text-white/50 text-xs">N3</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-display text-yellow-400">
+                {stats?.n4_interest_count || 0}
+              </div>
+              <div className="text-white/50 text-xs">N4</div>
             </div>
           </div>
         </div>
