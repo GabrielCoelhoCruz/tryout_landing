@@ -43,5 +43,4 @@ export type DayPeriodType = Database['public']['Enums']['day_period_type']
 export type RegistrationStatusType = Database['public']['Enums']['registration_status_type']
 export type AttendanceStatusType = Database['public']['Enums']['attendance_status_type']
 export type PaymentStatusType = Database['public']['Enums']['payment_status_type']
-export type PaymentStatusType = Database['public']['Enums']['payment_status_type']
 

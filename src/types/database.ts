@@ -85,6 +85,7 @@ export type Database = {
           outros_esportes: string | null
           participa_campeonatos: Database["public"]["Enums"]["yes_no_maybe_type"]
           payment_status: Database["public"]["Enums"]["payment_status_type"]
+          payment_proof_url: string | null
           periodo_preferencia:
             | Database["public"]["Enums"]["day_period_type"]
             | null
@@ -126,6 +127,7 @@ export type Database = {
           outros_esportes?: string | null
           participa_campeonatos: Database["public"]["Enums"]["yes_no_maybe_type"]
           payment_status?: Database["public"]["Enums"]["payment_status_type"]
+          payment_proof_url?: string | null
           periodo_preferencia?:
             | Database["public"]["Enums"]["day_period_type"]
             | null
@@ -167,6 +169,7 @@ export type Database = {
           outros_esportes?: string | null
           participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
           payment_status?: Database["public"]["Enums"]["payment_status_type"]
+          payment_proof_url?: string | null
           periodo_preferencia?:
             | Database["public"]["Enums"]["day_period_type"]
             | null

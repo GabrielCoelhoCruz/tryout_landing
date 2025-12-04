@@ -118,7 +118,7 @@ export default function CheckinPage() {
       search: debouncedSearch || undefined,
       attendanceFilter,
     })
-    fetchStats({})
+    fetchStats()
   }, [fetchRegistrations, fetchStats, debouncedSearch, attendanceFilter])
 
   useEffect(() => {

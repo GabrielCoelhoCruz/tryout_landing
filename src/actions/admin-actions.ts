@@ -244,10 +244,12 @@ export const uploadPaymentProof = actionClient
   .action(async ({ parsedInput }) => {
     const supabase = createServerClient()
 
-    const { data, error } = await supabase.rpc('update_payment_proof', {
-      p_registration_id: parsedInput.registrationId,
-      p_proof_url: parsedInput.proofUrl,
-    })
+    const { data, error } = await supabase
+      .from('registrations')
+      .update({ payment_proof_url: parsedInput.proofUrl })
+      .eq('id', parsedInput.registrationId)
+      .select()
+      .single()
 
     if (error) {
       console.error('Error updating payment proof:', error)

@@ -123,7 +123,7 @@ export default function AdminDashboard() {
       offset: 0,
       search: searchQuery || null,
     })
-    fetchStats({})
+    fetchStats()
   }, [fetchRegistrations, fetchStats, searchQuery])
 
   useEffect(() => {
