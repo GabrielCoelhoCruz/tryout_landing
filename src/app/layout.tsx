@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -50,6 +51,18 @@ export default function RootLayout({
         className={`${bebasNeue.variable} ${workSans.variable} antialiased`}
       >
         {children}
+        <Toaster
+          position="top-center"
+          theme="dark"
+          richColors
+          toastOptions={{
+            style: {
+              background: 'rgba(0, 12, 31, 0.95)',
+              border: '1px solid rgba(255, 127, 0, 0.3)',
+              backdropFilter: 'blur(12px)',
+            },
+          }}
+        />
       </body>
     </html>
   );
