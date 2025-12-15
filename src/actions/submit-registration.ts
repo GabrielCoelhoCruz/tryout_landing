@@ -87,5 +87,3 @@ export const submitRegistration = actionClient
       data,
     }
   })
-
-
