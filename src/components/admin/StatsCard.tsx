@@ -12,6 +12,12 @@ interface StatsCardProps {
     value: number
     label: string
   }
+  progress?: {
+    current: number
+    total: number
+    label?: string
+  }
+  subtitle?: string
   className?: string
 }
 
@@ -21,6 +27,8 @@ export function StatsCard({
   icon: Icon,
   color = '#FF7F00',
   trend,
+  progress,
+  subtitle,
   className = '',
 }: StatsCardProps) {
   return (
@@ -53,6 +61,11 @@ export function StatsCard({
         {/* Title */}
         <div className="text-white/60 text-sm font-medium">{title}</div>
 
+        {/* Subtitle */}
+        {subtitle && (
+          <div className="mt-2 text-white/40 text-xs">{subtitle}</div>
+        )}
+
         {/* Trend indicator */}
         {trend && (
           <div className="mt-3 flex items-center gap-2">
@@ -67,6 +80,26 @@ export function StatsCard({
               {trend.value}
             </span>
             <span className="text-white/40 text-xs">{trend.label}</span>
+          </div>
+        )}
+
+        {/* Progress bar */}
+        {progress && (
+          <div className="mt-4">
+            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ backgroundColor: color }}
+                initial={{ width: 0 }}
+                animate={{
+                  width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%`,
+                }}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+              />
+            </div>
+            {progress.label && (
+              <div className="mt-1.5 text-white/40 text-xs">{progress.label}</div>
+            )}
           </div>
         )}
       </div>

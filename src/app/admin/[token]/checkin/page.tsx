@@ -11,8 +11,6 @@ import {
   UserX,
   Clock,
   RefreshCw,
-  DollarSign,
-  AlertCircle,
 } from 'lucide-react'
 import {
   getRegistrationsForCheckin,
@@ -238,62 +236,83 @@ export default function CheckinPage() {
 
       {/* Secondary stats: Payment, Positions & Levels */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* Payment stats */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Pagamento</div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="text-center bg-green-500/10 rounded-lg p-2 border border-green-500/20">
-              <div className="text-xl font-display text-green-400 flex items-center justify-center gap-1">
-                <DollarSign className="w-4 h-4" />
-                {stats.paid}
-              </div>
-              <div className="text-green-400/70 text-xs">Pagos</div>
-            </div>
-            <div className="text-center bg-yellow-500/10 rounded-lg p-2 border border-yellow-500/20">
-              <div className="text-xl font-display text-yellow-400 flex items-center justify-center gap-1">
-                <AlertCircle className="w-4 h-4" />
-                {stats.paymentPending}
-              </div>
-              <div className="text-yellow-400/70 text-xs">Pendente</div>
-            </div>
+        {/* Payment stats - Simplified */}
+        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-white/50 text-xs uppercase tracking-wider">Pagamento</span>
+            <span className="text-white text-sm font-semibold">
+              {stats.paid}/{stats.total}
+            </span>
+          </div>
+          <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-2">
+            <motion.div
+              className="h-full bg-green-500 rounded-full"
+              initial={{ width: 0 }}
+              animate={{
+                width: stats.total > 0 ? `${(stats.paid / stats.total) * 100}%` : '0%',
+              }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-green-400">{stats.paid} pagos</span>
+            <span className="text-yellow-400">{stats.paymentPending} pendentes</span>
           </div>
         </div>
 
-        {/* Position stats */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Posições</div>
-          <div className="grid grid-cols-3 gap-2">
-            <div className="text-center">
-              <div className="text-xl font-display text-pink-400">{stats.flyers}</div>
-              <div className="text-white/50 text-xs">Flyer</div>
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-display text-emerald-400">{stats.bases}</div>
-              <div className="text-white/50 text-xs">Base</div>
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-display text-purple-400">{stats.backs}</div>
-              <div className="text-white/50 text-xs">Back</div>
-            </div>
+        {/* Position stats - Mini bar chart */}
+        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Posições</div>
+          <div className="space-y-2">
+            {[
+              { label: 'Flyer', value: stats.flyers, color: 'bg-pink-500' },
+              { label: 'Base', value: stats.bases, color: 'bg-emerald-500' },
+              { label: 'Back', value: stats.backs, color: 'bg-purple-500' },
+            ].map((item) => {
+              const maxPosition = Math.max(stats.flyers, stats.bases, stats.backs, 1)
+              return (
+                <div key={item.label} className="flex items-center gap-2">
+                  <span className="text-white/60 text-xs w-10">{item.label}</span>
+                  <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div
+                      className={`h-full ${item.color} rounded-full`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(item.value / maxPosition) * 100}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                  <span className="text-white text-xs font-semibold w-6 text-right">{item.value}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
 
-        {/* Level stats */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-2">Níveis</div>
-          <div className="grid grid-cols-3 gap-2">
-            <div className="text-center">
-              <div className="text-xl font-display text-[#FF7F00]">{stats.n2}</div>
-              <div className="text-white/50 text-xs">N2</div>
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-display text-[#00BFFF]">{stats.n3}</div>
-              <div className="text-white/50 text-xs">N3</div>
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-display text-yellow-400">{stats.n4}</div>
-              <div className="text-white/50 text-xs">N4</div>
-            </div>
+        {/* Level stats - Mini bar chart */}
+        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Níveis</div>
+          <div className="space-y-2">
+            {[
+              { label: 'N2', value: stats.n2, color: 'bg-[#FF7F00]' },
+              { label: 'N3', value: stats.n3, color: 'bg-[#00BFFF]' },
+              { label: 'N4', value: stats.n4, color: 'bg-yellow-400' },
+            ].map((item) => {
+              const maxLevel = Math.max(stats.n2, stats.n3, stats.n4, 1)
+              return (
+                <div key={item.label} className="flex items-center gap-2">
+                  <span className="text-white/60 text-xs w-6">{item.label}</span>
+                  <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div
+                      className={`h-full ${item.color} rounded-full`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(item.value / maxLevel) * 100}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                  <span className="text-white text-xs font-semibold w-6 text-right">{item.value}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

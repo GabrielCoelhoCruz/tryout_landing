@@ -6,12 +6,10 @@ import { toast } from 'sonner'
 import {
   Users,
   UserCheck,
-  UserX,
-  Clock,
-  CreditCard,
   AlertCircle,
   Calendar,
   DollarSign,
+  TrendingUp,
 } from 'lucide-react'
 import {
   getRegistrations,
@@ -21,6 +19,7 @@ import {
   uploadPaymentProof,
 } from '@/actions/admin-actions'
 import { StatsCard, RegistrationTable, RegistrationDetail } from '@/components/admin'
+import { BarChart, DonutChart, LineChart } from '@/components/admin/charts'
 import type { Database } from '@/types/database'
 
 type Registration = {
@@ -190,117 +189,136 @@ export default function AdminDashboard() {
           value={stats?.paid_count || 0}
           icon={DollarSign}
           color="#22C55E"
+          progress={
+            stats?.total_registrations
+              ? {
+                  current: stats?.paid_count || 0,
+                  total: stats.total_registrations,
+                  label: `${Math.round(((stats?.paid_count || 0) / stats.total_registrations) * 100)}% do total`,
+                }
+              : undefined
+          }
         />
         <StatsCard
           title="Comprovante Pendente"
           value={stats?.payment_pending_count || 0}
           icon={AlertCircle}
           color="#EAB308"
+          subtitle="Aguardando confirmação"
         />
         <StatsCard
-          title="Presentes no Tryout"
-          value={stats?.present_count || 0}
+          title="Check-in Status"
+          value={`${stats?.present_count || 0}/${stats?.total_registrations || 0}`}
           icon={UserCheck}
           color="#3B82F6"
+          progress={
+            stats?.total_registrations
+              ? {
+                  current: stats?.present_count || 0,
+                  total: stats.total_registrations,
+                }
+              : undefined
+          }
         />
       </div>
 
-      {/* Secondary Stats - Grouped */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Níveis */}
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Interesse por Nível</div>
-          <div className="grid grid-cols-3 gap-2">
-            <div className="text-center">
-              <div className="text-2xl font-display text-[#FF7F00]">
-                {stats?.n2_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">N2</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-display text-[#00BFFF]">
-                {stats?.n3_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">N3</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-display text-yellow-400">
-                {stats?.n4_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">N4</div>
-            </div>
-          </div>
-        </div>
+      {/* Charts Section */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Bar Chart: Interesse por Nível */}
+        <BarChart
+          title="Interesse por Nível"
+          subtitle="Distribuição de atletas por nível"
+          data={[
+            { label: 'N2', value: stats?.n2_interest_count || 0, color: '#FF7F00' },
+            { label: 'N3', value: stats?.n3_interest_count || 0, color: '#00BFFF' },
+            { label: 'N4', value: stats?.n4_interest_count || 0, color: '#EAB308' },
+          ]}
+        />
 
-        {/* Posições */}
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Interesse por Posição</div>
-          <div className="grid grid-cols-3 gap-2">
-            <div className="text-center">
-              <div className="text-2xl font-display text-pink-400">
-                {stats?.flyer_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">Flyer</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-display text-emerald-400">
-                {stats?.base_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">Base</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-display text-purple-400">
-                {stats?.back_interest_count || 0}
-              </div>
-              <div className="text-white/50 text-xs">Back</div>
-            </div>
-          </div>
-        </div>
+        {/* Donut Chart: Interesse por Posição */}
+        <DonutChart
+          title="Interesse por Posição"
+          subtitle="Distribuição por função"
+          centerLabel="Total"
+          data={[
+            { label: 'Flyer', value: stats?.flyer_interest_count || 0, color: '#EC4899' },
+            { label: 'Base', value: stats?.base_interest_count || 0, color: '#10B981' },
+            { label: 'Back', value: stats?.back_interest_count || 0, color: '#A855F7' },
+          ]}
+        />
 
-        {/* Idade */}
-        <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Por Idade</div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-display text-sky-400">
-                {stats?.minors_count || 0}
-              </div>
-              <div className="text-white/50 text-sm">Menores</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-display text-white">
-                {stats?.adults_count || 0}
-              </div>
-              <div className="text-white/50 text-sm">Adultos</div>
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* Line Chart: Distribuição por Idade */}
+        <LineChart
+          title="Distribuição por Idade"
+          subtitle="Menores vs Adultos"
+          color="#00BFFF"
+          data={[
+            { label: 'Menores', value: stats?.minors_count || 0 },
+            { label: 'Adultos', value: stats?.adults_count || 0 },
+          ]}
+        />
+      </section>
 
       {/* Attendance Stats (for tryout day) */}
       <div className="bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 rounded-2xl p-6 border border-[#FF7F00]/20">
-        <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-[#FF7F00]" />
-          Status de Presença (Dia do Tryout)
-        </h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-display text-xl text-white flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[#FF7F00]" />
+            Status de Presença (Dia do Tryout)
+          </h2>
+          <div className="text-sm text-white/60">
+            {stats?.present_count || 0}/{stats?.total_registrations || 0} check-ins
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#FF7F00] to-[#00BFFF] transition-all duration-500"
+              style={{
+                width: `${stats?.total_registrations ? ((stats?.present_count || 0) / stats.total_registrations) * 100 : 0}%`,
+              }}
+            />
+          </div>
+          <div className="flex justify-between mt-2 text-xs text-white/40">
+            <span>0%</span>
+            <span>
+              {stats?.total_registrations
+                ? Math.round(((stats?.present_count || 0) / stats.total_registrations) * 100)
+                : 0}% concluído
+            </span>
+            <span>100%</span>
+          </div>
+        </div>
+
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center">
+          <div className="bg-green-500/10 rounded-xl p-4 border border-green-500/20">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-green-400 text-xs font-semibold uppercase tracking-wider">Presentes</span>
+              <UserCheck className="w-4 h-4 text-green-400" />
+            </div>
             <div className="text-3xl font-display text-green-400">
               {stats?.present_count || 0}
             </div>
-            <div className="text-white/50 text-sm">Presentes</div>
           </div>
-          <div className="text-center">
+          <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/20">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-red-400 text-xs font-semibold uppercase tracking-wider">Ausentes</span>
+              <AlertCircle className="w-4 h-4 text-red-400" />
+            </div>
             <div className="text-3xl font-display text-red-400">
               {stats?.absent_count || 0}
             </div>
-            <div className="text-white/50 text-sm">Ausentes</div>
           </div>
-          <div className="text-center">
+          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-white/60 text-xs font-semibold uppercase tracking-wider">Aguardando</span>
+              <Calendar className="w-4 h-4 text-white/40" />
+            </div>
             <div className="text-3xl font-display text-white/60">
               {stats?.not_checked_count || 0}
             </div>
-            <div className="text-white/50 text-sm">Aguardando</div>
           </div>
         </div>
       </div>
