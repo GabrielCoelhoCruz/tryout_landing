@@ -32,3 +32,4 @@ export const actionClient = createSafeActionClient({
   // Use flattened validation errors shape for easier handling with react-hook-form
   defaultValidationErrorsShape: 'flattened',
 })
+
