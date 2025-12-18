@@ -84,7 +84,7 @@ export const TEAMS: readonly Team[] = [
       'Habilidades: (à confirmar) tumbling jump flic, rodante mortal, rodante flic mortal, estrela sem mãos e híber',
     ],
     vacancies: 0,
-    color: '#9D00FF',
+    color: '#2563EB',
     storm: 'thunder',
   },
   {

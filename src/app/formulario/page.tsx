@@ -838,7 +838,7 @@ function SuccessState() {
                   '#FF7F00',
                   '#00BFFF',
                   '#FF9933',
-                  '#9D00FF',
+                  '#2563EB',
                   '#FFD700',
                 ][i % 5],
               }}

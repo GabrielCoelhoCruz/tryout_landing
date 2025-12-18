@@ -70,7 +70,7 @@ const stormsData: StormData[] = [
     description: 'Poder, eletricidade e explosão. Raios representam energia máxima.',
     teamName: 'N3 All Girl',
     teamLevel: 'Nível 3',
-    primaryColor: '#9D00FF',
+    primaryColor: '#2563EB',
     secondaryColor: '#FFD700',
     icon: CloudLightning,
     characteristics: ['Errático', 'Elétrico', 'Puro'],

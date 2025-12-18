@@ -55,7 +55,7 @@ export function AnimatedBackground({
         }}
       />
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-gradient-radial from-[#9D00FF]/05 via-transparent to-transparent rounded-full blur-[80px]"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-gradient-radial from-[#2563EB]/05 via-transparent to-transparent rounded-full blur-[80px]"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],

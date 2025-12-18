@@ -37,7 +37,7 @@ const stormShineColors = {
     glow: '#4682B4',
   },
   thunder: {
-    primary: '#9D00FF',
+    primary: '#2563EB',
     secondary: '#FFD700',
     glow: '#FFFFFF',
   },

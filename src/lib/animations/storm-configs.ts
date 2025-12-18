@@ -228,7 +228,7 @@ export const stormConfigs: StormConfigs = {
     particles: {
       count: { desktop: 4, mobile: 2 },
       shape: 'bolt',
-      colors: ['#9D00FF', '#E0B0FF', '#FFFFFF'],
+      colors: ['#2563EB', '#93C5FD', '#FFFFFF'],
       size: { min: 25, max: 45 },
       speed: { min: 0.3, max: 0.8 },
       direction: 'down',
