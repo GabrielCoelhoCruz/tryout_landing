@@ -59,6 +59,8 @@ export type Database = {
       }
       registrations: {
         Row: {
+          aceita_crossover: Database["public"]["Enums"]["yes_no_type"]
+          aceita_realocacao: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos: boolean
           admin_notes: string | null
           attendance_status: Database["public"]["Enums"]["attendance_status_type"]
@@ -68,6 +70,7 @@ export type Database = {
           condicoes_medicas: string | null
           created_at: string
           data_nascimento: string
+          declaracao_medica: boolean
           dias_disponiveis: Database["public"]["Enums"]["weekday_type"][]
           email: string
           equipe_anterior: string | null
@@ -79,16 +82,12 @@ export type Database = {
           idade: number
           is_minor: boolean | null
           medicacoes: string | null
-          nivel_habilidades: Database["public"]["Enums"]["skill_level_type"]
-          nivel_interesse: Database["public"]["Enums"]["cheer_level_type"][]
+          nivel_interesse: Database["public"]["Enums"]["team_level_type"][]
           nome_completo: string
           outros_esportes: string | null
           participa_campeonatos: Database["public"]["Enums"]["yes_no_maybe_type"]
-          payment_status: Database["public"]["Enums"]["payment_status_type"]
           payment_proof_url: string | null
-          periodo_preferencia:
-            | Database["public"]["Enums"]["day_period_type"]
-            | null
+          payment_status: Database["public"]["Enums"]["payment_status_type"]
           posicao_interesse:
             | Database["public"]["Enums"]["cheer_position_type"][]
             | null
@@ -101,6 +100,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+          aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos?: boolean
           admin_notes?: string | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
@@ -110,6 +111,7 @@ export type Database = {
           condicoes_medicas?: string | null
           created_at?: string
           data_nascimento: string
+          declaracao_medica?: boolean
           dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
           email: string
           equipe_anterior?: string | null
@@ -121,16 +123,12 @@ export type Database = {
           idade: number
           is_minor?: boolean | null
           medicacoes?: string | null
-          nivel_habilidades: Database["public"]["Enums"]["skill_level_type"]
-          nivel_interesse?: Database["public"]["Enums"]["cheer_level_type"][]
+          nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
           nome_completo: string
           outros_esportes?: string | null
           participa_campeonatos: Database["public"]["Enums"]["yes_no_maybe_type"]
-          payment_status?: Database["public"]["Enums"]["payment_status_type"]
           payment_proof_url?: string | null
-          periodo_preferencia?:
-            | Database["public"]["Enums"]["day_period_type"]
-            | null
+          payment_status?: Database["public"]["Enums"]["payment_status_type"]
           posicao_interesse?:
             | Database["public"]["Enums"]["cheer_position_type"][]
             | null
@@ -143,6 +141,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+          aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos?: boolean
           admin_notes?: string | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
@@ -152,6 +152,7 @@ export type Database = {
           condicoes_medicas?: string | null
           created_at?: string
           data_nascimento?: string
+          declaracao_medica?: boolean
           dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
           email?: string
           equipe_anterior?: string | null
@@ -163,16 +164,12 @@ export type Database = {
           idade?: number
           is_minor?: boolean | null
           medicacoes?: string | null
-          nivel_habilidades?: Database["public"]["Enums"]["skill_level_type"]
-          nivel_interesse?: Database["public"]["Enums"]["cheer_level_type"][]
+          nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
           nome_completo?: string
           outros_esportes?: string | null
           participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
-          payment_status?: Database["public"]["Enums"]["payment_status_type"]
           payment_proof_url?: string | null
-          periodo_preferencia?:
-            | Database["public"]["Enums"]["day_period_type"]
-            | null
+          payment_status?: Database["public"]["Enums"]["payment_status_type"]
           posicao_interesse?:
             | Database["public"]["Enums"]["cheer_position_type"][]
             | null
@@ -193,15 +190,16 @@ export type Database = {
           absent_count: number | null
           accepted_count: number | null
           adults_count: number | null
+          allboy_interest_count: number | null
+          allgirl_interest_count: number | null
           back_interest_count: number | null
           base_interest_count: number | null
+          coed_n2_interest_count: number | null
+          coed_n3_interest_count: number | null
           flyer_interest_count: number | null
           last_30_days: number | null
           last_7_days: number | null
           minors_count: number | null
-          n2_interest_count: number | null
-          n3_interest_count: number | null
-          n4_interest_count: number | null
           not_checked_count: number | null
           paid_count: number | null
           payment_pending_count: number | null
@@ -216,6 +214,8 @@ export type Database = {
       }
       registrations_full: {
         Row: {
+          aceita_crossover: Database["public"]["Enums"]["yes_no_type"] | null
+          aceita_realocacao: Database["public"]["Enums"]["yes_no_type"] | null
           aceite_termos: boolean | null
           admin_notes: string | null
           attendance_status:
@@ -228,6 +228,7 @@ export type Database = {
           contato_responsavel: string | null
           created_at: string | null
           data_nascimento: string | null
+          declaracao_medica: boolean | null
           dias_disponiveis: Database["public"]["Enums"]["weekday_type"][] | null
           email: string | null
           email_responsavel: string | null
@@ -240,11 +241,8 @@ export type Database = {
           idade: number | null
           is_minor: boolean | null
           medicacoes: string | null
-          nivel_habilidades:
-            | Database["public"]["Enums"]["skill_level_type"]
-            | null
           nivel_interesse:
-            | Database["public"]["Enums"]["cheer_level_type"][]
+            | Database["public"]["Enums"]["team_level_type"][]
             | null
           nome_completo: string | null
           nome_responsavel: string | null
@@ -252,12 +250,9 @@ export type Database = {
           participa_campeonatos:
             | Database["public"]["Enums"]["yes_no_maybe_type"]
             | null
+          payment_proof_url: string | null
           payment_status:
             | Database["public"]["Enums"]["payment_status_type"]
-            | null
-          payment_proof_url: string | null
-          periodo_preferencia:
-            | Database["public"]["Enums"]["day_period_type"]
             | null
           posicao_interesse:
             | Database["public"]["Enums"]["cheer_position_type"][]
@@ -265,7 +260,6 @@ export type Database = {
           pratica_cheerleading:
             | Database["public"]["Enums"]["yes_no_type"]
             | null
-          reviewed_at: string | null
           status: Database["public"]["Enums"]["registration_status_type"] | null
           telefone: string | null
           tempo_experiencia:
@@ -291,7 +285,7 @@ export type Database = {
           id: string
           idade: number
           is_minor: boolean
-          nivel_interesse: Database["public"]["Enums"]["cheer_level_type"][]
+          nivel_interesse: Database["public"]["Enums"]["team_level_type"][]
           nome_completo: string
           posicao_interesse: Database["public"]["Enums"]["cheer_position_type"][]
           status: Database["public"]["Enums"]["registration_status_type"]
@@ -301,11 +295,15 @@ export type Database = {
       is_minor_by_date: { Args: { birthdate: string }; Returns: boolean }
       submit_registration: {
         Args: {
+          p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+          p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
           p_aceite_termos?: boolean
           p_autorizacao_responsavel?: boolean
+          p_comprovante_pagamento?: string
           p_condicoes_medicas?: string
           p_contato_responsavel?: string
           p_data_nascimento: string
+          p_declaracao_medica?: boolean
           p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
           p_email: string
           p_email_responsavel?: string
@@ -314,13 +312,11 @@ export type Database = {
           p_genero: Database["public"]["Enums"]["gender_type"]
           p_idade: number
           p_medicacoes?: string
-          p_nivel_habilidades?: Database["public"]["Enums"]["skill_level_type"]
-          p_nivel_interesse?: Database["public"]["Enums"]["cheer_level_type"][]
+          p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
           p_nome_completo: string
           p_nome_responsavel?: string
           p_outros_esportes?: string
           p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
-          p_periodo_preferencia?: Database["public"]["Enums"]["day_period_type"]
           p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
           p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
           p_telefone: string
@@ -334,6 +330,10 @@ export type Database = {
           p_registration_id: string
           p_status: Database["public"]["Enums"]["attendance_status_type"]
         }
+        Returns: Json
+      }
+      update_payment_proof: {
+        Args: { p_proof_url: string; p_registration_id: string }
         Returns: Json
       }
       update_payment_status: {
@@ -354,10 +354,9 @@ export type Database = {
     }
     Enums: {
       attendance_status_type: "not_checked" | "present" | "absent"
-      cheer_level_type: "n2" | "n3" | "n4"
       cheer_position_type: "base" | "flyer" | "back"
-      day_period_type: "manha" | "tarde" | "noite"
       experience_time_type:
+        | "nunca-pratiquei"
         | "menos-6-meses"
         | "6-12-meses"
         | "1-2-anos"
@@ -370,8 +369,8 @@ export type Database = {
         | "accepted"
         | "rejected"
         | "waitlisted"
-      skill_level_type: "basico" | "intermediario" | "avancado"
       sports_experience_type: "ginastica" | "tumbling" | "danca" | "nenhuma"
+      team_level_type: "coed-n2" | "coed-n3" | "allgirl-n2-n3" | "allboy-n2-n3"
       weekday_type:
         | "segunda"
         | "terca"
@@ -510,10 +509,9 @@ export const Constants = {
   public: {
     Enums: {
       attendance_status_type: ["not_checked", "present", "absent"],
-      cheer_level_type: ["n2", "n3", "n4"],
       cheer_position_type: ["base", "flyer", "back"],
-      day_period_type: ["manha", "tarde", "noite"],
       experience_time_type: [
+        "nunca-pratiquei",
         "menos-6-meses",
         "6-12-meses",
         "1-2-anos",
@@ -528,8 +526,8 @@ export const Constants = {
         "rejected",
         "waitlisted",
       ],
-      skill_level_type: ["basico", "intermediario", "avancado"],
       sports_experience_type: ["ginastica", "tumbling", "danca", "nenhuma"],
+      team_level_type: ["coed-n2", "coed-n3", "allgirl-n2-n3", "allboy-n2-n3"],
       weekday_type: [
         "segunda",
         "terca",

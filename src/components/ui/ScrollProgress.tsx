@@ -13,7 +13,7 @@ interface Section {
 const defaultSections: Section[] = [
   { id: 'hero', label: 'Início', color: '#FF7F00' },
   { id: 'sobre', label: 'Sobre', color: '#00BFFF' },
-  { id: 'times', label: 'Times', color: '#9D00FF' },
+  { id: 'times', label: 'Times', color: '#3B82F6' },
   { id: 'jornada', label: 'Jornada', color: '#FF8C69' },
   { id: 'faq', label: 'FAQ', color: '#1E90FF' },
   { id: 'cta', label: 'Inscreva-se', color: '#FFD700' },
@@ -109,7 +109,7 @@ export function ScrollProgress({
               className="absolute top-0 left-0 h-full origin-left"
               style={{
                 scaleX,
-                background: `linear-gradient(90deg, #FF7F00, #00BFFF, #9D00FF, #FFD700)`,
+                background: `linear-gradient(90deg, #FF7F00, #00BFFF, #3B82F6, #FFD700)`,
                 backgroundSize: '200% 100%',
               }}
             />
@@ -119,7 +119,7 @@ export function ScrollProgress({
               className="absolute top-0 left-0 h-full origin-left blur-md"
               style={{
                 scaleX,
-                background: `linear-gradient(90deg, #FF7F0060, #00BFFF60, #9D00FF60, #FFD70060)`,
+                background: `linear-gradient(90deg, #FF7F0060, #00BFFF60, #3B82F660, #FFD70060)`,
                 backgroundSize: '200% 100%',
               }}
             />
@@ -292,7 +292,7 @@ export function MinimalScrollProgress() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7F00] via-[#00BFFF] to-[#9D00FF] origin-left z-50"
+      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7F00] via-[#00BFFF] to-[#3B82F6] origin-left z-50"
       style={{ scaleX }}
     />
   )

@@ -19,6 +19,12 @@ import {
   Trophy,
   Calendar,
   Heart,
+  Upload,
+  FileText,
+  X,
+  CreditCard,
+  Copy,
+  Check,
 } from 'lucide-react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,6 +37,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { AnimatedBackground, GlowingButton } from '@/components/ui'
 import { useIntersectionTracker } from '@/hooks/useIntersectionTracker'
 import { createFormSections } from '@/constants/form-sections'
+import { PIX_CONFIG, PAYMENT_PROOF_CONFIG, FORM_SECTION_IDS } from '@/constants/payment'
 import { isMinor } from '@/lib/form-validation'
 import {
   registrationSchema,
@@ -38,6 +45,7 @@ import {
 } from '@/lib/schemas/registration-schema'
 import { submitRegistration } from '@/actions/submit-registration'
 import type { FormField } from '@/types/form'
+import { logError } from '@/lib/error-logger'
 
 // ============================================
 // FLOATING HEADER COMPONENT
@@ -120,7 +128,7 @@ function ProgressIndicator({
 }) {
   const progress = ((currentSection + 1) / totalSections) * 100
 
-  const icons = [User, Trophy, Calendar, Heart]
+  const icons = [User, Trophy, Calendar, Heart, CreditCard]
 
   return (
     <div className="hidden lg:flex fixed left-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3 px-2.5 py-4 rounded-xl bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50">
@@ -227,7 +235,7 @@ function MobileProgressBar({
   sectionTitles: string[]
 }) {
   const progress = ((currentSection + 1) / totalSections) * 100
-  const icons = [User, Trophy, Calendar, Heart]
+  const icons = [User, Trophy, Calendar, Heart, CreditCard]
 
   return (
     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3 pt-2 safe-area-inset-bottom">
@@ -335,6 +343,81 @@ function MobileProgressBar({
 }
 
 // ============================================
+// PIX INFO COMPONENT
+// ============================================
+function PixInfoBox() {
+  const [copied, setCopied] = React.useState(false)
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(PIX_CONFIG.key)
+      setCopied(true)
+      toast.success('Chave PIX copiada!')
+      setTimeout(() => setCopied(false), 2000)
+    } catch (error) {
+      logError(error, { component: 'PixInfoBox', action: 'copyToClipboard' })
+      toast.error('Erro ao copiar')
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-6"
+    >
+      <div className="bg-gradient-to-r from-[#00BFFF]/10 to-[#FF7F00]/10 rounded-xl p-5 border border-[#00BFFF]/30">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00BFFF] to-[#00BFFF]/70 flex items-center justify-center flex-shrink-0">
+            <CreditCard className="w-6 h-6 text-white" aria-hidden="true" />
+          </div>
+          <div className="flex-1">
+            <h4 className="text-white font-semibold text-lg mb-2">
+              Pagamento via PIX
+            </h4>
+            <p className="text-white/60 text-sm mb-4">
+              Realize o pagamento antecipado via PIX e envie o comprovante abaixo.
+            </p>
+            <div className="bg-black/30 rounded-lg p-4 border border-white/10">
+              <p className="text-white/50 text-xs uppercase tracking-wider mb-1">
+                {PIX_CONFIG.label}
+              </p>
+              <div className="flex items-center gap-3">
+                <code className="text-[#00BFFF] font-mono text-sm flex-1 break-all">
+                  {PIX_CONFIG.key}
+                </code>
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  aria-label={copied ? 'Chave PIX copiada' : 'Copiar chave PIX'}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    copied
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                      : 'bg-white/10 text-white hover:bg-white/20 border border-white/10'
+                  }`}
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4" aria-hidden="true" />
+                      Copiado
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" aria-hidden="true" />
+                      Copiar
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ============================================
 // FORM SECTION COMPONENT
 // ============================================
 interface FormSectionProps {
@@ -347,6 +430,7 @@ interface FormSectionProps {
   index: number
   isActive: boolean
   showMinorNotice?: boolean
+  sectionId?: string
 }
 
 function FormSection({
@@ -359,6 +443,7 @@ function FormSection({
   index,
   isActive,
   showMinorNotice,
+  sectionId,
 }: FormSectionProps) {
   return (
     <motion.div
@@ -426,16 +511,29 @@ function FormSection({
           )}
         </AnimatePresence>
 
+        {/* PIX Info for payment section */}
+        {sectionId === FORM_SECTION_IDS.payment && <PixInfoBox />}
+
         {/* Fields grid */}
         <div className="grid md:grid-cols-2 gap-5">
-          {fields.map((field, fieldIndex) => (
+          {fields.map((field, fieldIndex) => {
+            // Determine column span based on field type and content
+            const getColSpan = () => {
+              // Full width for textareas, checkbox-groups, and checkboxes with long descriptions
+              if (
+                field.type === 'textarea' || 
+                field.type === 'checkbox-group' ||
+                (field.type === 'checkbox' && field.description)
+              ) {
+                return 'md:col-span-2'
+              }
+              return ''
+            }
+
+            return (
             <motion.div
               key={String(field.name)}
-              className={
-                field.type === 'textarea' || field.type === 'checkbox-group'
-                  ? 'md:col-span-2'
-                  : ''
-              }
+              className={getColSpan()}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -445,16 +543,19 @@ function FormSection({
                 name={field.name as keyof RegistrationFormData}
                 control={control}
                 render={({ field: controllerField }) => (
-                  <>
-                    <Label
-                      htmlFor={field.name}
-                      className="mb-2 block text-white/80 text-sm font-medium"
-                    >
-                      {field.label}
-                      {field.required && (
-                        <span className="text-[#FF7F00] ml-1">*</span>
-                      )}
-                    </Label>
+                  <div className="flex flex-col h-full">
+                    {/* Label - fixed height area */}
+                    <div className="flex-1 flex flex-col justify-end mb-2">
+                      <Label
+                        htmlFor={field.name}
+                        className="block text-white/80 text-sm font-medium leading-tight"
+                      >
+                        {field.label}
+                        {field.required && (
+                          <span className="text-[#FF7F00] ml-1">*</span>
+                        )}
+                      </Label>
+                    </div>
 
                     {field.type === 'textarea' ? (
                       <Textarea
@@ -473,7 +574,7 @@ function FormSection({
                         value={(controllerField.value as string) || ''}
                         onChange={controllerField.onChange}
                         onBlur={controllerField.onBlur}
-                        className={`flex h-12 w-full rounded-xl border ${
+                        className={`h-12 w-full rounded-xl border ${
                           errors[field.name]
                             ? 'border-red-500'
                             : 'border-white/10'
@@ -499,21 +600,27 @@ function FormSection({
                         ))}
                       </select>
                     ) : field.type === 'checkbox' ? (
-                      <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10 hover:border-[#FF7F00]/30 transition-colors">
-                        <Checkbox
-                          id={field.name}
-                          name={field.name}
-                          label=""
-                          checked={Boolean(controllerField.value)}
-                          onChange={(e) =>
-                            controllerField.onChange(e.target.checked)
-                          }
-                        />
+                      <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-[#FF7F00]/30 transition-colors w-full">
+                        <div className="flex-shrink-0 mt-0.5">
+                          <Checkbox
+                            id={field.name}
+                            name={field.name}
+                            label=""
+                            checked={Boolean(controllerField.value)}
+                            onChange={(e) =>
+                              controllerField.onChange(e.target.checked)
+                            }
+                          />
+                        </div>
                         <label
                           htmlFor={field.name}
-                          className="text-white/70 text-sm cursor-pointer flex-1"
+                          className="text-white/70 text-sm cursor-pointer leading-relaxed flex-1"
                         >
-                          {field.label}
+                          {field.description ? (
+                            <span className="text-white/60">{field.description}</span>
+                          ) : (
+                            field.label
+                          )}
                         </label>
                       </div>
                     ) : field.type === 'checkbox-group' ? (
@@ -575,6 +682,87 @@ function FormSection({
                           )
                         })}
                       </div>
+                    ) : field.type === 'file' ? (
+                      <div className="space-y-2">
+                        <div
+                          className={`relative border-2 border-dashed rounded-xl p-6 transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FF7F00]/50 ${
+                            controllerField.value
+                              ? 'border-[#FF7F00]/50 bg-[#FF7F00]/5'
+                              : 'border-white/20 bg-white/5 hover:border-[#FF7F00]/30 hover:bg-white/10'
+                          }`}
+                        >
+                          <input
+                            type="file"
+                            id={field.name}
+                            accept={field.accept}
+                            aria-label={`Upload ${field.label}`}
+                            aria-describedby={field.description ? `${field.name}-description` : undefined}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer focus:outline-none"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0]
+                              if (file) {
+                                // Validate file size
+                                if (file.size > PAYMENT_PROOF_CONFIG.maxSizeBytes) {
+                                  toast.error(`Arquivo muito grande. Máximo: ${PAYMENT_PROOF_CONFIG.maxSizeMB}MB`)
+                                  e.target.value = ''
+                                  return
+                                }
+                                // Validate file type
+                                if (!PAYMENT_PROOF_CONFIG.acceptedMimeTypes.some(type => type === file.type)) {
+                                  toast.error(`Formato inválido. Aceitos: ${PAYMENT_PROOF_CONFIG.formatDescription}`)
+                                  e.target.value = ''
+                                  return
+                                }
+                                // Convert to base64 for storage
+                                const reader = new FileReader()
+                                reader.onloadend = () => {
+                                  controllerField.onChange(reader.result as string)
+                                }
+                                reader.readAsDataURL(file)
+                              }
+                            }}
+                          />
+                          <div className="flex flex-col items-center justify-center text-center">
+                            {controllerField.value ? (
+                              <>
+                                <div className="w-12 h-12 rounded-xl bg-[#FF7F00]/20 flex items-center justify-center mb-3">
+                                  <FileText className="w-6 h-6 text-[#FF7F00]" aria-hidden="true" />
+                                </div>
+                                <p className="text-white font-medium text-sm mb-1">
+                                  Arquivo selecionado
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    controllerField.onChange('')
+                                  }}
+                                  aria-label="Remover arquivo selecionado"
+                                  className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors mt-2 focus:outline-none focus:ring-2 focus:ring-red-400/50 rounded px-2 py-1"
+                                >
+                                  <X className="w-3 h-3" aria-hidden="true" />
+                                  Remover arquivo
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3">
+                                  <Upload className="w-6 h-6 text-white/50" aria-hidden="true" />
+                                </div>
+                                <p className="text-white/70 text-sm mb-1">
+                                  Clique para selecionar um arquivo
+                                </p>
+                                <p className="text-white/40 text-xs">
+                                  ou arraste e solte aqui
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        {field.description && (
+                          <p id={`${field.name}-description`} className="text-white/40 text-xs">{field.description}</p>
+                        )}
+                      </div>
                     ) : (
                       <Input
                         id={field.name}
@@ -607,11 +795,12 @@ function FormSection({
                         {errors[field.name]?.message}
                       </motion.p>
                     )}
-                  </>
+                  </div>
                 )}
               />
             </motion.div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </motion.div>
@@ -914,13 +1103,15 @@ export default function FormularioPage() {
       'experiencia-ginastica': undefined,
       'posicao-interesse': [],
       'nivel-interesse': [],
-      'nivel-habilidades': undefined,
       'dias-disponiveis': [],
-      'periodo-preferencia': undefined,
       'participa-campeonatos': undefined,
+      'aceita-realocacao': undefined,
+      'aceita-crossover': undefined,
       'outros-esportes': '',
+      'comprovante-pagamento': '',
       'condicoes-medicas': '',
       medicacoes: '',
+      'declaracao-medica': false,
       'autorizacao-responsavel': false,
       'aceite-termos': false,
     },
@@ -1050,6 +1241,7 @@ export default function FormularioPage() {
             {formSections.map((section, index) => (
               <FormSection
                 key={section.id}
+                sectionId={section.id}
                 title={section.title}
                 subtitle={section.subtitle}
                 icon={section.icon}

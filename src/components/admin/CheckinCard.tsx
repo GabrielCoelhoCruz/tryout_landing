@@ -20,7 +20,7 @@ type CheckinRegistration = {
   telefone: string
   idade: number
   is_minor: boolean | null
-  nivel_interesse: Database['public']['Enums']['cheer_level_type'][]
+  nivel_interesse: Database['public']['Enums']['team_level_type'][]
   posicao_interesse: Database['public']['Enums']['cheer_position_type'][] | null
   attendance_status: Database['public']['Enums']['attendance_status_type']
   payment_status: Database['public']['Enums']['payment_status_type']

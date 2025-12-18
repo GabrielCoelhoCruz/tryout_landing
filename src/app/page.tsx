@@ -10,7 +10,7 @@ import {
   ArrowRight,
   Sparkles,
   Play,
-  Instagram, // Note: Deprecated icon but still functional
+  Instagram,
   Phone,
   MapPin,
   ChevronRight,
@@ -18,6 +18,7 @@ import {
   Users,
   Star,
   CheckCircle,
+  Linkedin,
 } from 'lucide-react'
 
 import { AnimatedH1 } from '@/components/animations'
@@ -31,8 +32,10 @@ import {
   JOURNEY_STEPS,
   FAQS,
   TRYOUT_INFO,
+  PRICING_PLANS,
 } from '@/constants/landing-data'
 import { SCROLL_THRESHOLD, SECTION_SPACING } from '@/constants/animation-config'
+import { PricingCard } from '@/components/PricingCard'
 
 // ============================================
 // SECTION HEADER COMPONENT
@@ -80,7 +83,7 @@ function SectionHeader({
         {title}
       </h2>
       {subtitle && (
-        <p className={`text-lg md:text-xl max-w-3xl ${center ? 'mx-auto' : ''} ${
+        <p className={`text-lg md:text-xl max-w-2xl leading-relaxed text-pretty ${center ? 'mx-auto' : ''} ${
           light ? 'text-white/70' : 'text-[#4A4A4A]'
         }`}>
           {subtitle}
@@ -415,7 +418,8 @@ function LandingContent() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              Seu talento merece ir mais alto.{' '}
+              Seu talento merece ir mais alto.
+              <br />
               <span className="text-[#FF7F00] font-semibold">Venha elevar o nível com a gente.</span>
             </motion.p>
             
@@ -441,7 +445,7 @@ function LandingContent() {
                 }}
               >
                 <Play className="w-5 h-5" />
-                Conhecer a equipe
+                Conhecer o ginásio
               </GlowingButton>
             </motion.div>
           </motion.div>
@@ -503,7 +507,7 @@ function LandingContent() {
           <SectionHeader
             badge="Por que escolher a SkyHigh"
             title="FAÇA PARTE DE ALGO MAIOR"
-            subtitle="Muito mais do que um time, somos uma família comprometida com a excelência e com o seu desenvolvimento pessoal."
+            subtitle="Muito mais do que um ginásio, somos uma família comprometida com a excelência e com o seu desenvolvimento pessoal."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 max-w-5xl mx-auto">
@@ -516,20 +520,20 @@ function LandingContent() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <div className="relative bg-[#FAFAFA] rounded-2xl p-8 h-full border border-gray-100 hover:border-[#FF7F00]/30 hover:shadow-xl hover:shadow-[#FF7F00]/5 transition-all duration-500 overflow-hidden group-hover:-translate-y-1">
-                  {/* Icon - Solid background */}
-                  <div 
-                    className="relative w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                <div className="relative bg-[#FAFAFA] rounded-2xl p-6 md:p-8 h-full border border-gray-100 hover:border-[#FF7F00]/30 hover:shadow-xl hover:shadow-[#FF7F00]/5 transition-all duration-500 overflow-hidden group-hover:-translate-y-1 flex flex-col">
+                  {/* Icon */}
+                  <div
+                    className="relative w-14 h-14 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shrink-0"
                     style={{ backgroundColor: benefit.color }}
                   >
                     <benefit.icon className="w-7 h-7 text-white" />
                   </div>
-                  
+
                   {/* Content */}
-                  <h3 className="relative text-xl font-display text-[#000c1f] mb-3">
+                  <h3 className="relative text-xl font-display text-[#000c1f] mb-3 min-h-[3.5rem] flex items-end">
                     {benefit.title}
                   </h3>
-                  <p className="relative text-[#4A4A4A] leading-relaxed text-sm">
+                  <p className="relative text-[#4A4A4A] leading-relaxed text-sm text-pretty flex-1">
                     {benefit.description}
                   </p>
                 </div>
@@ -552,8 +556,8 @@ function LandingContent() {
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
           <SectionHeader
             badge="Times 2026"
-            title="ENCONTRE SEU TIME"
-            subtitle="Temos vagas para diferentes níveis e categorias. Escolha o que mais combina com você."
+            title="TRYOUT 2026"
+            subtitle="Temos vagas para diferentes níveis e categorias. Encontre o time que mais combina com você."
             light
           />
           
@@ -618,7 +622,7 @@ function LandingContent() {
                   <div className="space-y-2 mb-8">
                     {TEAMS[activeTeam].requirements.map((req, idx) => (
                       <div key={idx} className="flex items-center gap-3 text-white/50">
-                        <ChevronRight className="w-4 h-4" style={{ color: TEAMS[activeTeam].color }} />
+                        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: TEAMS[activeTeam].color }} />
                         <span>{req}</span>
                       </div>
                     ))}
@@ -648,7 +652,7 @@ function LandingContent() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Sua Jornada"
-            title="DO TRYOUT AO PÓDIO"
+            title="REPRESENTE SUA EQUIPE"
             subtitle="Veja o caminho que você vai percorrer conosco, do primeiro passo às grandes conquistas."
           />
           
@@ -840,45 +844,77 @@ function LandingContent() {
             ))}
           </div>
           
-          {/* What to bring and visual element */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <motion.div
-              className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h4 className="font-display text-lg text-[#000c1f] mb-4 text-center">O que levar</h4>
-              <ul className="space-y-3 text-[#4A4A4A]">
-                {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve', 'Comprovante de pagamento (R$ 50)'].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-[#FF7F00]/10 flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-4 h-4 text-[#FF7F00]" />
-                    </div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-            
-            <motion.div
-              className="bg-[#000c1f] rounded-2xl p-6 flex flex-col items-center justify-center text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <div className="text-6xl mb-4">🏆</div>
-              <h3 className="text-2xl font-display text-white mb-2">TRYOUT 2026</h3>
-              <p className="text-white/60 mb-1">Investimento: <span className="text-[#FF7F00] font-bold">R$ 50,00</span></p>
-              <p className="text-white/40 text-sm mb-4">Estacionamento no local</p>
-              <div className="flex items-center gap-2 text-[#FF7F00]">
-                <Sparkles className="w-5 h-5" />
-                <span className="font-semibold">Vagas ilimitadas</span>
-              </div>
-            </motion.div>
-          </div>
+          {/* Pricing Section */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="text-center mb-10">
+              <h3 className="font-display text-2xl text-[#000c1f] mb-2">Taxa de Inscrição</h3>
+              <p className="text-[#4A4A4A] text-sm">
+                Valores diferenciados para atletas SkyHigh 2025
+              </p>
+            </div>
+
+            {/* Pricing Cards */}
+            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              {PRICING_PLANS.map((plan, index) => (
+                <PricingCard
+                  key={plan.id}
+                  {...plan}
+                  delay={index * 0.1}
+                />
+              ))}
+            </div>
+
+            {/* Bottom row: PIX + O que levar */}
+            <div className="grid md:grid-cols-2 gap-6 mt-8 max-w-3xl mx-auto">
+              {/* PIX Info */}
+              <motion.div
+                className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100 flex flex-col justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <h4 className="font-display text-lg text-[#000c1f] mb-4">Pagamento</h4>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-[#4A4A4A] text-xs mb-1">Somente PIX</p>
+                    <p className="text-[#000c1f] font-mono text-sm font-medium select-all break-all">skyhigh.allstar@gmail.com</p>
+                  </div>
+                  <p className="text-[#4A4A4A] text-xs">
+                    Anexe o comprovante no formulário de inscrição.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* What to bring */}
+              <motion.div
+                className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <h4 className="font-display text-lg text-[#000c1f] mb-4">O que levar</h4>
+                <ul className="space-y-2 text-[#4A4A4A] text-sm">
+                  {['Roupa esportiva confortável', 'Tênis apropriado', 'Documento de identidade', 'Água e lanche leve'].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-[#FF7F00] flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-[#4A4A4A] text-xs mt-3 pt-3 border-t border-gray-200">
+                  Estacionamento disponível no local
+                </p>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
       
@@ -1055,13 +1091,33 @@ function LandingContent() {
           </div>
           
           {/* Bottom bar */}
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="pt-8 border-t border-white/10 flex flex-col items-center gap-3">
             <p className="text-white/40 text-sm">
               © {new Date().getFullYear()} SkyHigh AllStar. Todos os direitos reservados.
             </p>
-            <div className="flex items-center gap-6 text-sm text-white/40">
-              <Link href="#" className="hover:text-white transition-colors">Política de Privacidade</Link>
-              <Link href="#" className="hover:text-white transition-colors">Termos de Uso</Link>
+            <div className="flex items-center gap-2 text-white/30 text-xs">
+              <span>Desenvolvido por</span>
+              <span className="text-white/50">Gabriel Cruz</span>
+              <div className="flex items-center gap-1.5 ml-1">
+                <a
+                  href="https://www.linkedin.com/in/gabrielccruz20/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1 rounded-full hover:bg-white/10 hover:text-[#0077B5] transition-all"
+                  aria-label="LinkedIn de Gabriel Cruz"
+                >
+                  <Linkedin className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href="https://wa.me/5511953070701"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1 rounded-full hover:bg-white/10 hover:text-[#25D366] transition-all"
+                  aria-label="WhatsApp de Gabriel Cruz"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -1072,7 +1128,7 @@ function LandingContent() {
         sections={[
           { id: 'hero', label: 'Início', color: '#FF7F00' },
           { id: 'sobre', label: 'Sobre', color: '#00BFFF' },
-          { id: 'times', label: 'Times', color: '#9D00FF' },
+          { id: 'times', label: 'Times', color: '#3B82F6' },
           { id: 'jornada', label: 'Jornada', color: '#FF8C69' },
           { id: 'depoimentos', label: 'Depoimentos', color: '#FF7F00' },
           { id: 'tryout-info', label: 'Tryout', color: '#00BFFF' },

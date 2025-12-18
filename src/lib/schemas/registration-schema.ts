@@ -1,34 +1,34 @@
 import { z } from 'zod'
 
 // Enum schemas matching database types
-export const genderSchema = z.enum(['feminino', 'masculino', 'outro'])
-export const yesNoSchema = z.enum(['sim', 'nao'])
-export const yesNoMaybeSchema = z.enum(['sim', 'nao', 'talvez'])
-export const experienceTimeSchema = z.enum([
-  'menos-6-meses',
-  '6-12-meses',
-  '1-2-anos',
-  '2-anos-mais',
-])
-export const sportsExperienceSchema = z.enum([
-  'ginastica',
-  'tumbling',
-  'danca',
-  'nenhuma',
-])
-export const cheerPositionSchema = z.enum(['base', 'flyer', 'back'])
-export const cheerLevelSchema = z.enum(['n2', 'n3', 'n4'])
-export const skillLevelSchema = z.enum(['basico', 'intermediario', 'avancado'])
-export const weekdaySchema = z.enum([
-  'segunda',
-  'terca',
-  'quarta',
-  'quinta',
-  'sexta',
-  'sabado',
-  'domingo',
-])
-export const dayPeriodSchema = z.enum(['manha', 'tarde', 'noite'])
+export const genderSchema = z.enum(['feminino', 'masculino', 'outro'], {
+  message: 'Selecione um gênero válido',
+})
+export const yesNoSchema = z.enum(['sim', 'nao'], {
+  message: 'Selecione uma opção válida',
+})
+export const yesNoMaybeSchema = z.enum(['sim', 'nao', 'talvez'], {
+  message: 'Selecione uma opção válida',
+})
+export const experienceTimeSchema = z.enum(
+  ['nunca-pratiquei', 'menos-6-meses', '6-12-meses', '1-2-anos', '2-anos-mais'],
+  { message: 'Selecione um tempo de experiência válido' }
+)
+export const sportsExperienceSchema = z.enum(
+  ['ginastica', 'tumbling', 'danca', 'nenhuma'],
+  { message: 'Selecione uma experiência válida' }
+)
+export const cheerPositionSchema = z.enum(['base', 'flyer', 'back'], {
+  message: 'Selecione uma posição válida',
+})
+export const teamLevelSchema = z.enum(
+  ['coed-n2', 'coed-n3', 'allgirl-n2-n3', 'allboy-n2-n3'],
+  { message: 'Selecione um nível válido' }
+)
+export const weekdaySchema = z.enum(
+  ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'],
+  { message: 'Selecione um dia válido' }
+)
 
 // Phone validation regex (Brazilian format)
 const phoneRegex = /^\(?[0-9]{2}\)?\s?[0-9]{4,5}-?[0-9]{4}$/
@@ -78,21 +78,27 @@ const baseRegistrationSchema = z.object({
   'experiencia-ginastica': sportsExperienceSchema.optional(),
   'posicao-interesse': z.array(cheerPositionSchema).optional(),
   'nivel-interesse': z
-    .array(cheerLevelSchema)
+    .array(teamLevelSchema)
     .min(1, 'Selecione pelo menos um nível de interesse'),
-  'nivel-habilidades': skillLevelSchema,
 
   // Availability
   'dias-disponiveis': z
     .array(weekdaySchema)
     .min(1, 'Selecione pelo menos um dia disponível'),
-  'periodo-preferencia': dayPeriodSchema.optional(),
   'participa-campeonatos': yesNoMaybeSchema,
+  'aceita-realocacao': yesNoSchema,
+  'aceita-crossover': yesNoSchema,
   'outros-esportes': z.string().optional(),
+
+  // Payment proof (optional)
+  'comprovante-pagamento': z.string().optional(),
 
   // Health
   'condicoes-medicas': z.string().optional(),
   medicacoes: z.string().optional(),
+  'declaracao-medica': z.boolean().refine((val) => val === true, {
+    message: 'Você deve aceitar a declaração de responsabilidade médica',
+  }),
   'autorizacao-responsavel': z.boolean().refine((val) => val === true, {
     message: 'Você deve confirmar a autorização do responsável',
   }),

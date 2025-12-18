@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 
-export type GlowingButtonVariant = 'primary' | 'secondary' | 'ghost'
+export type GlowingButtonVariant = 'primary' | 'secondary' | 'ghost' | 'outline'
 
 interface GlowingButtonProps {
   children: React.ReactNode
@@ -16,7 +16,7 @@ interface GlowingButtonProps {
 
 /**
  * Glowing button with magnetic hover effect
- * Supports primary (gradient), secondary (outline), and ghost variants
+ * Supports primary (gradient), secondary (dark bg glass), outline (light bg), and ghost variants
  */
 export function GlowingButton({
   children,
@@ -31,6 +31,7 @@ export function GlowingButton({
   const variants: Record<GlowingButtonVariant, string> = {
     primary: "bg-gradient-to-r from-[#FF7F00] to-[#FF9933] text-white hover:shadow-[0_0_40px_rgba(255,127,0,0.5)]",
     secondary: "bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:border-white/40",
+    outline: "bg-transparent border-2 border-gray-100 text-[#000c1f] hover:border-[#FF7F00] hover:text-[#FF7F00]",
     ghost: "bg-transparent text-white hover:bg-white/10"
   }
 

@@ -1,0 +1,14 @@
+# Architecture Overview
+
+## Layout
+- `src/app`: Routes and page layouts.
+- `src/components`: UI components and section components.
+- `src/constants`: Static data and configuration.
+- `src/lib`: Utility functions and shared logic.
+- `src/hooks`: Custom React hooks.
+- `src/context`: React context providers.
+
+## Patterns
+- Section-based landing page.
+- Component-driven development.
+- Motion-enhanced interactions.

@@ -31,9 +31,8 @@ type Registration = {
   is_minor: boolean | null
   data_nascimento: string
   genero: Database['public']['Enums']['gender_type']
-  nivel_interesse: Database['public']['Enums']['cheer_level_type'][]
+  nivel_interesse: Database['public']['Enums']['team_level_type'][]
   posicao_interesse: Database['public']['Enums']['cheer_position_type'][] | null
-  nivel_habilidades: Database['public']['Enums']['skill_level_type']
   tempo_experiencia: Database['public']['Enums']['experience_time_type']
   status: Database['public']['Enums']['registration_status_type']
   attendance_status: Database['public']['Enums']['attendance_status_type']
@@ -224,14 +223,15 @@ export default function AdminDashboard() {
 
       {/* Charts Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Bar Chart: Interesse por Nível */}
+        {/* Bar Chart: Interesse por Equipe */}
         <BarChart
-          title="Interesse por Nível"
-          subtitle="Distribuição de atletas por nível"
+          title="Interesse por Equipe"
+          subtitle="Distribuição de atletas por equipe"
           data={[
-            { label: 'N2', value: stats?.n2_interest_count || 0, color: '#FF7F00' },
-            { label: 'N3', value: stats?.n3_interest_count || 0, color: '#00BFFF' },
-            { label: 'N4', value: stats?.n4_interest_count || 0, color: '#EAB308' },
+            { label: 'Coed N2', value: stats?.coed_n2_interest_count || 0, color: '#FF7F00' },
+            { label: 'Coed N3', value: stats?.coed_n3_interest_count || 0, color: '#00BFFF' },
+            { label: 'All Girl', value: stats?.allgirl_interest_count || 0, color: '#EC4899' },
+            { label: 'All Boy', value: stats?.allboy_interest_count || 0, color: '#A855F7' },
           ]}
         />
 

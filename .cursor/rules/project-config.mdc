@@ -1,0 +1,18 @@
+# Project Configuration
+
+## Tech Stack
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+- shadcn/ui
+- Supabase (Backend)
+
+## Critical Patterns & Conventions
+- **Mobile First**: All components must be designed for mobile first.
+- **Atomic Commits**: Each change should be self-contained and logical.
+- **Type Safety**: Use TypeScript for all components and utilities.
+- **Clean Code**: Prioritize readability and maintainability.
+- **Consistency**: Use the defined color palette and typography.

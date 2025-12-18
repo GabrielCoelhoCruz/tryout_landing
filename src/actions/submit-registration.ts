@@ -4,12 +4,11 @@ import { actionClient } from '@/lib/safe-action'
 import { registrationSchema } from '@/lib/schemas/registration-schema'
 import { createServerClient } from '@/lib/supabase'
 import type {
-  CheerLevelType,
   CheerPositionType,
-  DayPeriodType,
   ExperienceTimeType,
   GenderType,
   SportsExperienceType,
+  TeamLevelType,
   WeekdayType,
   YesNoMaybeType,
   YesNoType,
@@ -51,20 +50,19 @@ export const submitRegistration = actionClient
         undefined,
       p_posicao_interesse:
         (parsedInput['posicao-interesse'] as CheerPositionType[]) || undefined,
-      p_nivel_interesse:
-        parsedInput['nivel-interesse'] as CheerLevelType[],
-      p_nivel_habilidades: parsedInput['nivel-habilidades'] as 'basico' | 'intermediario' | 'avancado',
-      p_dias_disponiveis:
-        parsedInput['dias-disponiveis'] as WeekdayType[],
-      p_periodo_preferencia:
-        (parsedInput['periodo-preferencia'] as DayPeriodType) || undefined,
+      p_nivel_interesse: parsedInput['nivel-interesse'] as TeamLevelType[],
+      p_dias_disponiveis: parsedInput['dias-disponiveis'] as WeekdayType[],
       p_participa_campeonatos:
         parsedInput['participa-campeonatos'] as YesNoMaybeType,
+      p_aceita_realocacao: parsedInput['aceita-realocacao'] as YesNoType,
+      p_aceita_crossover: parsedInput['aceita-crossover'] as YesNoType,
       p_outros_esportes: parsedInput['outros-esportes'] || undefined,
       p_condicoes_medicas: parsedInput['condicoes-medicas'] || undefined,
       p_medicacoes: parsedInput.medicacoes || undefined,
       p_autorizacao_responsavel: parsedInput['autorizacao-responsavel'],
       p_aceite_termos: parsedInput['aceite-termos'],
+      p_declaracao_medica: parsedInput['declaracao-medica'],
+      p_comprovante_pagamento: parsedInput['comprovante-pagamento'] || undefined,
     })
 
     if (error) {
@@ -87,4 +85,3 @@ export const submitRegistration = actionClient
       data,
     }
   })
-

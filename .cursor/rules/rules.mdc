@@ -1,0 +1,7 @@
+# Global Rules
+
+1. **Design System**: Always use variables from `globals.css` or the project's color palette.
+2. **Animations**: Use Framer Motion. Keep them subtle but impactful.
+3. **Responsive**: Use Tailwind's responsive prefixes (`sm:`, `md:`, `lg:`, `xl:`).
+4. **Icons**: Use Lucide React.
+5. **Data**: Keep static content in `src/constants/landing-data.ts`.

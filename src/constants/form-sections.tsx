@@ -1,10 +1,11 @@
-import { User, Trophy, Calendar, Heart } from 'lucide-react'
+import { User, Trophy, Calendar, Heart, CreditCard } from 'lucide-react'
 import type { FormSection } from '@/types/form'
+import { FORM_SECTION_IDS, PAYMENT_PROOF_CONFIG } from './payment'
 
 export function createFormSections(userIsMinor: boolean): FormSection[] {
   return [
     {
-      id: 'dados-pessoais',
+      id: FORM_SECTION_IDS.personalData,
       title: 'Dados Pessoais',
       subtitle: 'Informações básicas do atleta',
       icon: <User className="w-6 h-6 text-white" />,
@@ -78,7 +79,7 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
       ],
     },
     {
-      id: 'experiencia',
+      id: FORM_SECTION_IDS.experience,
       title: 'Experiência Esportiva',
       subtitle: 'Seu histórico e habilidades',
       icon: <Trophy className="w-6 h-6 text-white" />,
@@ -99,6 +100,7 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           type: 'select',
           required: true,
           options: [
+            { value: 'nunca-pratiquei', label: 'Nunca pratiquei' },
             { value: 'menos-6-meses', label: 'Menos de 6 meses' },
             { value: '6-12-meses', label: '6 a 12 meses' },
             { value: '1-2-anos', label: '1 a 2 anos' },
@@ -138,26 +140,16 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           type: 'checkbox-group',
           required: true,
           options: [
-            { value: 'n2', label: 'N2 (Nível 2)' },
-            { value: 'n3', label: 'N3 (Nível 3)' },
-            { value: 'n4', label: 'N4 (Nível 4)' },
-          ],
-        },
-        {
-          name: 'nivel-habilidades',
-          label: 'Nível atual de habilidades',
-          type: 'select',
-          required: true,
-          options: [
-            { value: 'basico', label: 'Básico' },
-            { value: 'intermediario', label: 'Intermediário' },
-            { value: 'avancado', label: 'Avançado' },
+            { value: 'coed-n2', label: 'Coed N2' },
+            { value: 'coed-n3', label: 'Coed N3' },
+            { value: 'allgirl-n2-n3', label: 'All Girl N2/N3' },
+            { value: 'allboy-n2-n3', label: 'All Boy N2/N3' },
           ],
         },
       ],
     },
     {
-      id: 'disponibilidade',
+      id: FORM_SECTION_IDS.availability,
       title: 'Disponibilidade',
       subtitle: 'Horários e logística',
       icon: <Calendar className="w-6 h-6 text-white" />,
@@ -178,16 +170,6 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           ],
         },
         {
-          name: 'periodo-preferencia',
-          label: 'Período de preferência',
-          type: 'select',
-          options: [
-            { value: 'manha', label: 'Manhã' },
-            { value: 'tarde', label: 'Tarde' },
-            { value: 'noite', label: 'Noite' },
-          ],
-        },
-        {
           name: 'participa-campeonatos',
           label: 'Pode participar de campeonatos fora da cidade/estado?',
           type: 'select',
@@ -199,6 +181,27 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           ],
         },
         {
+          name: 'aceita-realocacao',
+          label:
+            'Está de acordo em ser realocado(a) para outra equipe do SkyHigh caso seja necessário para sua evolução no esporte?',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'sim', label: 'Sim' },
+            { value: 'nao', label: 'Não' },
+          ],
+        },
+        {
+          name: 'aceita-crossover',
+          label: 'Aceito/gostaria de ser crossover (estar em 2 equipes)',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'sim', label: 'Sim' },
+            { value: 'nao', label: 'Não' },
+          ],
+        },
+        {
           name: 'outros-esportes',
           label: 'Pratica outros esportes? Quais?',
           type: 'text',
@@ -207,7 +210,7 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
       ],
     },
     {
-      id: 'saude',
+      id: FORM_SECTION_IDS.health,
       title: 'Saúde e Autorização',
       subtitle: 'Informações importantes',
       icon: <Heart className="w-6 h-6 text-white" />,
@@ -225,6 +228,13 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           placeholder: 'Liste as medicações, se houver...',
         },
         {
+          name: 'declaracao-medica',
+          label: 'Eu declaro para os devidos efeitos e sob minha inteira responsabilidade',
+          type: 'checkbox',
+          required: true,
+          description: 'Não possuir qualquer contraindicação médica para a prática das atividades físicas a desenvolver com frequência na modalidade CHEERLEADING no CLUBE SKYHIGH ALL STAR, onde serei inteiramente responsável pela minha integridade física no que diz respeito à minha aptidão física para a prática desta modalidade, isentando os professores, instrutores e proprietários deste evento de toda e qualquer responsabilidade por acidentes que possam vir a ocorrer. Por fim, declaro estar ciente que é de minha inteira responsabilidade minha aptidão física atual e futura!',
+        },
+        {
           name: 'autorizacao-responsavel',
           label:
             'Confirmo que o responsável está ciente (para menores de 18 anos)',
@@ -236,6 +246,21 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           label: 'Li e aceito o termo de responsabilidade',
           type: 'checkbox',
           required: true,
+        },
+      ],
+    },
+    {
+      id: FORM_SECTION_IDS.payment,
+      title: 'Pagamento',
+      subtitle: 'Comprovante de pagamento antecipado (opcional)',
+      icon: <CreditCard className="w-6 h-6 text-white" />,
+      fields: [
+        {
+          name: 'comprovante-pagamento',
+          label: 'Comprovante de pagamento',
+          type: 'file',
+          accept: PAYMENT_PROOF_CONFIG.acceptedFormats,
+          description: `Formatos aceitos: ${PAYMENT_PROOF_CONFIG.formatDescription} (máx. ${PAYMENT_PROOF_CONFIG.maxSizeMB}MB)`,
         },
       ],
     },

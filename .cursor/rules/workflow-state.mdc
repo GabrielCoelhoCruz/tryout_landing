@@ -1,0 +1,50 @@
+## State
+{
+  "Phase": "VALIDATE",
+  "Status": "COMPLETED",
+  "CurrentTask": "Refactor and improve Pricing Section UI/UX",
+  "TotalSteps": 4,
+  "CompletedSteps": 4
+}
+
+## Plan
+
+1. **Phase 1: Data Modernization**
+   - Extract pricing details from hardcoded JSX in `src/app/page.tsx` to a new `PRICING_PLANS` constant in `src/constants/landing-data.ts`. [completed]
+   - Structure: `id, name, description, features: { label, sublabel, price }[], highlight, color, icon`.
+
+2. **Phase 2: Component Architecture**
+   - Create `src/components/PricingCard.tsx`: [completed]
+     - Implement a modern SaaS-style card with clean typography.
+     - Add hover animations using Framer Motion (scale, glow effect matching the team colors).
+     - Include a CTA button that scrolls to the `#formulario` section.
+     - Support for "Highlight" state (e.g., "Best Value" badge).
+   - Create `src/components/PricingTabs.tsx` (optional but recommended for mobile): [cancelled]
+     - A toggle switch to change between "Uma Equipe" and "Múltiplas Equipes" views.
+
+3. **Phase 3: Integration and Refactoring**
+   - Replace the existing pricing section in `src/app/page.tsx` with a new layout using the `PricingCard` components. [completed]
+   - Use a `Tabs` or `Toggle` logic for switching plans if the screen is mobile, or side-by-side for desktop.
+   - Refine the PIX info area to be more integrated and less "attached".
+
+4. **Phase 4: Validation and Polish**
+   - Verify responsiveness on mobile/tablet/desktop. [completed]
+   - Ensure color consistency with the updated palette (`#FF7F00`, `#00BFFF`). [completed]
+   - Check accessibility (ARIA labels, keyboard navigation). [completed]
+
+## Rules
+- Use Framer Motion for all transitions.
+- Stick to the project's color palette (Orange `#FF7F00`, Blue `#00BFFF`).
+- Avoid "AI generic look" by using bold typography (Bebas Neue) and specific team-related terminology.
+
+## Items
+- [ ] pricing-data-extraction
+- [ ] pricing-card-component
+- [ ] pricing-integration
+- [ ] pricing-validation
+
+## Log
+- Initial exploration completed.
+- Identified pricing section in `src/app/page.tsx`.
+- Checked project design system and colors.
+- Created workflow-state.mdc and initialized BLUEPRINT phase.

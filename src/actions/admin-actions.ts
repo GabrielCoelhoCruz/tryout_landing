@@ -50,7 +50,6 @@ export const getRegistrations = actionClient
         genero,
         nivel_interesse,
         posicao_interesse,
-        nivel_habilidades,
         tempo_experiencia,
         status,
         attendance_status,

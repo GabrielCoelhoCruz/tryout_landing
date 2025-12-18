@@ -44,6 +44,7 @@ const genderLabels = {
 }
 
 const experienceLabels = {
+  'nunca-pratiquei': 'Nunca pratiquei',
   'menos-6-meses': 'Menos de 6 meses',
   '6-12-meses': '6 a 12 meses',
   '1-2-anos': '1 a 2 anos',
@@ -439,14 +440,6 @@ export function RegistrationDetail({
                         : 'Nenhuma'
                     }
                   />
-                  <InfoItem
-                    label="Nível de Habilidades"
-                    value={
-                      registration.nivel_habilidades
-                        ? skillLabels[registration.nivel_habilidades]
-                        : '-'
-                    }
-                  />
                 </InfoGrid>
               </Section>
 
@@ -502,18 +495,26 @@ export function RegistrationDetail({
                   </div>
                   <InfoGrid>
                     <InfoItem
-                      label="Período de Preferência"
-                      value={
-                        registration.periodo_preferencia
-                          ? periodLabels[registration.periodo_preferencia]
-                          : 'Não informado'
-                      }
-                    />
-                    <InfoItem
                       label="Participa de Campeonatos"
                       value={
                         registration.participa_campeonatos
                           ? yesNoMaybeLabels[registration.participa_campeonatos]
+                          : '-'
+                      }
+                    />
+                    <InfoItem
+                      label="Aceita Realocação"
+                      value={
+                        registration.aceita_realocacao
+                          ? yesNoLabels[registration.aceita_realocacao]
+                          : '-'
+                      }
+                    />
+                    <InfoItem
+                      label="Aceita Crossover"
+                      value={
+                        registration.aceita_crossover
+                          ? yesNoLabels[registration.aceita_crossover]
                           : '-'
                       }
                     />

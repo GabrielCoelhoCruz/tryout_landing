@@ -10,6 +10,7 @@ export type YesNo = 'sim' | 'nao'
 export type YesNoMaybe = 'sim' | 'nao' | 'talvez'
 
 export type ExperienceTime =
+  | 'nunca-pratiquei'
   | 'menos-6-meses'
   | '6-12-meses'
   | '1-2-anos'
@@ -23,9 +24,7 @@ export type SportsExperience =
 
 export type CheerPosition = 'base' | 'flyer' | 'back'
 
-export type CheerLevel = 'n2' | 'n3'
-
-export type SkillLevel = 'basico' | 'intermediario' | 'avancado'
+export type TeamLevel = 'coed-n2' | 'coed-n3' | 'allgirl-n2-n3' | 'allboy-n2-n3'
 
 export type Weekday =
   | 'segunda'
@@ -35,8 +34,6 @@ export type Weekday =
   | 'sexta'
   | 'sabado'
   | 'domingo'
-
-export type DayPeriod = 'manha' | 'tarde' | 'noite'
 
 // FormErrors now uses Zod-inferred keys
 export type FormErrors = Partial<Record<string, string>>
@@ -51,6 +48,7 @@ export type FieldType =
   | 'checkbox'
   | 'checkbox-group'
   | 'textarea'
+  | 'file'
 
 export type SelectOption = {
   value: string
@@ -74,13 +72,15 @@ export type FormFieldName =
   | 'experiencia-ginastica'
   | 'posicao-interesse'
   | 'nivel-interesse'
-  | 'nivel-habilidades'
   | 'dias-disponiveis'
-  | 'periodo-preferencia'
   | 'participa-campeonatos'
+  | 'aceita-realocacao'
+  | 'aceita-crossover'
   | 'outros-esportes'
+  | 'comprovante-pagamento'
   | 'condicoes-medicas'
   | 'medicacoes'
+  | 'declaracao-medica'
   | 'autorizacao-responsavel'
   | 'aceite-termos'
 
@@ -91,6 +91,8 @@ export type FormField = {
   required?: boolean
   placeholder?: string
   options?: SelectOption[]
+  accept?: string
+  description?: string
 }
 
 export type FormSection = {

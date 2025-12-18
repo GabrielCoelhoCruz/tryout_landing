@@ -28,7 +28,7 @@ type CheckinRegistration = {
   telefone: string
   idade: number
   is_minor: boolean | null
-  nivel_interesse: Database['public']['Enums']['cheer_level_type'][]
+  nivel_interesse: Database['public']['Enums']['team_level_type'][]
   posicao_interesse: Database['public']['Enums']['cheer_position_type'][] | null
   attendance_status: Database['public']['Enums']['attendance_status_type']
   payment_status: Database['public']['Enums']['payment_status_type']
@@ -53,10 +53,11 @@ export default function CheckinPage() {
     flyers: number
     bases: number
     backs: number
-    n2: number
-    n3: number
-    n4: number
-  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0, n2: 0, n3: 0, n4: 0 })
+    coedN2: number
+    coedN3: number
+    allGirl: number
+    allBoy: number
+  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0, coedN2: 0, coedN3: 0, allGirl: 0, allBoy: 0 })
 
   // Debounce search
   useEffect(() => {
@@ -95,9 +96,10 @@ export default function CheckinPage() {
           flyers: s.flyer_interest_count || 0,
           bases: s.base_interest_count || 0,
           backs: s.back_interest_count || 0,
-          n2: s.n2_interest_count || 0,
-          n3: s.n3_interest_count || 0,
-          n4: s.n4_interest_count || 0,
+          coedN2: s.coed_n2_interest_count || 0,
+          coedN3: s.coed_n3_interest_count || 0,
+          allGirl: s.allgirl_interest_count || 0,
+          allBoy: s.allboy_interest_count || 0,
         })
       }
     },
@@ -290,17 +292,18 @@ export default function CheckinPage() {
 
         {/* Level stats - Mini bar chart */}
         <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Níveis</div>
+          <div className="text-white/50 text-xs uppercase tracking-wider mb-3">Equipes</div>
           <div className="space-y-2">
             {[
-              { label: 'N2', value: stats.n2, color: 'bg-[#FF7F00]' },
-              { label: 'N3', value: stats.n3, color: 'bg-[#00BFFF]' },
-              { label: 'N4', value: stats.n4, color: 'bg-yellow-400' },
+              { label: 'Coed N2', value: stats.coedN2, color: 'bg-[#FF7F00]' },
+              { label: 'Coed N3', value: stats.coedN3, color: 'bg-[#00BFFF]' },
+              { label: 'All Girl', value: stats.allGirl, color: 'bg-pink-500' },
+              { label: 'All Boy', value: stats.allBoy, color: 'bg-purple-500' },
             ].map((item) => {
-              const maxLevel = Math.max(stats.n2, stats.n3, stats.n4, 1)
+              const maxLevel = Math.max(stats.coedN2, stats.coedN3, stats.allGirl, stats.allBoy, 1)
               return (
                 <div key={item.label} className="flex items-center gap-2">
-                  <span className="text-white/60 text-xs w-6">{item.label}</span>
+                  <span className="text-white/60 text-xs w-14">{item.label}</span>
                   <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                     <motion.div
                       className={`h-full ${item.color} rounded-full`}

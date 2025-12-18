@@ -20,29 +20,29 @@ export const STATS = [
   { number: '15+', label: 'Campeonatos', icon: Trophy, color: '#FF7F00' },
   { number: '6', label: 'Anos de Equipe', icon: Calendar, color: '#00BFFF' },
   { number: '100+', label: 'Atletas Formados', icon: Users, color: '#FF8C69' },
-  { number: '10', label: 'Conquistas', icon: Star, color: '#2563EB' },
+  { number: '10+', label: 'Conquistas', icon: Star, color: '#2563EB' },
 ] as const
 
 export const BENEFITS = [
   {
     icon: Target,
-    title: 'Treinamento de Elite',
+    title: 'Metodologia',
     description:
-      'Metodologia comprovada com técnicos certificados e acompanhamento individualizado para desenvolvimento técnico e pessoal.',
+      'Treinamento comprovado com técnicos certificados e acompanhamento personalizado para seu desenvolvimento.',
     color: '#FF7F00',
   },
   {
     icon: Zap,
-    title: 'Performance de Alto Nível',
+    title: 'Performance',
     description:
-      'Programa focado em excelência técnica, condicionamento físico e preparação mental para competições nacionais e internacionais.',
+      'Excelência técnica, condicionamento físico e preparação mental para competições nacionais e internacionais.',
     color: '#00BFFF',
   },
   {
     icon: Heart,
     title: 'Espírito de Equipe',
     description:
-      'Ambiente de união, respeito e crescimento coletivo. Aqui você constrói amizades para toda a vida enquanto evolui no esporte.',
+      'União, respeito e crescimento coletivo. Construa amizades para a vida enquanto evolui no esporte.',
     color: '#FF7F00',
   },
 ] as const
@@ -60,7 +60,7 @@ type Team = {
 
 export const TEAMS: readonly Team[] = [
   {
-    name: 'HAILSTORM COED 2 NT',
+    name: 'COED N2',
     level: 'Nível 2',
     category: 'Coed',
     description:
@@ -74,35 +74,7 @@ export const TEAMS: readonly Team[] = [
     storm: 'hail',
   },
   {
-    name: 'SNOWSTORM ALL GIRL 2 NT',
-    level: 'Nível 2',
-    category: 'All Girl',
-    description:
-      'Time feminino, com foco em técnica, sincronia e performance.',
-    requirements: [
-      'Idade mínimo: 8 anos',
-      'Habilidades: (à confirmar)',
-    ],
-    vacancies: 0,
-    color: '#FFFFFF',
-    storm: 'snow',
-  },
-  {
-    name: 'RAINSTORM COED 3 NT',
-    level: 'Nível 3',
-    category: 'Coed',
-    description:
-      'Time misto de nível intermediário, ideal para atletas com experiência prévia que buscam evolução técnica.',
-    requirements: [
-      'Idade mínimo: 12 anos',
-      'Habilidades: (à confirmar)',
-    ],
-    vacancies: 0,
-    color: '#00BFFF',
-    storm: 'rain',
-  },
-  {
-    name: 'THUNDERSTORM COED 3',
+    name: 'COED N3',
     level: 'Nível 3',
     category: 'Coed',
     description:
@@ -116,18 +88,32 @@ export const TEAMS: readonly Team[] = [
     storm: 'thunder',
   },
   {
-    name: 'LIGHTNINGSTORM COED 4',
-    level: 'Nível 4',
-    category: 'Coed',
+    name: 'ALL GIRL N2/N3',
+    level: 'Nível 2/3',
+    category: 'All Girl',
     description:
-      'Time misto avançado com foco em rotinas complexas e competições de alto nível.',
+      'Time feminino, com foco em técnica, sincronia e performance.',
     requirements: [
-      'Idade mínimo: 12 anos',
-      'Habilidades: (à confirmar) tumbling mortal parado, rodante mortal estendido',
+      'Idade mínimo: 8 anos',
+      'Habilidades: (à confirmar)',
     ],
     vacancies: 0,
-    color: '#FFD700',
-    storm: 'thunder',
+    color: '#FFFFFF',
+    storm: 'snow',
+  },
+  {
+    name: 'ALL BOY N2/N3',
+    level: 'Nível 2/3',
+    category: 'All Boy',
+    description:
+      'Time masculino, com foco em técnica, sincronia e performance. Nível 2/3.',
+    requirements: [
+      'Idade mínimo: 12 anos',
+      'Habilidades: (à confirmar)',
+    ],
+    vacancies: 0,
+    color: '#00BFFF',
+    storm: 'rain',
   },
 ] as const
 
@@ -198,27 +184,27 @@ export const FAQS = [
   {
     question: 'Preciso ter experiência prévia em cheerleading?',
     answer:
-      'Recomendamos experiência mínima de 6 meses em cheerleading ou ginástica artística. Para times N3, a exigência é de pelo menos 2 anos de experiência.',
+      'Não é necessário, pois em equipes de nível 2 ensinamos desde os fundamentos do esporte para quem nunca praticou. Recomendamos experiência prévia para níveis 3 ou acima.',
   },
   {
     question: 'Tem custo para participar do tryout?',
     answer:
-      'Sim, há uma taxa de inscrição de R$ 50,00 que será descontada da mensalidade caso você seja selecionado.',
+      'Sim, há uma taxa de inscrição a partir de R$ 25,00, dependendo da modalidade e período de pagamento.',
   },
   {
     question: 'Quais são os valores da mensalidade?',
     answer:
-      'Os valores variam de acordo com o nível e categoria do time, entre R$ 350,00 e R$ 550,00 mensais. Isso inclui treinos, uniforme de treino e acompanhamento profissional.',
+      'O valor da mensalidade para participar de uma equipe é R$ 140,00, incluindo treinos de equipe, treinos extras, treinos de tumbling (acrobacias) e acompanhamento profissional. Para apenas aulas de tumbling, consulte valores de mensalidade ou aula avulsa.',
+  },
+  {
+    question: 'Existe bolsa para mensalidade?',
+    answer:
+      'Sim, existe bolsa para treinar. O formulário de pedidos de bolsa será aberto após o início oficial da temporada.',
   },
   {
     question: 'Qual a frequência de treinos?',
     answer:
-      'Times N2 treinam 3 vezes por semana (2h por treino). Times N3 treinam 4 vezes por semana (2h30 por treino). Também há treinos extras pré-campeonatos.',
-  },
-  {
-    question: 'Preciso ter disponibilidade para viajar?',
-    answer:
-      'Sim, a equipe compete em campeonatos regionais, estaduais e nacionais. É importante ter disponibilidade para viagens, especialmente nos finais de semana de competição.',
+      'O treino oficial de cada equipe é todo domingo com 3h15 de duração (os horários serão divulgados em breve). Também há treinos extras aos sábados pré-campeonatos.',
   },
   {
     question: 'Quando começam os treinos após a seleção?',
@@ -231,7 +217,7 @@ export const TRYOUT_INFO = [
   {
     icon: ClipboardList,
     label: 'Inscrições abertas',
-    value: '14/12 a 30/01',
+    value: '06/01 - 30/01',
     color: '#FF7F00',
   },
   {
@@ -241,9 +227,36 @@ export const TRYOUT_INFO = [
     color: '#00BFFF',
   },
   {
-    icon: DollarSign,
-    label: 'Taxa de Inscrição',
-    value: 'R$ 50,00',
+    icon: Users,
+    label: 'Vagas Limitadas',
+    value: 'Garanta sua vaga',
     color: '#2563EB',
+  },
+] as const
+
+export const PRICING_PLANS = [
+  {
+    id: 'single',
+    name: 'Uma Equipe',
+    description: 'Tryout para uma única equipe',
+    icon: '1',
+    color: '#FF7F00',
+    prices: [
+      { label: 'Atleta SkyHigh 2025', sublabel: 'Antecipado', price: '25' },
+      { label: 'Não atleta SkyHigh', sublabel: 'Antecipado', price: '30' },
+      { label: 'Na porta', sublabel: 'Todos', price: '35' },
+    ],
+  },
+  {
+    id: 'multiple',
+    name: 'Mais Equipes',
+    description: 'Tryout para múltiplas equipes',
+    icon: '2+',
+    color: '#00BFFF',
+    prices: [
+      { label: 'Atleta SkyHigh 2025', sublabel: 'Antecipado', price: '30' },
+      { label: 'Não atleta SkyHigh', sublabel: 'Antecipado', price: '35' },
+      { label: 'Na porta', sublabel: 'Todos', price: '40' },
+    ],
   },
 ] as const

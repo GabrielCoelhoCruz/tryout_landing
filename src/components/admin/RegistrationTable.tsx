@@ -22,9 +22,8 @@ type Registration = {
   is_minor: boolean | null
   data_nascimento: string
   genero: Database['public']['Enums']['gender_type']
-  nivel_interesse: Database['public']['Enums']['cheer_level_type'][]
+  nivel_interesse: Database['public']['Enums']['team_level_type'][]
   posicao_interesse: Database['public']['Enums']['cheer_position_type'][] | null
-  nivel_habilidades: Database['public']['Enums']['skill_level_type']
   tempo_experiencia: Database['public']['Enums']['experience_time_type']
   status: Database['public']['Enums']['registration_status_type']
   attendance_status: Database['public']['Enums']['attendance_status_type']
@@ -53,12 +52,13 @@ const positionConfig: Record<string, { label: string; color: string; bgColor: st
   back: { label: 'Back', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
 }
 
-const levelOrder = ['N2', 'N3', 'N4']
+const levelOrder = ['coed-n2', 'coed-n3', 'allgirl-n2-n3', 'allboy-n2-n3']
 
-const levelConfig: Record<string, { color: string; bgColor: string; borderColor: string }> = {
-  N2: { color: 'text-[#FF7F00]', bgColor: 'bg-[#FF7F00]/10', borderColor: 'border-[#FF7F00]/30' },
-  N3: { color: 'text-[#00BFFF]', bgColor: 'bg-[#00BFFF]/10', borderColor: 'border-[#00BFFF]/30' },
-  N4: { color: 'text-yellow-400', bgColor: 'bg-yellow-400/10', borderColor: 'border-yellow-400/30' },
+const levelConfig: Record<string, { label: string; color: string; bgColor: string; borderColor: string }> = {
+  'coed-n2': { label: 'Coed N2', color: 'text-[#FF7F00]', bgColor: 'bg-[#FF7F00]/10', borderColor: 'border-[#FF7F00]/30' },
+  'coed-n3': { label: 'Coed N3', color: 'text-[#00BFFF]', bgColor: 'bg-[#00BFFF]/10', borderColor: 'border-[#00BFFF]/30' },
+  'allgirl-n2-n3': { label: 'All Girl', color: 'text-pink-400', bgColor: 'bg-pink-400/10', borderColor: 'border-pink-400/30' },
+  'allboy-n2-n3': { label: 'All Boy', color: 'text-purple-400', bgColor: 'bg-purple-400/10', borderColor: 'border-purple-400/30' },
 }
 
 const ITEMS_PER_PAGE = 10
@@ -98,7 +98,7 @@ export function RegistrationTable({
   // Filter by level
   const filteredRegistrations = registrations.filter((reg) => {
     if (levelFilter === 'all') return true
-    return reg.nivel_interesse.includes(levelFilter as Database['public']['Enums']['cheer_level_type'])
+    return reg.nivel_interesse.includes(levelFilter as Database['public']['Enums']['team_level_type'])
   })
 
   // Sort
@@ -183,10 +183,11 @@ export function RegistrationTable({
               onChange={(e) => handleLevelFilter(e.target.value)}
               className="appearance-none bg-white/5 border-none text-white text-sm font-medium rounded-full py-2.5 pl-4 pr-10 cursor-pointer focus:ring-2 focus:ring-[#FF7F00]/30"
             >
-              <option value="all">Todos Níveis</option>
-              <option value="N2">Nível N2</option>
-              <option value="N3">Nível N3</option>
-              <option value="N4">Nível N4</option>
+              <option value="all">Todas Equipes</option>
+              <option value="coed-n2">Coed N2</option>
+              <option value="coed-n3">Coed N3</option>
+              <option value="allgirl-n2-n3">All Girl</option>
+              <option value="allboy-n2-n3">All Boy</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/50">
               <ChevronDown className="w-4 h-4" />
@@ -290,17 +291,17 @@ export function RegistrationTable({
                         <td className="px-6 py-4 hidden lg:table-cell">
                           <div className="flex flex-col gap-2">
                             {/* Níveis */}
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 flex-wrap">
                               {[...registration.nivel_interesse]
                                 .sort((a, b) => levelOrder.indexOf(a) - levelOrder.indexOf(b))
                                 .map((nivel) => {
-                                  const config = levelConfig[nivel] || { color: 'text-white', bgColor: 'bg-white/10', borderColor: 'border-white/20' }
+                                  const config = levelConfig[nivel] || { label: nivel, color: 'text-white', bgColor: 'bg-white/10', borderColor: 'border-white/20' }
                                   return (
                                     <span
                                       key={nivel}
                                       className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${config.color} ${config.bgColor} border ${config.borderColor}`}
                                     >
-                                      {nivel}
+                                      {config.label}
                                     </span>
                                   )
                                 })}

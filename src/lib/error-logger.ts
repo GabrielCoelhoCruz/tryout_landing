@@ -97,6 +97,11 @@ class ErrorLogger {
 
 export const logger = new ErrorLogger()
 
+export function logError(error: unknown, context?: LogContext): void {
+  const errorInstance = error instanceof Error ? error : new Error(String(error))
+  logger.error(errorInstance.message, errorInstance, context)
+}
+
 export function handleAsyncError<T>(
   promise: Promise<T>,
   context?: LogContext
