@@ -97,6 +97,14 @@ const yesNoMaybeLabels = {
   talvez: 'Talvez',
 }
 
+const teamLevelLabels = {
+  'coed-n2': 'Coed N2',
+  'coed-n3': 'Coed N3',
+  'coed-n4': 'Coed N4',
+  'allgirl-n2-n3': 'All Girl N2/N3',
+  'allboy-n2-n3': 'All Boy N2/N3',
+}
+
 export function RegistrationDetail({
   registration,
   isOpen,
@@ -295,8 +303,20 @@ export function RegistrationDetail({
             <div className="sticky top-0 bg-[#0a0a1a]/95 backdrop-blur-xl border-b border-white/10 px-6 py-4 z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white font-display text-2xl">
-                    {registration.nome_completo?.charAt(0).toUpperCase()}
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-white/20">
+                    {registration.athlete_photo_url ? (
+                      <Image
+                        src={registration.athlete_photo_url}
+                        alt={registration.nome_completo || 'Atleta'}
+                        fill
+                        className="object-cover"
+                        sizes="56px"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white font-display text-2xl">
+                        {registration.nome_completo?.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h2 className="text-xl font-display text-white">
@@ -635,9 +655,9 @@ export function RegistrationDetail({
                       {registration.nivel_interesse?.map((nivel) => (
                         <span
                           key={nivel}
-                          className="px-3 py-1.5 bg-[#FF7F00]/20 text-[#FF7F00] text-sm rounded-lg font-semibold uppercase"
+                          className="px-3 py-1.5 bg-[#FF7F00]/20 text-[#FF7F00] text-sm rounded-lg font-semibold"
                         >
-                          {nivel}
+                          {teamLevelLabels[nivel] || nivel}
                         </span>
                       ))}
                     </div>

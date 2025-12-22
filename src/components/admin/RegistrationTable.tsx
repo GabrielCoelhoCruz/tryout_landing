@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronDown,
@@ -9,7 +10,6 @@ import {
   Search,
   User,
   Download,
-  Calendar,
 } from 'lucide-react'
 import type { Database } from '@/types/database'
 
@@ -29,6 +29,7 @@ type Registration = {
   attendance_status: Database['public']['Enums']['attendance_status_type']
   payment_status?: Database['public']['Enums']['payment_status_type']
   payment_proof_url?: string | null
+  athlete_photo_url?: string | null
   checked_in_at: string | null
   created_at: string
   updated_at: string
@@ -52,11 +53,12 @@ const positionConfig: Record<string, { label: string; color: string; bgColor: st
   back: { label: 'Back', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
 }
 
-const levelOrder = ['coed-n2', 'coed-n3', 'allgirl-n2-n3', 'allboy-n2-n3']
+const levelOrder = ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3']
 
 const levelConfig: Record<string, { label: string; color: string; bgColor: string; borderColor: string }> = {
   'coed-n2': { label: 'Coed N2', color: 'text-[#FF7F00]', bgColor: 'bg-[#FF7F00]/10', borderColor: 'border-[#FF7F00]/30' },
   'coed-n3': { label: 'Coed N3', color: 'text-[#00BFFF]', bgColor: 'bg-[#00BFFF]/10', borderColor: 'border-[#00BFFF]/30' },
+  'coed-n4': { label: 'Coed N4', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10', borderColor: 'border-emerald-400/30' },
   'allgirl-n2-n3': { label: 'All Girl', color: 'text-pink-400', bgColor: 'bg-pink-400/10', borderColor: 'border-pink-400/30' },
   'allboy-n2-n3': { label: 'All Boy', color: 'text-purple-400', bgColor: 'bg-purple-400/10', borderColor: 'border-purple-400/30' },
 }
@@ -181,13 +183,14 @@ export function RegistrationTable({
             <select
               value={levelFilter}
               onChange={(e) => handleLevelFilter(e.target.value)}
-              className="appearance-none bg-white/5 border-none text-white text-sm font-medium rounded-full py-2.5 pl-4 pr-10 cursor-pointer focus:ring-2 focus:ring-[#FF7F00]/30"
+              className="appearance-none bg-[#1a1a2e] border border-white/10 text-white text-sm font-medium rounded-full py-2.5 pl-4 pr-10 cursor-pointer focus:ring-2 focus:ring-[#FF7F00]/30"
             >
-              <option value="all">Todas Equipes</option>
-              <option value="coed-n2">Coed N2</option>
-              <option value="coed-n3">Coed N3</option>
-              <option value="allgirl-n2-n3">All Girl</option>
-              <option value="allboy-n2-n3">All Boy</option>
+              <option value="all" className="bg-[#1a1a2e] text-white">Todas Equipes</option>
+              <option value="coed-n2" className="bg-[#1a1a2e] text-white">Coed N2</option>
+              <option value="coed-n3" className="bg-[#1a1a2e] text-white">Coed N3</option>
+              <option value="coed-n4" className="bg-[#1a1a2e] text-white">Coed N4</option>
+              <option value="allgirl-n2-n3" className="bg-[#1a1a2e] text-white">All Girl</option>
+              <option value="allboy-n2-n3" className="bg-[#1a1a2e] text-white">All Boy</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/50">
               <ChevronDown className="w-4 h-4" />
@@ -221,7 +224,7 @@ export function RegistrationTable({
                   </div>
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-white/50 uppercase tracking-wider hidden lg:table-cell">
-                  Detalhes
+                  Níveis de Interesse
                 </th>
                 <th className="px-6 py-4 text-xs font-bold text-white/50 uppercase tracking-wider hidden md:table-cell">
                   Posição
@@ -273,8 +276,20 @@ export function RegistrationTable({
                         {/* Athlete */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white font-display text-base shrink-0 border border-white/10">
-                              {registration.nome_completo.charAt(0).toUpperCase()}
+                            <div className="relative w-10 h-10 rounded-full shrink-0 overflow-hidden border border-white/10">
+                              {registration.athlete_photo_url ? (
+                                <Image
+                                  src={registration.athlete_photo_url}
+                                  alt={registration.nome_completo}
+                                  fill
+                                  className="object-cover"
+                                  sizes="40px"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white font-display text-base">
+                                  {registration.nome_completo.charAt(0).toUpperCase()}
+                                </div>
+                              )}
                             </div>
                             <div>
                               <p className="text-sm font-semibold text-white">
@@ -283,41 +298,36 @@ export function RegistrationTable({
                               <p className="text-xs text-white/40">
                                 {registration.email}
                               </p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <span className="text-xs text-white/50">
+                                  {registration.idade} anos
+                                </span>
+                                {registration.is_minor && (
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-[#00BFFF]/10 text-[#00BFFF] text-[10px] font-semibold uppercase">
+                                    Menor
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </td>
 
-                        {/* Details */}
+                        {/* Níveis de Interesse */}
                         <td className="px-6 py-4 hidden lg:table-cell">
-                          <div className="flex flex-col gap-2">
-                            {/* Níveis */}
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              {[...registration.nivel_interesse]
-                                .sort((a, b) => levelOrder.indexOf(a) - levelOrder.indexOf(b))
-                                .map((nivel) => {
-                                  const config = levelConfig[nivel] || { label: nivel, color: 'text-white', bgColor: 'bg-white/10', borderColor: 'border-white/20' }
-                                  return (
-                                    <span
-                                      key={nivel}
-                                      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${config.color} ${config.bgColor} border ${config.borderColor}`}
-                                    >
-                                      {config.label}
-                                    </span>
-                                  )
-                                })}
-                            </div>
-                            {/* Info linha */}
-                            <div className="flex items-center gap-2 text-xs text-white/50">
-                              <span className="inline-flex items-center gap-1">
-                                <Calendar className="w-3 h-3 text-white/30" />
-                                {registration.idade} anos
-                              </span>
-                              {registration.is_minor && (
-                                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#00BFFF]/10 text-[#00BFFF] text-[10px] font-semibold uppercase">
-                                  Menor
-                                </span>
-                              )}
-                            </div>
+                          <div className="grid grid-cols-2 gap-1.5 max-w-[200px]">
+                            {[...registration.nivel_interesse]
+                              .sort((a, b) => levelOrder.indexOf(a) - levelOrder.indexOf(b))
+                              .map((nivel) => {
+                                const config = levelConfig[nivel] || { label: nivel, color: 'text-white', bgColor: 'bg-white/10', borderColor: 'border-white/20' }
+                                return (
+                                  <span
+                                    key={nivel}
+                                    className={`inline-flex items-center justify-center px-2 py-1 rounded text-xs font-bold ${config.color} ${config.bgColor} border ${config.borderColor}`}
+                                  >
+                                    {config.label}
+                                  </span>
+                                )
+                              })}
                           </div>
                         </td>
 

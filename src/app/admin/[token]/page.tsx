@@ -39,6 +39,7 @@ type Registration = {
   status: Database['public']['Enums']['registration_status_type']
   attendance_status: Database['public']['Enums']['attendance_status_type']
   payment_status: Database['public']['Enums']['payment_status_type']
+  athlete_photo_url?: string | null
   checked_in_at: string | null
   created_at: string
   updated_at: string

@@ -55,6 +55,7 @@ export const getRegistrations = actionClient
         attendance_status,
         payment_status,
         payment_proof_url,
+        athlete_photo_url,
         checked_in_at,
         created_at,
         updated_at

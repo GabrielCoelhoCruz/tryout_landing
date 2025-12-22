@@ -12,6 +12,14 @@ import {
 } from 'lucide-react'
 import type { Database } from '@/types/database'
 
+const teamLevelLabels: Record<string, string> = {
+  'coed-n2': 'Coed N2',
+  'coed-n3': 'Coed N3',
+  'coed-n4': 'Coed N4',
+  'allgirl-n2-n3': 'All Girl N2/N3',
+  'allboy-n2-n3': 'All Boy N2/N3',
+}
+
 type CheckinRegistration = {
   id: string
   nome_completo: string
@@ -164,9 +172,9 @@ export function CheckinCard({
             {registration.nivel_interesse.map((nivel) => (
               <span
                 key={nivel}
-                className="px-2 py-0.5 bg-[#FF7F00]/20 text-[#FF7F00] text-xs rounded font-semibold uppercase"
+                className="px-2 py-0.5 bg-[#FF7F00]/20 text-[#FF7F00] text-xs rounded font-semibold"
               >
-                {nivel}
+                {teamLevelLabels[nivel] || nivel}
               </span>
             ))}
             {registration.posicao_interesse?.map((pos) => (
