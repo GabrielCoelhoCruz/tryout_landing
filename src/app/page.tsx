@@ -872,7 +872,7 @@ function LandingContent() {
             <div className="text-center mb-8">
               <h3 className="font-display text-2xl text-[#000c1f] mb-2">Cronograma do Tryout</h3>
               <p className="text-[#4A4A4A] text-sm">
-                Horários detalhados por equipe
+                Horários detalhados por níveis
               </p>
             </div>
 

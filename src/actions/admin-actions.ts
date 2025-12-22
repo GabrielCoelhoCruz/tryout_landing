@@ -261,3 +261,59 @@ export const uploadPaymentProof = actionClient
     }
   })
 
+// Update athlete photo URL
+export const updateAthletePhoto = actionClient
+  .metadata({ actionName: 'updateAthletePhoto' })
+  .schema(z.object({
+    registrationId: z.string().uuid(),
+    photoUrl: z.string().url(),
+  }))
+  .action(async ({ parsedInput }) => {
+    const supabase = createServerClient()
+
+    const { data, error } = await supabase
+      .from('registrations')
+      .update({ athlete_photo_url: parsedInput.photoUrl })
+      .eq('id', parsedInput.registrationId)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error updating athlete photo:', error)
+      throw new Error('Erro ao salvar foto do atleta.')
+    }
+
+    return {
+      success: true,
+      data,
+    }
+  })
+
+// Update tryout number
+export const updateTryoutNumber = actionClient
+  .metadata({ actionName: 'updateTryoutNumber' })
+  .schema(z.object({
+    registrationId: z.string().uuid(),
+    tryoutNumber: z.string().min(1).max(10),
+  }))
+  .action(async ({ parsedInput }) => {
+    const supabase = createServerClient()
+
+    const { data, error } = await supabase
+      .from('registrations')
+      .update({ tryout_number: parsedInput.tryoutNumber })
+      .eq('id', parsedInput.registrationId)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error updating tryout number:', error)
+      throw new Error('Erro ao salvar número do tryout.')
+    }
+
+    return {
+      success: true,
+      data,
+    }
+  })
+

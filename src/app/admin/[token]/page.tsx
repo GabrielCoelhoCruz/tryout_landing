@@ -17,6 +17,8 @@ import {
   getRegistrationById,
   updatePaymentStatus,
   uploadPaymentProof,
+  updateAthletePhoto,
+  updateTryoutNumber,
 } from '@/actions/admin-actions'
 import { StatsCard, RegistrationTable, RegistrationDetail } from '@/components/admin'
 import { BarChart, DonutChart, LineChart } from '@/components/admin/charts'
@@ -114,6 +116,32 @@ export default function AdminDashboard() {
     },
   })
 
+  const { execute: uploadPhoto } = useAction(updateAthletePhoto, {
+    onSuccess: () => {
+      toast.success('Foto do atleta salva com sucesso!')
+      loadData()
+      if (selectedId) {
+        fetchRegistrationDetail({ id: selectedId })
+      }
+    },
+    onError: () => {
+      toast.error('Erro ao salvar foto do atleta')
+    },
+  })
+
+  const { execute: saveTryoutNumber } = useAction(updateTryoutNumber, {
+    onSuccess: () => {
+      toast.success('Número do tryout salvo!')
+      loadData()
+      if (selectedId) {
+        fetchRegistrationDetail({ id: selectedId })
+      }
+    },
+    onError: () => {
+      toast.error('Erro ao salvar número do tryout')
+    },
+  })
+
   // Load data
   const loadData = useCallback(() => {
     fetchRegistrations({
@@ -149,6 +177,20 @@ export default function AdminDashboard() {
     uploadProof({
       registrationId: id,
       proofUrl: url,
+    })
+  }
+
+  const handleUploadPhoto = (id: string, url: string) => {
+    uploadPhoto({
+      registrationId: id,
+      photoUrl: url,
+    })
+  }
+
+  const handleUpdateTryoutNumber = (id: string, number: string) => {
+    saveTryoutNumber({
+      registrationId: id,
+      tryoutNumber: number,
     })
   }
 
@@ -343,6 +385,8 @@ export default function AdminDashboard() {
         onClose={handleCloseDetail}
         onUpdatePayment={handleUpdatePayment}
         onUploadProof={handleUploadProof}
+        onUploadPhoto={handleUploadPhoto}
+        onUpdateTryoutNumber={handleUpdateTryoutNumber}
       />
     </div>
   )

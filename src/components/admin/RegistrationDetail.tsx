@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
@@ -22,6 +23,9 @@ import {
   Loader2,
   CheckCircle2,
   Image as ImageIcon,
+  Camera,
+  Hash,
+  Save,
 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
@@ -35,6 +39,8 @@ interface RegistrationDetailProps {
   onClose: () => void
   onUpdatePayment?: (id: string, status: string) => void
   onUploadProof?: (id: string, url: string) => void
+  onUploadPhoto?: (id: string, url: string) => void
+  onUpdateTryoutNumber?: (id: string, number: string) => void
 }
 
 const genderLabels = {
@@ -97,14 +103,21 @@ export function RegistrationDetail({
   onClose,
   onUpdatePayment,
   onUploadProof,
+  onUploadPhoto,
+  onUpdateTryoutNumber,
 }: RegistrationDetailProps) {
   const [isUploading, setIsUploading] = useState(false)
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+  const [tryoutNumber, setTryoutNumber] = useState(registration?.tryout_number || '')
+  const [isSavingNumber, setIsSavingNumber] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const photoInputRef = useRef<HTMLInputElement>(null)
 
   if (!registration) return null
 
   const isPaid = registration.payment_status === 'pago'
   const hasProof = !!registration.payment_proof_url
+  const hasPhoto = !!registration.athlete_photo_url
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -176,6 +189,87 @@ export function RegistrationDetail({
     }
   }
 
+  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !registration.id) return
+
+    // Validate file type (images only)
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Tipo de arquivo não permitido', {
+        description: 'Use JPG, PNG ou WebP',
+      })
+      return
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Arquivo muito grande', {
+        description: 'Tamanho máximo: 5MB',
+      })
+      return
+    }
+
+    setIsUploadingPhoto(true)
+
+    try {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${registration.id}-${Date.now()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('athlete-photos')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true,
+        })
+
+      if (uploadError) {
+        throw uploadError
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('athlete-photos')
+        .getPublicUrl(fileName)
+
+      if (onUploadPhoto && urlData.publicUrl) {
+        onUploadPhoto(registration.id, urlData.publicUrl)
+        toast.success('Foto anexada com sucesso!')
+      }
+    } catch (error) {
+      console.error('Photo upload error:', error)
+      toast.error('Erro ao fazer upload da foto', {
+        description: 'Tente novamente mais tarde',
+      })
+    } finally {
+      setIsUploadingPhoto(false)
+      if (photoInputRef.current) {
+        photoInputRef.current.value = ''
+      }
+    }
+  }
+
+  const handleSaveTryoutNumber = async () => {
+    if (!registration.id || !tryoutNumber.trim()) return
+
+    setIsSavingNumber(true)
+    try {
+      if (onUpdateTryoutNumber) {
+        onUpdateTryoutNumber(registration.id, tryoutNumber.trim())
+        toast.success('Número do tryout salvo!')
+      }
+    } catch (error) {
+      console.error('Error saving tryout number:', error)
+      toast.error('Erro ao salvar número do tryout')
+    } finally {
+      setIsSavingNumber(false)
+    }
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -234,6 +328,95 @@ export function RegistrationDetail({
 
             {/* Content */}
             <div className="p-6 space-y-6">
+              {/* Tryout Info Section - Photo & Number */}
+              <Section title="Informações do Tryout" icon={Hash}>
+                <div className="space-y-4">
+                  {/* Tryout Number */}
+                  <div>
+                    <label className="text-white/40 text-sm mb-2 block">Número Tryout</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={tryoutNumber}
+                        onChange={(e) => setTryoutNumber(e.target.value)}
+                        placeholder="Ex: 001"
+                        className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#FF7F00]/50 focus:ring-1 focus:ring-[#FF7F00]/20"
+                        maxLength={10}
+                      />
+                      <button
+                        onClick={handleSaveTryoutNumber}
+                        disabled={isSavingNumber || !tryoutNumber.trim()}
+                        className="px-4 py-2.5 bg-[#FF7F00]/20 hover:bg-[#FF7F00]/30 text-[#FF7F00] rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {isSavingNumber ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Save className="w-4 h-4" />
+                        )}
+                        Salvar
+                      </button>
+                    </div>
+                    {registration.tryout_number && (
+                      <p className="text-white/40 text-xs mt-2">
+                        Número atual: <span className="text-[#FF7F00] font-semibold">{registration.tryout_number}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Athlete Photo */}
+                  <div>
+                    <label className="text-white/40 text-sm mb-2 block">Foto do Atleta</label>
+                    <div className="flex gap-4">
+                      {/* Photo Preview */}
+                      <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center">
+                        {hasPhoto ? (
+                          <Image
+                            src={registration.athlete_photo_url!}
+                            alt={registration.nome_completo || 'Atleta'}
+                            fill
+                            className="object-cover"
+                            sizes="96px"
+                          />
+                        ) : (
+                          <Camera className="w-8 h-8 text-white/20" />
+                        )}
+                      </div>
+
+                      {/* Upload Button */}
+                      <div className="flex-1 flex flex-col justify-center">
+                        <input
+                          ref={photoInputRef}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          onChange={handlePhotoSelect}
+                          className="hidden"
+                        />
+                        <button
+                          onClick={() => photoInputRef.current?.click()}
+                          disabled={isUploadingPhoto}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#00BFFF]/20 hover:bg-[#00BFFF]/30 text-[#00BFFF] rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isUploadingPhoto ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Enviando...
+                            </>
+                          ) : (
+                            <>
+                              <Camera className="w-4 h-4" />
+                              {hasPhoto ? 'Trocar Foto' : 'Anexar Foto'}
+                            </>
+                          )}
+                        </button>
+                        <p className="text-white/40 text-xs mt-2">
+                          JPG, PNG ou WebP (máx. 5MB)
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Section>
+
               {/* Payment Status Section */}
               <Section title="Pagamento" icon={CreditCard}>
                 <div className="space-y-4">

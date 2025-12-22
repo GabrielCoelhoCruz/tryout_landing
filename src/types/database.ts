@@ -63,6 +63,7 @@ export type Database = {
           aceita_realocacao: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos: boolean
           admin_notes: string | null
+          athlete_photo_url: string | null
           attendance_status: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel: boolean
           checked_in_at: string | null
@@ -97,6 +98,7 @@ export type Database = {
           status: Database["public"]["Enums"]["registration_status_type"]
           telefone: string
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
+          tryout_number: string | null
           updated_at: string
         }
         Insert: {
@@ -104,6 +106,7 @@ export type Database = {
           aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos?: boolean
           admin_notes?: string | null
+          athlete_photo_url?: string | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -138,6 +141,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["registration_status_type"]
           telefone: string
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
+          tryout_number?: string | null
           updated_at?: string
         }
         Update: {
@@ -145,6 +149,7 @@ export type Database = {
           aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
           aceite_termos?: boolean
           admin_notes?: string | null
+          athlete_photo_url?: string | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -179,6 +184,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["registration_status_type"]
           telefone?: string
           tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
+          tryout_number?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -218,6 +224,7 @@ export type Database = {
           aceita_realocacao: Database["public"]["Enums"]["yes_no_type"] | null
           aceite_termos: boolean | null
           admin_notes: string | null
+          athlete_photo_url: string | null
           attendance_status:
             | Database["public"]["Enums"]["attendance_status_type"]
             | null
@@ -260,11 +267,14 @@ export type Database = {
           pratica_cheerleading:
             | Database["public"]["Enums"]["yes_no_type"]
             | null
+          reviewed_at: string | null
+          reviewed_by: string | null
           status: Database["public"]["Enums"]["registration_status_type"] | null
           telefone: string | null
           tempo_experiencia:
             | Database["public"]["Enums"]["experience_time_type"]
             | null
+          tryout_number: string | null
           updated_at: string | null
         }
         Relationships: []
