@@ -19,6 +19,8 @@ import {
   Star,
   CheckCircle,
   Linkedin,
+  Clock,
+  Calendar,
 } from 'lucide-react'
 
 import { AnimatedH1 } from '@/components/animations'
@@ -32,6 +34,7 @@ import {
   JOURNEY_STEPS,
   FAQS,
   TRYOUT_INFO,
+  TRYOUT_SCHEDULE,
   PRICING_PLANS,
 } from '@/constants/landing-data'
 import { SCROLL_THRESHOLD, SECTION_SPACING } from '@/constants/animation-config'
@@ -557,9 +560,23 @@ function LandingContent() {
           <SectionHeader
             badge="Times 2026"
             title="TRYOUT 2026"
-            subtitle="Temos vagas para diferentes níveis e categorias. Encontre o time que mais combina com você."
+            subtitle="Temos vagas para possíveis níveis e categorias. Encontre o time que mais combina com você."
             light
           />
+
+          {/* Disclaimer sobre alocação */}
+          <motion.div
+            className="flex justify-center mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-sm font-medium">
+              <Star className="w-4 h-4" />
+              <span>Times definidos após o tryout, sujeito a realocação</span>
+            </div>
+          </motion.div>
           
           {/* Team selector tabs - Clean solid */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
@@ -810,7 +827,7 @@ function LandingContent() {
       {/* Smooth transition from dark to light */}
       <div className="h-16 md:h-20 lg:h-24 bg-gradient-to-b from-[#000c1f] via-gray-800 to-white" />
 
-      <section id="tryout-info" className={`relative z-10 ${SECTION_SPACING} bg-white scroll-mt-20`}>
+      <section id="tryout-info" className={`relative z-10 ${SECTION_SPACING} !pb-16 md:!pb-20 lg:!pb-24 bg-white scroll-mt-20`}>
         <div className="max-w-5xl mx-auto px-4 md:px-8">
           <SectionHeader
             badge="Informações"
@@ -843,7 +860,74 @@ function LandingContent() {
               </motion.div>
             ))}
           </div>
-          
+
+          {/* Schedule Section */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="text-center mb-8">
+              <h3 className="font-display text-2xl text-[#000c1f] mb-2">Cronograma do Tryout</h3>
+              <p className="text-[#4A4A4A] text-sm">
+                Horários detalhados por equipe
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {TRYOUT_SCHEDULE.map((day, dayIndex) => (
+                <motion.div
+                  key={day.date}
+                  className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: dayIndex * 0.1 }}
+                >
+                  {/* Day Header */}
+                  <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200">
+                    <div className="w-12 h-12 rounded-xl bg-[#FF7F00] flex items-center justify-center text-white">
+                      <Calendar className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="font-display text-xl text-[#000c1f]">{day.date}/2026</div>
+                      <div className="text-sm text-[#4A4A4A]">{day.day}</div>
+                    </div>
+                  </div>
+
+                  {/* Teams Schedule */}
+                  <div className="space-y-4">
+                    {day.teams.map((team, teamIndex) => (
+                      <div key={teamIndex}>
+                        <div
+                          className="flex items-center gap-2 mb-2"
+                          style={{ color: team.color }}
+                        >
+                          <div
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: team.color }}
+                          />
+                          <span className="font-semibold text-sm">{team.name}</span>
+                        </div>
+                        <div className="ml-4 space-y-1">
+                          {team.schedule.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-sm">
+                              <Clock className="w-3.5 h-3.5 text-[#4A4A4A]" />
+                              <span className="text-[#000c1f] font-medium">{item.time}</span>
+                              <span className="text-[#4A4A4A]">— {item.activity}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
           {/* Pricing Section */}
           <motion.div
             className="mb-12"

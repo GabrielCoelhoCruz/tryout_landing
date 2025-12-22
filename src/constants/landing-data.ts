@@ -13,6 +13,7 @@ import {
   Medal,
   ClipboardList,
   DollarSign,
+  Clock,
 } from 'lucide-react'
 import type { StormType } from '@/context/StormWeatherContext'
 
@@ -66,8 +67,8 @@ export const TEAMS: readonly Team[] = [
     description:
       'Time misto, ideal para atletas iniciantes que buscam evolução técnica na base do cheerleading.',
     requirements: [
-      'Idade mínimo: 12 anos',
-      'Habilidades: (à confirmar)',
+      'Idade mínima: 12 anos',
+      'Habilidades: Skills de nível 2 + Jump, tumbling (se tiver)',
     ],
     vacancies: 0,
     color: '#E0F4FF',
@@ -80,12 +81,26 @@ export const TEAMS: readonly Team[] = [
     description:
       'Time misto de nível intermediário, ideal para atletas com experiência prévia que buscam evolução técnica.',
     requirements: [
-      'Idade mínimo: 12 anos',
-      'Habilidades: (à confirmar) tumbling jump flic, rodante mortal, rodante flic mortal, estrela sem mãos e híber',
+      'Idade mínima: 12 anos',
+      'Habilidades: Skills de nível 3 + Jump, tumbling (se tiver)',
     ],
     vacancies: 0,
     color: '#2563EB',
     storm: 'thunder',
+  },
+  {
+    name: 'COED N4',
+    level: 'Nível 4',
+    category: 'Coed',
+    description:
+      'Time misto de nível avançado, para atletas experientes que buscam desafios técnicos mais elevados.',
+    requirements: [
+      'Idade mínima: 12 anos',
+      'Habilidades: Skills de nível 4 + Jump, tumbling (se tiver)',
+    ],
+    vacancies: 0,
+    color: '#FF7F00',
+    storm: 'fire',
   },
   {
     name: 'ALL GIRL N2/N3',
@@ -94,8 +109,8 @@ export const TEAMS: readonly Team[] = [
     description:
       'Time feminino, com foco em técnica, sincronia e performance.',
     requirements: [
-      'Idade mínimo: 8 anos',
-      'Habilidades: (à confirmar)',
+      'Idade mínima: 8 anos',
+      'Habilidades: Skills de nível 2/3 + Jump, tumbling (se tiver)',
     ],
     vacancies: 0,
     color: '#FFFFFF',
@@ -106,10 +121,10 @@ export const TEAMS: readonly Team[] = [
     level: 'Nível 2/3',
     category: 'All Boy',
     description:
-      'Time masculino, com foco em técnica, sincronia e performance. Nível 2/3.',
+      'Time masculino, com foco em técnica, sincronia e performance.',
     requirements: [
-      'Idade mínimo: 12 anos',
-      'Habilidades: (à confirmar)',
+      'Idade mínima: 8 anos',
+      'Habilidades: Skills de nível 2/3 + Jump, tumbling (se tiver)',
     ],
     vacancies: 0,
     color: '#00BFFF',
@@ -217,13 +232,13 @@ export const TRYOUT_INFO = [
   {
     icon: ClipboardList,
     label: 'Inscrições abertas',
-    value: '06/01 - 30/01',
+    value: '06 - 30 Jan, 2026',
     color: '#FF7F00',
   },
   {
     icon: Calendar,
     label: 'Data do Tryout',
-    value: '31/01 e 01/02 de 2026',
+    value: '31 Jan e 01 Fev, 2026',
     color: '#00BFFF',
   },
   {
@@ -231,6 +246,75 @@ export const TRYOUT_INFO = [
     label: 'Vagas Limitadas',
     value: 'Garanta sua vaga',
     color: '#2563EB',
+  },
+] as const
+
+export const TRYOUT_SCHEDULE = [
+  {
+    date: '31/01',
+    day: 'Sábado',
+    teams: [
+      {
+        name: 'All Girl',
+        color: '#FF69B4',
+        schedule: [
+          { time: '9h30 - 10h', activity: 'Credenciamento' },
+          { time: '10h - 13h', activity: 'Tryout' },
+        ],
+      },
+      {
+        name: 'Intervalo',
+        color: '#6B7280',
+        schedule: [
+          { time: '13h - 14h', activity: 'Almoço' },
+        ],
+      },
+      {
+        name: 'All Boy',
+        color: '#00BFFF',
+        schedule: [
+          { time: '14h - 14h30', activity: 'Credenciamento' },
+          { time: '14h30 - 17h30', activity: 'Tryout' },
+        ],
+      },
+    ],
+  },
+  {
+    date: '01/02',
+    day: 'Domingo',
+    teams: [
+      {
+        name: 'COED N2',
+        color: '#3B82F6',
+        schedule: [
+          { time: '9h30 - 10h', activity: 'Credenciamento' },
+          { time: '10h - 12h', activity: 'Tryout' },
+        ],
+      },
+      {
+        name: 'Intervalo',
+        color: '#6B7280',
+        schedule: [
+          { time: '12h - 13h', activity: 'Almoço' },
+        ],
+      },
+      {
+        name: 'COED N3',
+        color: '#2563EB',
+        schedule: [
+          { time: '13h - 13h30', activity: 'Credenciamento' },
+          { time: '13h30 - 15h30', activity: 'Tryout' },
+        ],
+      },
+      {
+        name: 'COED N4',
+        color: '#FF7F00',
+        schedule: [
+          { time: '15h30 - 16h', activity: 'Credenciamento' },
+          { time: '16h - 18h', activity: 'Tryout' },
+        ],
+      },
+    ],
   },
 ] as const
 
