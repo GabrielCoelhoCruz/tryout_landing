@@ -25,7 +25,6 @@ type CheckinRegistration = {
   id: string
   nome_completo: string
   email: string
-  telefone: string
   idade: number
   is_minor: boolean | null
   nivel_interesse: Database['public']['Enums']['team_level_type'][]
@@ -55,9 +54,10 @@ export default function CheckinPage() {
     backs: number
     coedN2: number
     coedN3: number
+    coedN4: number
     allGirl: number
     allBoy: number
-  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0, coedN2: 0, coedN3: 0, allGirl: 0, allBoy: 0 })
+  }>({ present: 0, absent: 0, notChecked: 0, total: 0, paid: 0, paymentPending: 0, flyers: 0, bases: 0, backs: 0, coedN2: 0, coedN3: 0, coedN4: 0, allGirl: 0, allBoy: 0 })
 
   // Debounce search
   useEffect(() => {
@@ -98,6 +98,7 @@ export default function CheckinPage() {
           backs: s.back_interest_count || 0,
           coedN2: s.coed_n2_interest_count || 0,
           coedN3: s.coed_n3_interest_count || 0,
+          coedN4: s.coed_n4_interest_count || 0,
           allGirl: s.allgirl_interest_count || 0,
           allBoy: s.allboy_interest_count || 0,
         })
@@ -297,10 +298,11 @@ export default function CheckinPage() {
             {[
               { label: 'Coed N2', value: stats.coedN2, color: 'bg-[#FF7F00]' },
               { label: 'Coed N3', value: stats.coedN3, color: 'bg-[#00BFFF]' },
+              { label: 'Coed N4', value: stats.coedN4, color: 'bg-emerald-500' },
               { label: 'All Girl', value: stats.allGirl, color: 'bg-pink-500' },
               { label: 'All Boy', value: stats.allBoy, color: 'bg-purple-500' },
             ].map((item) => {
-              const maxLevel = Math.max(stats.coedN2, stats.coedN3, stats.allGirl, stats.allBoy, 1)
+              const maxLevel = Math.max(stats.coedN2, stats.coedN3, stats.coedN4, stats.allGirl, stats.allBoy, 1)
               return (
                 <div key={item.label} className="flex items-center gap-2">
                   <span className="text-white/60 text-xs w-14">{item.label}</span>

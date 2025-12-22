@@ -142,6 +142,7 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           options: [
             { value: 'coed-n2', label: 'Coed N2' },
             { value: 'coed-n3', label: 'Coed N3' },
+            { value: 'coed-n4', label: 'Coed N4' },
             { value: 'allgirl-n2-n3', label: 'All Girl N2/N3' },
             { value: 'allboy-n2-n3', label: 'All Boy N2/N3' },
           ],

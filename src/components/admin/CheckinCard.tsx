@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   User,
-  Phone,
   CheckCircle2,
   XCircle,
   Clock,
@@ -17,7 +16,6 @@ type CheckinRegistration = {
   id: string
   nome_completo: string
   email: string
-  telefone: string
   idade: number
   is_minor: boolean | null
   nivel_interesse: Database['public']['Enums']['team_level_type'][]
@@ -159,10 +157,6 @@ export function CheckinCard({
                   MENOR
                 </span>
               )}
-            </span>
-            <span className="flex items-center gap-1 truncate">
-              <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-              {registration.telefone}
             </span>
           </div>
 

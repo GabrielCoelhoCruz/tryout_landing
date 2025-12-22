@@ -202,6 +202,7 @@ export type Database = {
           base_interest_count: number | null
           coed_n2_interest_count: number | null
           coed_n3_interest_count: number | null
+          coed_n4_interest_count: number | null
           flyer_interest_count: number | null
           last_30_days: number | null
           last_7_days: number | null
@@ -380,7 +381,7 @@ export type Database = {
         | "rejected"
         | "waitlisted"
       sports_experience_type: "ginastica" | "tumbling" | "danca" | "nenhuma"
-      team_level_type: "coed-n2" | "coed-n3" | "allgirl-n2-n3" | "allboy-n2-n3"
+      team_level_type: "coed-n2" | "coed-n3" | "coed-n4" | "allgirl-n2-n3" | "allboy-n2-n3"
       weekday_type:
         | "segunda"
         | "terca"
@@ -537,7 +538,7 @@ export const Constants = {
         "waitlisted",
       ],
       sports_experience_type: ["ginastica", "tumbling", "danca", "nenhuma"],
-      team_level_type: ["coed-n2", "coed-n3", "allgirl-n2-n3", "allboy-n2-n3"],
+      team_level_type: ["coed-n2", "coed-n3", "coed-n4", "allgirl-n2-n3", "allboy-n2-n3"],
       weekday_type: [
         "segunda",
         "terca",

@@ -272,6 +272,7 @@ export default function AdminDashboard() {
           data={[
             { label: 'Coed N2', value: stats?.coed_n2_interest_count || 0, color: '#FF7F00' },
             { label: 'Coed N3', value: stats?.coed_n3_interest_count || 0, color: '#00BFFF' },
+            { label: 'Coed N4', value: stats?.coed_n4_interest_count || 0, color: '#10B981' },
             { label: 'All Girl', value: stats?.allgirl_interest_count || 0, color: '#EC4899' },
             { label: 'All Boy', value: stats?.allboy_interest_count || 0, color: '#A855F7' },
           ]}

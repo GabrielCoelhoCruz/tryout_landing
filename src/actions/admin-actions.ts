@@ -198,7 +198,6 @@ export const getRegistrationsForCheckin = actionClient
         id,
         nome_completo,
         email,
-        telefone,
         idade,
         is_minor,
         nivel_interesse,

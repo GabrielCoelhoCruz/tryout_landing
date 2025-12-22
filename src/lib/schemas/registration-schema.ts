@@ -22,7 +22,7 @@ export const cheerPositionSchema = z.enum(['base', 'flyer', 'back'], {
   message: 'Selecione uma posição válida',
 })
 export const teamLevelSchema = z.enum(
-  ['coed-n2', 'coed-n3', 'allgirl-n2-n3', 'allboy-n2-n3'],
+  ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3'],
   { message: 'Selecione um nível válido' }
 )
 export const weekdaySchema = z.enum(
