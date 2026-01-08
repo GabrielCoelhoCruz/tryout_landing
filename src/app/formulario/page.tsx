@@ -39,6 +39,7 @@ import { useIntersectionTracker } from '@/hooks/useIntersectionTracker'
 import { createFormSections } from '@/constants/form-sections'
 import { PIX_CONFIG, PAYMENT_PROOF_CONFIG, FORM_SECTION_IDS } from '@/constants/payment'
 import { isMinor } from '@/lib/form-validation'
+import { calculateAge, isValidAge } from '@/lib/utils'
 import {
   registrationSchema,
   type RegistrationFormData,
@@ -682,6 +683,23 @@ function FormSection({
                           )
                         })}
                       </div>
+                    ) : field.type === 'readonly' ? (
+                      <div
+                        role="status"
+                        aria-live="polite"
+                        aria-label={
+                          controllerField.value !== undefined && controllerField.value !== null
+                            ? `Idade: ${controllerField.value} anos`
+                            : 'Idade será calculada automaticamente'
+                        }
+                        className={`bg-white/5 border border-white/20 rounded-xl h-12 flex items-center px-4 cursor-not-allowed opacity-70 ${
+                          controllerField.value ? 'text-white/80' : 'text-white/40 italic'
+                        }`}
+                      >
+                        {controllerField.value !== undefined && controllerField.value !== null
+                          ? `${controllerField.value} anos`
+                          : 'Calculado automaticamente'}
+                      </div>
                     ) : field.type === 'file' ? (
                       <div className="space-y-2">
                         <div
@@ -1084,6 +1102,7 @@ export default function FormularioPage() {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
@@ -1118,11 +1137,22 @@ export default function FormularioPage() {
     mode: 'onBlur',
   })
 
-  // Watch the birth date to determine if user is minor
+  // Watch the birth date to determine if user is minor and calculate age
   const watchedData = watch()
-  const userIsMinor = isMinor({ 'data-nascimento': watchedData['data-nascimento'] })
+  const birthDate = watchedData['data-nascimento']
+  const userIsMinor = isMinor({ 'data-nascimento': birthDate })
   const formSections = useMemo(() => createFormSections(userIsMinor), [userIsMinor])
   const currentSection = useIntersectionTracker(formSections.length)
+
+  // Calculate age automatically when birth date changes
+  useEffect(() => {
+    if (birthDate) {
+      const age = calculateAge(birthDate)
+      if (isValidAge(age)) {
+        setValue('idade', age)
+      }
+    }
+  }, [birthDate, setValue])
 
   // Next Safe Action hook
   const { execute, status, result } = useAction(submitRegistration)

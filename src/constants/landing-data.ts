@@ -134,24 +134,24 @@ export const TEAMS: readonly Team[] = [
 
 export const TESTIMONIALS = [
   {
-    name: 'Maria Silva',
-    role: 'Flyer - N2 All Girl',
-    tenure: '2 anos na equipe',
-    text: 'Entrar para esta equipe mudou minha vida. O nível de comprometimento e a qualidade do treinamento são incomparáveis. Conquistei meu primeiro pódio nacional aqui!',
+    name: 'Beatriz Souza',
+    tenure: 'Desde 2020 na equipe',
+    image: '/photos/Beatriz.jpeg',
+    text: 'O Sky me trouxe conhecimento, amizades e me abriu portas como atleta e coach, desde o primeiro empurrãozinho para fazer o try out pro Team Brazil até o reconhecimento para treinar um time, hoje eles são mais que uma equipe, são minha família.',
     rating: 5,
   },
   {
-    name: 'João Santos',
-    role: 'Base - N3 Coed',
-    tenure: '3 anos na equipe',
-    text: 'A evolução técnica que tive aqui foi incrível. Além de melhorar no cheerleading, ganhei uma segunda família e aprendi valores que levo para toda a vida.',
+    name: 'Samuel Faglioni',
+    tenure: 'Desde 2024 na equipe',
+    image: '/photos/Samuel.jpg',
+    text: 'Estar dentro do Sky foi de longe minha melhor experiência com cheer. Seja por ter evoluído muito como atleta quanto por ser um espaço onde fiz amizades incríveis!',
     rating: 5,
   },
   {
-    name: 'Ana Costa',
-    role: 'Back - N3 All Girl',
-    tenure: '1.5 ano na equipe',
-    text: 'Nunca pensei que chegaria tão longe. Com o apoio dos técnicos e da equipe, conquistei habilidades que achava impossíveis!',
+    name: 'Manu e Andre, pais da Catarina',
+    tenure: 'Desde 2024 na equipe',
+    image: '/photos/Catarina.jpg',
+    text: 'A evolução da Catarina no Sky é visível em todos os sentidos. Ela ganhou força, técnica, disciplina e confiança, além de aprender sobre trabalho em equipe, respeito e empatia. Mais do que um time, o Sky se tornou uma família onde ela se sente acolhida e pertencente. Ver nossa filha feliz, confiante e evoluindo é a maior conquista que poderíamos ter.',
     rating: 5,
   },
 ] as const
@@ -209,7 +209,7 @@ export const FAQS = [
   {
     question: 'Quais são os valores da mensalidade?',
     answer:
-      'O valor da mensalidade para participar de uma equipe é R$ 140,00, incluindo treinos de equipe, treinos extras, treinos de tumbling (acrobacias) e acompanhamento profissional. Para apenas aulas de tumbling, consulte valores de mensalidade ou aula avulsa.',
+      'Mensalidade (fev a dez): R$ 200,00 (1 equipe) ou R$ 210,00 (crossover: 2 equipes). Incluso: treinos oficiais, treinos extras de equipe, treinos de tumbling (acrobacias), fotos de campeonatos e cheermix.\n\nMatrícula: R$ 150,00 (taxa única).',
   },
   {
     question: 'Existe bolsa para mensalidade?',
@@ -219,7 +219,7 @@ export const FAQS = [
   {
     question: 'Qual a frequência de treinos?',
     answer:
-      'O treino oficial de cada equipe é todo domingo com 3h15 de duração (os horários serão divulgados em breve). Também há treinos extras aos sábados pré-campeonatos.',
+      'O treino oficial de cada equipe é todo domingo com 3h15 de duração (os horários serão divulgados em breve). A partir de julho, também teremos treinos aos sábados para preparação dos campeonatos.',
   },
   {
     question: 'Quando começam os treinos após a seleção?',
@@ -266,7 +266,7 @@ export const TRYOUT_SCHEDULE = [
         name: 'Intervalo',
         color: '#6B7280',
         schedule: [
-          { time: '13h - 14h', activity: 'Almoço' },
+          { time: '13h - 14h', activity: 'Descanso' },
         ],
       },
       {
@@ -295,7 +295,7 @@ export const TRYOUT_SCHEDULE = [
         name: 'Intervalo',
         color: '#6B7280',
         schedule: [
-          { time: '12h - 13h', activity: 'Almoço' },
+          { time: '12h - 13h', activity: 'Descanso' },
         ],
       },
       {

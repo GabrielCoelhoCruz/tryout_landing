@@ -26,9 +26,8 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
         {
           name: 'idade',
           label: 'Idade',
-          type: 'number',
+          type: 'readonly',
           required: true,
-          placeholder: '18',
         },
         {
           name: 'genero',
@@ -55,27 +54,31 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           required: true,
           placeholder: 'seu@email.com',
         },
-        {
-          name: 'nome-responsavel',
-          label: `Nome do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`,
-          type: 'text',
-          required: userIsMinor,
-          placeholder: 'Nome completo do responsável',
-        },
-        {
-          name: 'contato-responsavel',
-          label: `Telefone do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`,
-          type: 'tel',
-          required: userIsMinor,
-          placeholder: '(11) 99999-9999',
-        },
-        {
-          name: 'email-responsavel',
-          label: `E-mail do Responsável${userIsMinor ? '' : ' (se menor de idade)'}`,
-          type: 'email',
-          required: userIsMinor,
-          placeholder: 'responsavel@email.com',
-        },
+        ...(userIsMinor
+          ? [
+              {
+                name: 'nome-responsavel' as const,
+                label: 'Nome do Responsável',
+                type: 'text' as const,
+                required: true,
+                placeholder: 'Nome completo do responsável',
+              },
+              {
+                name: 'contato-responsavel' as const,
+                label: 'Telefone do Responsável',
+                type: 'tel' as const,
+                required: true,
+                placeholder: '(11) 99999-9999',
+              },
+              {
+                name: 'email-responsavel' as const,
+                label: 'E-mail do Responsável',
+                type: 'email' as const,
+                required: true,
+                placeholder: 'responsavel@email.com',
+              },
+            ]
+          : []),
       ],
     },
     {

@@ -49,6 +49,7 @@ export type FieldType =
   | 'checkbox-group'
   | 'textarea'
   | 'file'
+  | 'readonly'
 
 export type SelectOption = {
   value: string

@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { INTERSECTION_OBSERVER_CONFIG } from '@/constants/animation-config'
+import { useState, useEffect, useRef } from 'react'
 
 type UseIntersectionTrackerOptions = {
   threshold?: number
@@ -11,24 +10,45 @@ export function useIntersectionTracker(
   options: UseIntersectionTrackerOptions = {}
 ) {
   const [activeSection, setActiveSection] = useState(0)
+  const visibleSectionsRef = useRef<Map<number, number>>(new Map())
 
-  const { threshold, rootMargin } = {
-    ...INTERSECTION_OBSERVER_CONFIG,
-    ...options,
-  }
+  const { threshold = 0.1, rootMargin = '-20% 0px -20% 0px' } = options
 
   useEffect(() => {
+    if (sectionCount <= 0) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const sectionId = entry.target.id
+          const match = sectionId.match(/section-(\d+)/)
+          if (!match) return
+
+          const sectionIndex = parseInt(match[1], 10)
+
           if (entry.isIntersecting) {
-            const sectionId = entry.target.id
-            const sectionIndex = parseInt(sectionId.split('-')[1] || '0', 10)
-            setActiveSection(sectionIndex)
+            // Store visibility ratio for each section
+            visibleSectionsRef.current.set(sectionIndex, entry.intersectionRatio)
+          } else {
+            visibleSectionsRef.current.delete(sectionIndex)
           }
         })
+
+        // Find the section with highest visibility, or the highest index if equal
+        const visibleSections = Array.from(visibleSectionsRef.current.entries())
+        if (visibleSections.length > 0) {
+          // Sort by visibility ratio (desc), then by index (desc) for tie-breaking
+          visibleSections.sort((a, b) => {
+            if (Math.abs(a[1] - b[1]) < 0.1) {
+              // If ratios are close, prefer higher index (further in form)
+              return b[0] - a[0]
+            }
+            return b[1] - a[1]
+          })
+          setActiveSection(visibleSections[0][0])
+        }
       },
-      { threshold, rootMargin }
+      { threshold: [0.1, 0.3, 0.5, 0.7], rootMargin }
     )
 
     const sections: Element[] = []
@@ -40,9 +60,11 @@ export function useIntersectionTracker(
       }
     }
 
+    const visibleSections = visibleSectionsRef.current
     return () => {
       sections.forEach((section) => observer.unobserve(section))
       observer.disconnect()
+      visibleSections.clear()
     }
   }, [sectionCount, threshold, rootMargin])
 

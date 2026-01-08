@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { calculateAge } from '@/lib/utils'
 
 // Enum schemas matching database types
 export const genderSchema = z.enum(['feminino', 'masculino', 'outro'], {
@@ -33,20 +34,6 @@ export const weekdaySchema = z.enum(
 // Phone validation regex (Brazilian format)
 const phoneRegex = /^\(?[0-9]{2}\)?\s?[0-9]{4,5}-?[0-9]{4}$/
 
-// Helper to calculate age from birth date
-function calculateAge(birthDate: string): number {
-  const today = new Date()
-  const birth = new Date(birthDate)
-  let age = today.getFullYear() - birth.getFullYear()
-  const monthDiff = today.getMonth() - birth.getMonth()
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-    age--
-  }
-
-  return age
-}
-
 // Base schema without refinements
 const baseRegistrationSchema = z.object({
   // Personal data
@@ -56,7 +43,7 @@ const baseRegistrationSchema = z.object({
     .max(100, 'Nome muito longo'),
   'data-nascimento': z.string().min(1, 'Data de nascimento é obrigatória'),
   idade: z
-    .number()
+    .number({ message: 'Preencha a data de nascimento para calcular a idade' })
     .min(5, 'Idade mínima é 5 anos')
     .max(99, 'Idade máxima é 99 anos'),
   genero: genderSchema,

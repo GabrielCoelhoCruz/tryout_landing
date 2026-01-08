@@ -803,14 +803,19 @@ function LandingContent() {
                     &ldquo;{testimonial.text}&rdquo;
                   </p>
                   
-                  {/* Author - WITH GRADIENT AVATAR (RESTORED) */}
+                  {/* Author - WITH PHOTO */}
                   <div className="flex items-center gap-4 pt-6 border-t border-white/10">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF7F00] to-[#00BFFF] flex items-center justify-center text-white font-display text-xl">
-                      {testimonial.name.charAt(0)}
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#FF7F00]/50">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
                     </div>
                     <div>
                       <div className="font-semibold text-white">{testimonial.name}</div>
-                      <div className="text-sm text-[#FF7F00]">{testimonial.role}</div>
                       <div className="text-xs text-white/50">{testimonial.tenure}</div>
                     </div>
                   </div>
@@ -1012,7 +1017,7 @@ function LandingContent() {
             title="PERGUNTAS FREQUENTES"
             subtitle="Tire suas dúvidas sobre o tryout e a equipe."
           />
-          
+
           <div className="space-y-4">
             {FAQS.map((faq, index) => (
               <motion.div
@@ -1026,8 +1031,8 @@ function LandingContent() {
                   onClick={() => setActiveFaq(activeFaq === index ? null : index)}
                   className={`w-full text-left p-6 rounded-2xl transition-all duration-300 ${
                     activeFaq === index
-                      ? 'bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 border-2 border-[#FF7F00]/30'
-                      : 'bg-white hover:bg-gray-50 border-2 border-transparent'
+                      ? 'bg-white border-2 border-[#FF7F00]/30 shadow-lg'
+                      : 'bg-white hover:bg-gray-50 border-2 border-transparent shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-4">
@@ -1045,7 +1050,7 @@ function LandingContent() {
                       }`} />
                     </motion.div>
                   </div>
-                  
+
                   <AnimatePresence>
                     {activeFaq === index && (
                       <motion.div
@@ -1055,7 +1060,7 @@ function LandingContent() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <p className="pt-4 text-[#4A4A4A] leading-relaxed">
+                        <p className="pt-4 text-[#4A4A4A] leading-relaxed whitespace-pre-line">
                           {faq.answer}
                         </p>
                       </motion.div>
