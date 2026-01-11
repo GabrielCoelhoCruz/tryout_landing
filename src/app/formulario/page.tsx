@@ -25,6 +25,7 @@ import {
   CreditCard,
   Copy,
   Check,
+  DollarSign,
 } from 'lucide-react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -37,7 +38,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { AnimatedBackground, GlowingButton } from '@/components/ui'
 import { useIntersectionTracker } from '@/hooks/useIntersectionTracker'
 import { createFormSections } from '@/constants/form-sections'
-import { PIX_CONFIG, PAYMENT_PROOF_CONFIG, FORM_SECTION_IDS } from '@/constants/payment'
+import { PIX_CONFIG, PAYMENT_PROOF_CONFIG, FORM_SECTION_IDS, calculateTryoutPrice, TRYOUT_PRICING } from '@/constants/payment'
 import { isMinor } from '@/lib/form-validation'
 import { calculateAge, isValidAge } from '@/lib/utils'
 import {
@@ -346,7 +347,13 @@ function MobileProgressBar({
 // ============================================
 // PIX INFO COMPONENT
 // ============================================
-function PixInfoBox() {
+interface PixInfoBoxProps {
+  calculatedPrice: number | null
+  isSkyhighAthlete: boolean | null
+  teamCount: number
+}
+
+function PixInfoBox({ calculatedPrice, isSkyhighAthlete, teamCount }: PixInfoBoxProps) {
   const [copied, setCopied] = React.useState(false)
 
   const handleCopy = async () => {
@@ -361,12 +368,66 @@ function PixInfoBox() {
     }
   }
 
+  const canDisplayPrice = calculatedPrice !== null && isSkyhighAthlete !== null && teamCount > 0
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6"
+      className="mb-6 space-y-4"
     >
+      {/* Price calculation box */}
+      <div
+        className="bg-gradient-to-r from-[#FF7F00]/10 to-[#FF9933]/10 rounded-xl p-5 border border-[#FF7F00]/30"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF7F00] to-[#FF9933] flex items-center justify-center flex-shrink-0">
+            <DollarSign className="w-6 h-6 text-white" aria-hidden="true" />
+          </div>
+          <div className="flex-1">
+            <h4 className="text-white font-semibold text-lg mb-2">
+              Valor do Tryout
+            </h4>
+            {canDisplayPrice ? (
+              <div className="space-y-3">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-[#FF7F00]">
+                    R$ {calculatedPrice},00
+                  </span>
+                  <span className="text-white/50 text-sm">(pagamento antecipado)</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                    isSkyhighAthlete
+                      ? 'bg-[#FF7F00]/20 text-[#FF7F00] border border-[#FF7F00]/30'
+                      : 'bg-white/10 text-white/70 border border-white/20'
+                  }`}>
+                    {isSkyhighAthlete ? 'Atleta SkyHigh 2025' : 'Novo atleta'}
+                  </span>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                    teamCount > 1
+                      ? 'bg-[#00BFFF]/20 text-[#00BFFF] border border-[#00BFFF]/30'
+                      : 'bg-white/10 text-white/70 border border-white/20'
+                  }`}>
+                    {teamCount === 1 ? '1 equipe' : `${teamCount} equipes`}
+                  </span>
+                </div>
+                <p className="text-white/40 text-xs">
+                  Na porta: R$ {teamCount > 1 ? TRYOUT_PRICING.atDoor.multiple : TRYOUT_PRICING.atDoor.single},00
+                </p>
+              </div>
+            ) : (
+              <p className="text-white/50 text-sm">
+                Preencha os campos &quot;Atleta SkyHigh 2025?&quot; e &quot;Nível de interesse&quot; para calcular o valor.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* PIX info box */}
       <div className="bg-gradient-to-r from-[#00BFFF]/10 to-[#FF7F00]/10 rounded-xl p-5 border border-[#00BFFF]/30">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00BFFF] to-[#00BFFF]/70 flex items-center justify-center flex-shrink-0">
@@ -432,6 +493,10 @@ interface FormSectionProps {
   isActive: boolean
   showMinorNotice?: boolean
   sectionId?: string
+  // Payment pricing props
+  calculatedPrice?: number | null
+  isSkyhighAthlete?: boolean | null
+  teamCount?: number
 }
 
 function FormSection({
@@ -445,6 +510,9 @@ function FormSection({
   isActive,
   showMinorNotice,
   sectionId,
+  calculatedPrice,
+  isSkyhighAthlete,
+  teamCount,
 }: FormSectionProps) {
   return (
     <motion.div
@@ -513,7 +581,13 @@ function FormSection({
         </AnimatePresence>
 
         {/* PIX Info for payment section */}
-        {sectionId === FORM_SECTION_IDS.payment && <PixInfoBox />}
+        {sectionId === FORM_SECTION_IDS.payment && (
+          <PixInfoBox
+            calculatedPrice={calculatedPrice ?? null}
+            isSkyhighAthlete={isSkyhighAthlete ?? null}
+            teamCount={teamCount ?? 0}
+          />
+        )}
 
         {/* Fields grid */}
         <div className="grid md:grid-cols-2 gap-5">
@@ -1120,6 +1194,7 @@ export default function FormularioPage() {
       'tempo-experiencia': undefined,
       'equipe-anterior': '',
       'experiencia-ginastica': undefined,
+      'atleta-skyhigh-2025': undefined,
       'posicao-interesse': [],
       'nivel-interesse': [],
       'dias-disponiveis': [],
@@ -1143,6 +1218,16 @@ export default function FormularioPage() {
   const userIsMinor = isMinor({ 'data-nascimento': birthDate })
   const formSections = useMemo(() => createFormSections(userIsMinor), [userIsMinor])
   const currentSection = useIntersectionTracker(formSections.length)
+
+  // Calculate tryout price based on athlete status and number of teams
+  const atletaSkyhigh2025 = watchedData['atleta-skyhigh-2025']
+  const nivelInteresse = watchedData['nivel-interesse'] || []
+  const isSkyhighAthlete = atletaSkyhigh2025 === 'sim' ? true : atletaSkyhigh2025 === 'nao' ? false : null
+  const teamCount = nivelInteresse.length
+  const calculatedPrice = useMemo(() => {
+    if (isSkyhighAthlete === null || teamCount === 0) return null
+    return calculateTryoutPrice(isSkyhighAthlete, teamCount)
+  }, [isSkyhighAthlete, teamCount])
 
   // Calculate age automatically when birth date changes
   useEffect(() => {
@@ -1179,9 +1264,14 @@ export default function FormularioPage() {
   // Form submission handler
   const onSubmit = useCallback(
     (data: RegistrationFormData) => {
-      execute(data)
+      // Add calculated price to the submission data
+      const dataWithPrice = {
+        ...data,
+        'valor-inscricao': calculatedPrice ?? undefined,
+      }
+      execute(dataWithPrice)
     },
-    [execute]
+    [execute, calculatedPrice]
   )
 
   // Handle validation errors
@@ -1281,6 +1371,11 @@ export default function FormularioPage() {
                 index={index}
                 isActive={index === currentSection}
                 showMinorNotice={index === 0 && userIsMinor}
+                {...(section.id === FORM_SECTION_IDS.payment && {
+                  calculatedPrice,
+                  isSkyhighAthlete,
+                  teamCount,
+                })}
               />
             ))}
           </div>

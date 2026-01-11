@@ -128,6 +128,16 @@ export function createFormSections(userIsMinor: boolean): FormSection[] {
           ],
         },
         {
+          name: 'atleta-skyhigh-2025',
+          label: 'Atleta SkyHigh 2025?',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'sim', label: 'Sim' },
+            { value: 'nao', label: 'Não' },
+          ],
+        },
+        {
           name: 'posicao-interesse',
           label: 'Posição de interesse',
           type: 'checkbox-group',

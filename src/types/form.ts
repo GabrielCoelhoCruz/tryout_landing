@@ -71,6 +71,7 @@ export type FormFieldName =
   | 'tempo-experiencia'
   | 'equipe-anterior'
   | 'experiencia-ginastica'
+  | 'atleta-skyhigh-2025'
   | 'posicao-interesse'
   | 'nivel-interesse'
   | 'dias-disponiveis'

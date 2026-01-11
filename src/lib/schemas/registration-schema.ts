@@ -63,6 +63,7 @@ const baseRegistrationSchema = z.object({
   'tempo-experiencia': experienceTimeSchema,
   'equipe-anterior': z.string().optional(),
   'experiencia-ginastica': sportsExperienceSchema.optional(),
+  'atleta-skyhigh-2025': yesNoSchema,
   'posicao-interesse': z.array(cheerPositionSchema).optional(),
   'nivel-interesse': z
     .array(teamLevelSchema)
@@ -77,8 +78,9 @@ const baseRegistrationSchema = z.object({
   'aceita-crossover': yesNoSchema,
   'outros-esportes': z.string().optional(),
 
-  // Payment proof (optional)
+  // Payment
   'comprovante-pagamento': z.string().optional(),
+  'valor-inscricao': z.number().min(25).max(40).optional(),
 
   // Health
   'condicoes-medicas': z.string().optional(),
