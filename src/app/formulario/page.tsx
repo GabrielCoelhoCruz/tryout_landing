@@ -37,10 +37,12 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { AnimatedBackground, GlowingButton } from '@/components/ui'
 import { useIntersectionTracker } from '@/hooks/useIntersectionTracker'
+import { useFileUpload } from '@/hooks/useFileUpload'
 import { createFormSections } from '@/constants/form-sections'
 import { PIX_CONFIG, PAYMENT_PROOF_CONFIG, FORM_SECTION_IDS, calculateTryoutPrice, TRYOUT_PRICING } from '@/constants/payment'
+import { STORAGE_BUCKETS, PENDING_UPLOAD_PLACEHOLDER } from '@/constants/storage'
 import { isMinor } from '@/lib/form-validation'
-import { calculateAge, isValidAge } from '@/lib/utils'
+import { calculateAge, isValidAge, formatFileSize } from '@/lib/utils'
 import {
   registrationSchema,
   type RegistrationFormData,
@@ -497,6 +499,10 @@ interface FormSectionProps {
   calculatedPrice?: number | null
   isSkyhighAthlete?: boolean | null
   teamCount?: number
+  // File upload state
+  isUploadingProof?: boolean
+  paymentProofFile?: File | null
+  setPaymentProofFile?: (file: File | null) => void
 }
 
 function FormSection({
@@ -513,6 +519,9 @@ function FormSection({
   calculatedPrice,
   isSkyhighAthlete,
   teamCount,
+  isUploadingProof = false,
+  paymentProofFile,
+  setPaymentProofFile,
 }: FormSectionProps) {
   return (
     <motion.div
@@ -780,16 +789,21 @@ function FormSection({
                           className={`relative border-2 border-dashed rounded-xl p-6 transition-all duration-300 focus-within:ring-2 focus-within:ring-[#FF7F00]/50 ${
                             controllerField.value
                               ? 'border-[#FF7F00]/50 bg-[#FF7F00]/5'
-                              : 'border-white/20 bg-white/5 hover:border-[#FF7F00]/30 hover:bg-white/10'
+                              : isUploadingProof
+                                ? 'border-[#FF7F00]/30 bg-[#FF7F00]/5 cursor-not-allowed'
+                                : 'border-white/20 bg-white/5 hover:border-[#FF7F00]/30 hover:bg-white/10'
                           }`}
                         >
                           <input
                             type="file"
                             id={field.name}
                             accept={field.accept}
+                            disabled={isUploadingProof}
                             aria-label={`Upload ${field.label}`}
                             aria-describedby={field.description ? `${field.name}-description` : undefined}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer focus:outline-none"
+                            className={`absolute inset-0 w-full h-full opacity-0 focus:outline-none ${
+                              isUploadingProof ? 'cursor-not-allowed' : 'cursor-pointer'
+                            }`}
                             onChange={(e) => {
                               const file = e.target.files?.[0]
                               if (file) {
@@ -805,32 +819,34 @@ function FormSection({
                                   e.target.value = ''
                                   return
                                 }
-                                // Convert to base64 for storage
-                                const reader = new FileReader()
-                                reader.onloadend = () => {
-                                  controllerField.onChange(reader.result as string)
-                                }
-                                reader.readAsDataURL(file)
+                                // Store file in state (upload happens on form submit)
+                                setPaymentProofFile?.(file)
+                                // Set a placeholder value to pass form validation
+                                controllerField.onChange(PENDING_UPLOAD_PLACEHOLDER)
                               }
                             }}
                           />
                           <div className="flex flex-col items-center justify-center text-center">
-                            {controllerField.value ? (
+                            {paymentProofFile ? (
                               <>
                                 <div className="w-12 h-12 rounded-xl bg-[#FF7F00]/20 flex items-center justify-center mb-3">
                                   <FileText className="w-6 h-6 text-[#FF7F00]" aria-hidden="true" />
                                 </div>
-                                <p className="text-white font-medium text-sm mb-1">
-                                  Arquivo selecionado
+                                <p className="text-white font-medium text-sm mb-1 max-w-[200px] truncate">
+                                  {paymentProofFile.name}
+                                </p>
+                                <p className="text-white/40 text-xs mb-2">
+                                  {formatFileSize(paymentProofFile.size)}
                                 </p>
                                 <button
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation()
+                                    setPaymentProofFile?.(null)
                                     controllerField.onChange('')
                                   }}
                                   aria-label="Remover arquivo selecionado"
-                                  className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors mt-2 focus:outline-none focus:ring-2 focus:ring-red-400/50 rounded px-2 py-1"
+                                  className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors focus:outline-none focus:ring-2 focus:ring-red-400/50 rounded px-2 py-1"
                                 >
                                   <X className="w-3 h-3" aria-hidden="true" />
                                   Remover arquivo
@@ -1229,6 +1245,17 @@ export default function FormularioPage() {
     }
   }, [birthDate, setValue])
 
+  // File upload hook
+  const {
+    file: paymentProofFile,
+    isUploading: isUploadingProof,
+    setFile: setPaymentProofFile,
+    upload: uploadPaymentProof,
+  } = useFileUpload({
+    bucket: STORAGE_BUCKETS.paymentProofs,
+    onError: () => toast.error('Erro ao enviar comprovante. Tente novamente.'),
+  })
+
   // Next Safe Action hook
   const { execute, status, result } = useAction(submitRegistration)
   const isSubmitting = status === 'executing'
@@ -1253,15 +1280,28 @@ export default function FormularioPage() {
 
   // Form submission handler
   const onSubmit = useCallback(
-    (data: RegistrationFormData) => {
-      // Add calculated price to the submission data
-      const dataWithPrice = {
+    async (data: RegistrationFormData) => {
+      let paymentProofUrl: string | undefined
+
+      // Upload payment proof file if exists
+      if (paymentProofFile) {
+        const result = await uploadPaymentProof()
+        if (!result) {
+          // Error already handled by hook's onError callback
+          return
+        }
+        paymentProofUrl = result.url
+      }
+
+      // Add calculated price and payment proof URL to the submission data
+      const dataWithExtras = {
         ...data,
         'valor-inscricao': calculatedPrice ?? undefined,
+        'comprovante-pagamento': paymentProofUrl,
       }
-      execute(dataWithPrice)
+      execute(dataWithExtras)
     },
-    [execute, calculatedPrice]
+    [execute, calculatedPrice, paymentProofFile, uploadPaymentProof]
   )
 
   // Handle validation errors
@@ -1365,6 +1405,9 @@ export default function FormularioPage() {
                   calculatedPrice,
                   isSkyhighAthlete,
                   teamCount,
+                  isUploadingProof,
+                  paymentProofFile,
+                  setPaymentProofFile,
                 })}
               />
             ))}
@@ -1379,14 +1422,19 @@ export default function FormularioPage() {
           >
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isUploadingProof}
               className="relative group inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#FF7F00] to-[#FF9933] text-white font-bold text-lg rounded-full transition-all duration-300 hover:shadow-[0_0_50px_rgba(255,127,0,0.5)] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
             >
               <span className="relative z-10 flex items-center gap-3">
-                {isSubmitting ? (
+                {isUploadingProof ? (
                   <>
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    Enviando...
+                    Enviando comprovante...
+                  </>
+                ) : isSubmitting ? (
+                  <>
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                    Enviando inscrição...
                   </>
                 ) : (
                   <>
@@ -1395,7 +1443,7 @@ export default function FormularioPage() {
                   </>
                 )}
               </span>
-              {!isSubmitting && (
+              {!isSubmitting && !isUploadingProof && (
                 <motion.div className="absolute inset-0 bg-gradient-to-r from-[#FF9933] to-[#FF7F00] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               )}
             </button>

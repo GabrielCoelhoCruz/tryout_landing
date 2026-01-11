@@ -33,3 +33,13 @@ export function calculateAge(birthDate: string): number {
 export function isValidAge(age: number): boolean {
   return age >= MIN_VALID_AGE && age <= MAX_VALID_AGE
 }
+
+/**
+ * Format file size in bytes to human-readable format
+ * @param bytes - File size in bytes
+ * @returns Formatted string (e.g., "1.25 MB")
+ */
+export function formatFileSize(bytes: number): string {
+  const mb = bytes / 1024 / 1024
+  return `${mb.toFixed(2)} MB`
+}

@@ -64,6 +64,7 @@ export type Database = {
           aceite_termos: boolean
           admin_notes: string | null
           athlete_photo_url: string | null
+          atleta_skyhigh_2025: Database["public"]["Enums"]["yes_no_type"] | null
           attendance_status: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel: boolean
           checked_in_at: string | null
@@ -100,6 +101,7 @@ export type Database = {
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
           tryout_number: string | null
           updated_at: string
+          valor_inscricao: number | null
         }
         Insert: {
           aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
@@ -107,6 +109,7 @@ export type Database = {
           aceite_termos?: boolean
           admin_notes?: string | null
           athlete_photo_url?: string | null
+          atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"] | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -143,6 +146,7 @@ export type Database = {
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
           tryout_number?: string | null
           updated_at?: string
+          valor_inscricao?: number | null
         }
         Update: {
           aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
@@ -150,6 +154,7 @@ export type Database = {
           aceite_termos?: boolean
           admin_notes?: string | null
           athlete_photo_url?: string | null
+          atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"] | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -186,6 +191,7 @@ export type Database = {
           tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
           tryout_number?: string | null
           updated_at?: string
+          valor_inscricao?: number | null
         }
         Relationships: []
       }
@@ -226,6 +232,7 @@ export type Database = {
           aceite_termos: boolean | null
           admin_notes: string | null
           athlete_photo_url: string | null
+          atleta_skyhigh_2025: Database["public"]["Enums"]["yes_no_type"] | null
           attendance_status:
             | Database["public"]["Enums"]["attendance_status_type"]
             | null
@@ -277,6 +284,7 @@ export type Database = {
             | null
           tryout_number: string | null
           updated_at: string | null
+          valor_inscricao: number | null
         }
         Relationships: []
       }

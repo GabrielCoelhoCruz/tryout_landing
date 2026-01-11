@@ -440,6 +440,23 @@ export function RegistrationDetail({
               {/* Payment Status Section */}
               <Section title="Pagamento" icon={CreditCard}>
                 <div className="space-y-4">
+                  {/* Registration Value */}
+                  {registration.valor_inscricao && (
+                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-[#FF7F00]/10 to-[#00BFFF]/10 rounded-xl border border-[#FF7F00]/20">
+                      <div>
+                        <p className="text-white/60 text-sm">Valor da Inscrição</p>
+                        <p className="text-2xl font-display text-white">
+                          R$ {registration.valor_inscricao},00
+                        </p>
+                      </div>
+                      {registration.atleta_skyhigh_2025 === 'sim' && (
+                        <span className="px-3 py-1.5 bg-[#FF7F00]/20 text-[#FF7F00] text-xs rounded-full font-semibold">
+                          Atleta SkyHigh 2025
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Current Status */}
                   <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
                     <div className="flex items-center gap-3">
@@ -641,6 +658,14 @@ export function RegistrationDetail({
                       registration.experiencia_ginastica
                         ? sportsLabels[registration.experiencia_ginastica]
                         : 'Nenhuma'
+                    }
+                  />
+                  <InfoItem
+                    label="Atleta SkyHigh 2025"
+                    value={
+                      registration.atleta_skyhigh_2025
+                        ? yesNoLabels[registration.atleta_skyhigh_2025]
+                        : '-'
                     }
                   />
                 </InfoGrid>
