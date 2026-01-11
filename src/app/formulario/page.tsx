@@ -1000,21 +1000,11 @@ function SuccessState() {
             <Clock className="w-5 h-5" />
             Próximos Passos
           </h3>
-          <div className="space-y-3 text-left">
-            {[
-              'Você receberá um email de confirmação em breve',
-              'Nossa equipe analisará sua inscrição',
-              'Entraremos em contato via WhatsApp com os detalhes do tryout',
-            ].map((step, i) => (
-              <div key={i} className="flex items-center gap-3 text-white/70">
-                <div className="w-6 h-6 rounded-full bg-[#FF7F00]/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs font-bold text-[#FF7F00]">
-                    {i + 1}
-                  </span>
-                </div>
-                <span className="text-sm">{step}</span>
-              </div>
-            ))}
+          <div className="flex items-center gap-3 text-white/70">
+            <div className="w-6 h-6 rounded-full bg-[#FF7F00]/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-xs font-bold text-[#FF7F00]">1</span>
+            </div>
+            <span className="text-sm">Entraremos em contato via WhatsApp com os detalhes do tryout</span>
           </div>
         </motion.div>
 
