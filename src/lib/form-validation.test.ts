@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { isMinor, validateEmail, validatePhone, validateForm } from './form-validation'
-import type { FormData, FormField } from '@/types/form'
+import { isMinor, validateEmail, validatePhone } from './form-validation'
+import type { FormData } from '@/types/form'
 
 describe('form-validation', () => {
   describe('isMinor', () => {
@@ -66,64 +66,6 @@ describe('form-validation', () => {
     })
   })
 
-  describe('validateForm', () => {
-    const mockFields: FormField[] = [
-      { name: 'nome-completo', label: 'Nome', type: 'text', required: true },
-      { name: 'email', label: 'Email', type: 'email', required: true },
-      { name: 'telefone', label: 'Telefone', type: 'tel', required: true },
-      { name: 'nivel-interesse', label: 'Nível', type: 'checkbox-group', required: true },
-    ]
-
-    it('returns empty errors for valid form data', () => {
-      const formData: Partial<FormData> = {
-        'nome-completo': 'João Silva',
-        email: 'joao@example.com',
-        telefone: '(11) 99999-9999',
-        'nivel-interesse': ['n2'],
-      }
-      const errors = validateForm(formData, mockFields)
-      expect(Object.keys(errors)).toHaveLength(0)
-    })
-
-    it('returns errors for missing required fields', () => {
-      const formData: Partial<FormData> = {}
-      const errors = validateForm(formData, mockFields)
-      expect(errors['nome-completo']).toBe('Este campo é obrigatório')
-      expect(errors.email).toBe('Este campo é obrigatório')
-      expect(errors.telefone).toBe('Este campo é obrigatório')
-    })
-
-    it('validates email format', () => {
-      const formData: Partial<FormData> = {
-        'nome-completo': 'João Silva',
-        email: 'invalid-email',
-        telefone: '(11) 99999-9999',
-        'nivel-interesse': ['n2'],
-      }
-      const errors = validateForm(formData, mockFields)
-      expect(errors.email).toBe('E-mail inválido')
-    })
-
-    it('validates phone format', () => {
-      const formData: Partial<FormData> = {
-        'nome-completo': 'João Silva',
-        email: 'joao@example.com',
-        telefone: 'invalid',
-        'nivel-interesse': ['n2'],
-      }
-      const errors = validateForm(formData, mockFields)
-      expect(errors.telefone).toBe('Telefone inválido')
-    })
-
-    it('validates checkbox-group has at least one selection', () => {
-      const formData: Partial<FormData> = {
-        'nome-completo': 'João Silva',
-        email: 'joao@example.com',
-        telefone: '(11) 99999-9999',
-        'nivel-interesse': [],
-      }
-      const errors = validateForm(formData, mockFields)
-      expect(errors['nivel-interesse']).toBe('Selecione pelo menos uma opção')
-    })
-  })
+  // Note: validateForm was replaced by Zod schema validation
+  // See registration-schema.test.ts for comprehensive form validation tests
 })

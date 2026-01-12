@@ -28,6 +28,7 @@ import {
   Save,
 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
+import { formatDateBR } from '@/lib/utils'
 import type { Database } from '@/types/database'
 import { toast } from 'sonner'
 
@@ -584,11 +585,7 @@ export function RegistrationDetail({
                 <InfoGrid>
                   <InfoItem
                     label="Data de Nascimento"
-                    value={
-                      registration.data_nascimento
-                        ? new Date(registration.data_nascimento).toLocaleDateString('pt-BR')
-                        : '-'
-                    }
+                    value={formatDateBR(registration.data_nascimento)}
                   />
                   <InfoItem
                     label="Idade"
