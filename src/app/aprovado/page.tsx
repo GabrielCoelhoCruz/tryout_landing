@@ -160,9 +160,11 @@ export default function AprovadoPage() {
                 Status de <span className="text-[#FF7F00]">Aprovação</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12">
-                Verifique se você foi aprovado(a) no tryout do Sky High All Star
-              </p>
+              {(pageState.status === 'idle' || pageState.status === 'loading') && (
+                <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12">
+                  Verifique se você foi aprovado(a) no tryout do Sky High All Star
+                </p>
+              )}
             </motion.div>
           </div>
         </section>
@@ -191,7 +193,10 @@ export default function AprovadoPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <ApprovedState registration={pageState.registration} />
+                <ApprovedState
+                  registration={pageState.registration}
+                  onRetry={handleRetry}
+                />
               </motion.div>
             )}
 
@@ -216,7 +221,7 @@ export default function AprovadoPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <PendingState message={pageState.message} />
+                <PendingState message={pageState.message} onRetry={handleRetry} />
               </motion.div>
             )}
 
@@ -227,7 +232,7 @@ export default function AprovadoPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <PendingState message={pageState.message} />
+                <PendingState message={pageState.message} onRetry={handleRetry} />
               </motion.div>
             )}
 
@@ -238,7 +243,7 @@ export default function AprovadoPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <RejectedState message={pageState.message} />
+                <RejectedState message={pageState.message} onRetry={handleRetry} />
               </motion.div>
             )}
 
@@ -252,6 +257,7 @@ export default function AprovadoPage() {
                 <AbsentState
                   registration={pageState.registration}
                   message={pageState.message}
+                  onRetry={handleRetry}
                 />
               </motion.div>
             )}
@@ -266,6 +272,7 @@ export default function AprovadoPage() {
                 <ScheduledState
                   registration={pageState.registration}
                   scheduledDate={pageState.scheduledDate}
+                  onRetry={handleRetry}
                 />
               </motion.div>
             )}

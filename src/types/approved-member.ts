@@ -9,10 +9,11 @@ type AttendanceStatusType = Database['public']['Enums']['attendance_status_type'
 /**
  * Team assignment after tryout approval
  * Athletes can be assigned to up to 2 teams
+ * Position can be a single role or compound (e.g., 'flyer/base')
  */
 export type TeamAssignment = {
   team: AthleteTeamType
-  position: CheerPositionType
+  position: string // Supports compound positions like 'flyer/base', 'base/back'
 }
 
 /**

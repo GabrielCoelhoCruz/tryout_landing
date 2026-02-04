@@ -1,8 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { AlertCircle, ArrowLeft, CalendarDays, MessageCircle } from 'lucide-react'
+import { AlertCircle, RotateCcw, CalendarDays, MessageCircle } from 'lucide-react'
 import { GlowingButton, ContactLinks } from '@/components/ui'
 import { createWhatsAppLink } from '@/constants/contact'
 import type { ApprovedRegistration } from '@/types/approved-member'
@@ -10,13 +9,14 @@ import type { ApprovedRegistration } from '@/types/approved-member'
 type AbsentStateProps = {
   registration: ApprovedRegistration
   message: string
+  onRetry: () => void
 }
 
 /**
  * Displays absent status for users who missed the tryout
  * Provides option to schedule a new tryout via WhatsApp
  */
-export function AbsentState({ registration, message }: AbsentStateProps) {
+export function AbsentState({ registration, message, onRetry }: AbsentStateProps) {
   const whatsappMessage = `Olá! Sou ${registration.name} e não pude comparecer ao tryout. Gostaria de agendar uma nova data para fazer meu tryout. Meu e-mail de inscrição: ${registration.email}`
 
   return (
@@ -83,12 +83,10 @@ export function AbsentState({ registration, message }: AbsentStateProps) {
         <ContactLinks />
       </div>
 
-      <Link href="/">
-        <GlowingButton variant="secondary">
-          <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-          Voltar ao Site
-        </GlowingButton>
-      </Link>
+      <GlowingButton variant="secondary" onClick={onRetry}>
+        <RotateCcw className="w-5 h-5" aria-hidden="true" />
+        Verificar Outro Email
+      </GlowingButton>
     </motion.div>
   )
 }

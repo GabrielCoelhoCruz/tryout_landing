@@ -1,18 +1,18 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { ArrowLeft, Clock } from 'lucide-react'
+import { RotateCcw, Clock } from 'lucide-react'
 import { GlowingButton } from '@/components/ui'
 
 type PendingStateProps = {
   message: string
+  onRetry: () => void
 }
 
 /**
  * Displays pending/under review status for registrations
  */
-export function PendingState({ message }: PendingStateProps) {
+export function PendingState({ message, onRetry }: PendingStateProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -37,12 +37,10 @@ export function PendingState({ message }: PendingStateProps) {
         </p>
       </div>
 
-      <Link href="/">
-        <GlowingButton variant="secondary">
-          <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-          Voltar ao Site
-        </GlowingButton>
-      </Link>
+      <GlowingButton variant="secondary" onClick={onRetry}>
+        <RotateCcw className="w-5 h-5" aria-hidden="true" />
+        Verificar Outro Email
+      </GlowingButton>
     </motion.div>
   )
 }

@@ -18,12 +18,32 @@ export const CONFETTI_COLORS = [
   '#FFD700', // Gold
 ]
 
-// Position labels for display
-export const POSITION_LABELS: Record<CheerPositionType, string> = {
+// Position labels for display (base types)
+const BASE_POSITION_LABELS: Record<CheerPositionType, string> = {
   base: 'Base',
   flyer: 'Flyer',
   back: 'Back',
 }
+
+/**
+ * Get display label for a position, handling compound positions like 'flyer/base'
+ */
+export function getPositionLabel(position: string): string {
+  // Check if it's a compound position (e.g., 'flyer/base', 'base/flyer')
+  if (position.includes('/')) {
+    const parts = position.split('/')
+    const labels = parts
+      .map((part) => BASE_POSITION_LABELS[part.trim() as CheerPositionType])
+      .filter(Boolean)
+    return labels.join(' / ') || position
+  }
+
+  // Simple position
+  return BASE_POSITION_LABELS[position as CheerPositionType] || position
+}
+
+// Export for backwards compatibility (deprecated, use getPositionLabel instead)
+export const POSITION_LABELS = BASE_POSITION_LABELS
 
 type TeamConfig = {
   name: string
@@ -35,17 +55,17 @@ type TeamConfig = {
 export const TEAM_CONFIG: Record<AthleteTeamType, TeamConfig> = {
   snowstorm: {
     name: 'Snowstorm',
-    level: 'All Girl N2',
+    level: 'ALLGIRL N2 NT',
     color: '#00BFFF', // Cyan/ice blue
   },
   hailstorm: {
     name: 'Hailstorm',
-    level: 'Coed N2',
+    level: 'COED N2 NT',
     color: '#8B5CF6', // Purple
   },
   rainstorm: {
     name: 'Rainstorm',
-    level: 'Coed N3',
+    level: 'COED N3 NT',
     color: '#3B82F6', // Blue
   },
   unassigned: {

@@ -1,18 +1,18 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { AlertCircle, ArrowLeft } from 'lucide-react'
+import { AlertCircle, RotateCcw } from 'lucide-react'
 import { GlowingButton, ContactLinks } from '@/components/ui'
 
 type RejectedStateProps = {
   message: string
+  onRetry: () => void
 }
 
 /**
  * Displays rejection status with contact options
  */
-export function RejectedState({ message }: RejectedStateProps) {
+export function RejectedState({ message, onRetry }: RejectedStateProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -35,12 +35,10 @@ export function RejectedState({ message }: RejectedStateProps) {
         <ContactLinks showLabels={false} />
       </div>
 
-      <Link href="/">
-        <GlowingButton variant="secondary">
-          <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-          Voltar ao Site
-        </GlowingButton>
-      </Link>
+      <GlowingButton variant="secondary" onClick={onRetry}>
+        <RotateCcw className="w-5 h-5" aria-hidden="true" />
+        Verificar Outro Email
+      </GlowingButton>
     </motion.div>
   )
 }

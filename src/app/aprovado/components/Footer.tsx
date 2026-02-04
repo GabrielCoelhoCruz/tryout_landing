@@ -32,8 +32,8 @@ export function Footer() {
               </div>
             </div>
             <p className="text-white/60 max-w-sm leading-relaxed">
-              Seu talento merece ir mais alto. Venha elevar o nivel com a gente. Tradicao,
-              excelencia e paixao pelo esporte.
+              Seu talento merece ir mais alto. Venha elevar o nível com a gente!
+              Tradição, excelência e paixão pelo esporte.
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export function Footer() {
 
           {/* Location */}
           <div>
-            <h4 className="font-display text-lg mb-4">Localizacao</h4>
+            <h4 className="font-display text-lg mb-4">Localização</h4>
             <div className="flex items-start gap-2 text-white/60">
               <MapPin className="w-4 h-4 mt-1 flex-shrink-0" aria-hidden="true" />
               <address className="not-italic">
@@ -88,7 +88,7 @@ export function Footer() {
           </p>
           <nav className="flex items-center gap-6 text-sm text-white/40" aria-label="Legal">
             <Link href="#" className="hover:text-white transition-colors">
-              Politica de Privacidade
+              Política de Privacidade
             </Link>
             <Link href="#" className="hover:text-white transition-colors">
               Termos de Uso

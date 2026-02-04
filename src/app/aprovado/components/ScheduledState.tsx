@@ -1,20 +1,20 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { ArrowLeft, CalendarCheck, Clock } from 'lucide-react'
+import { RotateCcw, CalendarCheck, Clock } from 'lucide-react'
 import { GlowingButton, ContactLinks } from '@/components/ui'
 import type { ApprovedRegistration } from '@/types/approved-member'
 
 type ScheduledStateProps = {
   registration: ApprovedRegistration
   scheduledDate: string
+  onRetry: () => void
 }
 
 /**
  * Displays scheduled tryout date and preparation info
  */
-export function ScheduledState({ registration, scheduledDate }: ScheduledStateProps) {
+export function ScheduledState({ registration, scheduledDate, onRetry }: ScheduledStateProps) {
   const formattedDate = new Date(scheduledDate).toLocaleDateString('pt-BR', {
     weekday: 'long',
     day: 'numeric',
@@ -99,12 +99,10 @@ export function ScheduledState({ registration, scheduledDate }: ScheduledStatePr
         <ContactLinks />
       </div>
 
-      <Link href="/">
-        <GlowingButton variant="secondary">
-          <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-          Voltar ao Site
-        </GlowingButton>
-      </Link>
+      <GlowingButton variant="secondary" onClick={onRetry}>
+        <RotateCcw className="w-5 h-5" aria-hidden="true" />
+        Verificar Outro Email
+      </GlowingButton>
     </motion.div>
   )
 }
