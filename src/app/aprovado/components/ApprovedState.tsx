@@ -11,7 +11,12 @@ import {
   CheckCircle2,
   MessageCircle,
   Sparkles,
+  CreditCard,
+  Calendar,
+  Users,
+  ExternalLink,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { GlowingButton, ContactLinks } from '@/components/ui'
 import { createWhatsAppLink } from '@/constants/contact'
 import type { ApprovedRegistration, TeamAssignment } from '@/types/approved-member'
@@ -764,8 +769,28 @@ export function ApprovedState({ registration, onRetry }: ApprovedStateProps) {
           revealStage={revealStage}
         />
 
-        {/* Spacer after shareable card */}
-        <div className="h-8" />
+        {/* Share on Instagram message */}
+        <motion.div
+          className="text-center mt-6 mb-8"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: revealStage >= 5 ? 1 : 0, y: revealStage >= 5 ? 0 : 10 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-[#833AB4]/20 via-[#FD1D1D]/20 to-[#F77737]/20 border border-white/10 backdrop-blur-sm">
+            <span className="text-2xl">📸</span>
+            <p className="text-white/80 text-sm">
+              Tire um print, poste e nos marque no{' '}
+              <a
+                href="https://instagram.com/skyhighallstar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#FF7F00] font-semibold hover:underline"
+              >
+                @skyhighallstar
+              </a>
+            </p>
+          </div>
+        </motion.div>
 
         {/* ----- MEMBER DATA CARD ----- */}
         <motion.div
@@ -816,17 +841,145 @@ export function ApprovedState({ registration, onRetry }: ApprovedStateProps) {
               variant="celebration"
               delay={0}
             >
-              <div className="text-center py-4">
+              <div className="py-4">
+                {/* Success icon */}
                 <motion.div
-                  className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500 flex items-center justify-center"
+                  className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-500 flex items-center justify-center"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', delay: 0.2 }}
                 >
                   <CheckCircle2 className="w-8 h-8 text-white" />
                 </motion.div>
-                <p className="text-white/70 text-sm">
-                  Nossa equipe entrará em contato em breve com os próximos passos.
+
+                {/* Important notices */}
+                <div className="space-y-4 mb-6">
+                  {/* Matrícula - Premium Card Design */}
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FF7F00]/15 via-[#FF7F00]/5 to-transparent border border-[#FF7F00]/20">
+                    {/* Subtle glow effect */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF7F00]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                    <div className="relative p-5">
+                      {/* Header with icon and label */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-[#FF7F00] flex items-center justify-center">
+                          <CreditCard className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-[#FF7F00] font-semibold text-sm tracking-wide uppercase">Matrícula</span>
+                      </div>
+
+                      {/* Value - Hero element */}
+                      <div className="mb-5">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-white/50 text-lg font-medium">R$</span>
+                          <span className="text-white font-display text-4xl font-bold tracking-tight">150</span>
+                          <span className="text-white/50 text-lg font-medium">,00</span>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="w-full h-px bg-gradient-to-r from-[#FF7F00]/30 via-[#FF7F00]/10 to-transparent mb-5" />
+
+                      {/* PIX Key - Clean inline design */}
+                      <div className="mb-4">
+                        <p className="text-white/40 text-xs uppercase tracking-widest mb-2">Chave PIX</p>
+                        <div className="flex items-center gap-3">
+                          <code className="flex-1 text-white text-sm font-medium tracking-wide">
+                            skyhigh.allstar@gmail.com
+                          </code>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText('skyhigh.allstar@gmail.com')
+                              toast.success('Chave PIX copiada!')
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-[#FF7F00]/20 hover:bg-[#FF7F00]/30 text-[#FF7F00] text-xs font-semibold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
+                          >
+                            Copiar
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Footer note */}
+                      <p className="text-white/40 text-xs leading-relaxed">
+                        Envie o comprovante no WhatsApp após o pagamento
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Primeiro Treino - Premium Card Design */}
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#00BFFF]/15 via-[#00BFFF]/5 to-transparent border border-[#00BFFF]/20">
+                    {/* Subtle glow effect */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#00BFFF]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                    <div className="relative p-5">
+                      {/* Header with icon and label */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-[#00BFFF] flex items-center justify-center">
+                          <Calendar className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-[#00BFFF] font-semibold text-sm tracking-wide uppercase">Primeiro Treino</span>
+                      </div>
+
+                      {/* Date - Hero element */}
+                      <div className="mb-5">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-white font-display text-4xl font-bold tracking-tight">08</span>
+                          <span className="text-white/50 text-lg font-medium">/ FEV</span>
+                        </div>
+                        <p className="text-white/60 text-sm mt-1">Domingo • 9h às 12h</p>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="w-full h-px bg-gradient-to-r from-[#00BFFF]/30 via-[#00BFFF]/10 to-transparent mb-5" />
+
+                      {/* Footer note */}
+                      <p className="text-white/40 text-xs leading-relaxed">
+                        Todas as equipes juntas no primeiro treino de 2026
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Grupo WhatsApp - Premium Card Design */}
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#25D366]/15 via-[#25D366]/5 to-transparent border border-[#25D366]/20">
+                    {/* Subtle glow effect */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#25D366]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                    <div className="relative p-5">
+                      {/* Header with icon and label */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-[#25D366] flex items-center justify-center">
+                          <Users className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-[#25D366] font-semibold text-sm tracking-wide uppercase">Grupo WhatsApp</span>
+                      </div>
+
+                      {/* Title - Hero element */}
+                      <div className="mb-5">
+                        <p className="text-white font-display text-xl font-bold tracking-tight">Grupo Geral</p>
+                        <p className="text-white/60 text-sm mt-1">Atletas Sky High 2026</p>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="w-full h-px bg-gradient-to-r from-[#25D366]/30 via-[#25D366]/10 to-transparent mb-5" />
+
+                      {/* Action button */}
+                      <a
+                        href="https://chat.whatsapp.com/D8WgzazWGaQCgSPz8XOwRB"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366]/30 text-[#25D366] text-sm font-semibold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        Entrar no Grupo
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-white/50 text-xs text-center">
+                  Nossa equipe entrará em contato em breve com mais informações.
                 </p>
               </div>
             </FormCard>
