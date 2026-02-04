@@ -7,11 +7,180 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
+      athlete_guardians: {
+        Row: {
+          athlete_id: string
+          contato_responsavel: string
+          created_at: string
+          id: string
+          nome_responsavel: string
+          updated_at: string
+        }
+        Insert: {
+          athlete_id: string
+          contato_responsavel: string
+          created_at?: string
+          id?: string
+          nome_responsavel: string
+          updated_at?: string
+        }
+        Update: {
+          athlete_id?: string
+          contato_responsavel?: string
+          created_at?: string
+          id?: string
+          nome_responsavel?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "athlete_guardians_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: true
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      athletes: {
+        Row: {
+          admin_notes: string | null
+          chronic_disease_details: string | null
+          cpf: string
+          created_at: string
+          data_nascimento: string
+          document_url: string | null
+          email: string
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          endereco: string
+          enrollment_type: Database["public"]["Enums"]["enrollment_type"]
+          has_chronic_disease: boolean | null
+          has_health_insurance: boolean | null
+          has_restriction: boolean | null
+          health_insurance_name: string | null
+          id: string
+          instagram: string
+          is_minor: boolean
+          is_student_discount: boolean | null
+          matricula_amount: number | null
+          matricula_paid: boolean
+          matricula_paid_at: string | null
+          mensalidade_amount: number | null
+          nome_completo: string
+          payment_proof_url: string | null
+          registration_id: string | null
+          restriction_details: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          rg: string
+          season: number
+          shirt_size: Database["public"]["Enums"]["shirt_size_type"] | null
+          status: Database["public"]["Enums"]["athlete_status_type"]
+          team: Database["public"]["Enums"]["athlete_team_type"]
+          telefone: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          chronic_disease_details?: string | null
+          cpf: string
+          created_at?: string
+          data_nascimento: string
+          document_url?: string | null
+          email: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          endereco: string
+          enrollment_type?: Database["public"]["Enums"]["enrollment_type"]
+          has_chronic_disease?: boolean | null
+          has_health_insurance?: boolean | null
+          has_restriction?: boolean | null
+          health_insurance_name?: string | null
+          id?: string
+          instagram: string
+          is_minor?: boolean
+          is_student_discount?: boolean | null
+          matricula_amount?: number | null
+          matricula_paid?: boolean
+          matricula_paid_at?: string | null
+          mensalidade_amount?: number | null
+          nome_completo: string
+          payment_proof_url?: string | null
+          registration_id?: string | null
+          restriction_details?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          rg: string
+          season?: number
+          shirt_size?: Database["public"]["Enums"]["shirt_size_type"] | null
+          status?: Database["public"]["Enums"]["athlete_status_type"]
+          team?: Database["public"]["Enums"]["athlete_team_type"]
+          telefone: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          chronic_disease_details?: string | null
+          cpf?: string
+          created_at?: string
+          data_nascimento?: string
+          document_url?: string | null
+          email?: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          endereco?: string
+          enrollment_type?: Database["public"]["Enums"]["enrollment_type"]
+          has_chronic_disease?: boolean | null
+          has_health_insurance?: boolean | null
+          has_restriction?: boolean | null
+          health_insurance_name?: string | null
+          id?: string
+          instagram?: string
+          is_minor?: boolean
+          is_student_discount?: boolean | null
+          matricula_amount?: number | null
+          matricula_paid?: boolean
+          matricula_paid_at?: string | null
+          mensalidade_amount?: number | null
+          nome_completo?: string
+          payment_proof_url?: string | null
+          registration_id?: string | null
+          restriction_details?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          rg?: string
+          season?: number
+          shirt_size?: Database["public"]["Enums"]["shirt_size_type"] | null
+          status?: Database["public"]["Enums"]["athlete_status_type"]
+          team?: Database["public"]["Enums"]["athlete_team_type"]
+          telefone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "athletes_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "athletes_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations_full"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guardians: {
         Row: {
           contato_responsavel: string
@@ -96,7 +265,9 @@ export type Database = {
           pratica_cheerleading: Database["public"]["Enums"]["yes_no_type"]
           reviewed_at: string | null
           reviewed_by: string | null
+          scheduled_tryout_date: string | null
           status: Database["public"]["Enums"]["registration_status_type"]
+          team_assignments: Json | null
           telefone: string
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
           tryout_number: string | null
@@ -109,7 +280,9 @@ export type Database = {
           aceite_termos?: boolean
           admin_notes?: string | null
           athlete_photo_url?: string | null
-          atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"] | null
+          atleta_skyhigh_2025?:
+            | Database["public"]["Enums"]["yes_no_type"]
+            | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -141,7 +314,9 @@ export type Database = {
           pratica_cheerleading: Database["public"]["Enums"]["yes_no_type"]
           reviewed_at?: string | null
           reviewed_by?: string | null
+          scheduled_tryout_date?: string | null
           status?: Database["public"]["Enums"]["registration_status_type"]
+          team_assignments?: Json | null
           telefone: string
           tempo_experiencia: Database["public"]["Enums"]["experience_time_type"]
           tryout_number?: string | null
@@ -154,7 +329,9 @@ export type Database = {
           aceite_termos?: boolean
           admin_notes?: string | null
           athlete_photo_url?: string | null
-          atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"] | null
+          atleta_skyhigh_2025?:
+            | Database["public"]["Enums"]["yes_no_type"]
+            | null
           attendance_status?: Database["public"]["Enums"]["attendance_status_type"]
           autorizacao_responsavel?: boolean
           checked_in_at?: string | null
@@ -186,7 +363,9 @@ export type Database = {
           pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
           reviewed_at?: string | null
           reviewed_by?: string | null
+          scheduled_tryout_date?: string | null
           status?: Database["public"]["Enums"]["registration_status_type"]
+          team_assignments?: Json | null
           telefone?: string
           tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
           tryout_number?: string | null
@@ -292,6 +471,33 @@ export type Database = {
     Functions: {
       calculate_age: { Args: { birthdate: string }; Returns: number }
       check_duplicate_email: { Args: { p_email: string }; Returns: boolean }
+      create_athlete_with_guardian: {
+        Args: {
+          p_chronic_disease_details?: string
+          p_cpf: string
+          p_data_nascimento: string
+          p_email: string
+          p_emergency_contact_name: string
+          p_emergency_contact_phone: string
+          p_endereco: string
+          p_guardian_name?: string
+          p_guardian_phone?: string
+          p_has_chronic_disease: boolean
+          p_has_health_insurance: boolean
+          p_has_restriction: boolean
+          p_health_insurance_name?: string
+          p_instagram: string
+          p_is_minor: boolean
+          p_nome_completo: string
+          p_registration_id: string
+          p_restriction_details?: string
+          p_rg: string
+          p_season?: number
+          p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
+          p_telefone: string
+        }
+        Returns: Json
+      }
       get_registrations_by_status: {
         Args: {
           p_limit?: number
@@ -304,7 +510,7 @@ export type Database = {
           id: string
           idade: number
           is_minor: boolean
-          nivel_interesse: Database["public"]["Enums"]["team_level_type"][]
+          nivel_interesse: Database["public"]["Enums"]["cheer_level_type"][]
           nome_completo: string
           posicao_interesse: Database["public"]["Enums"]["cheer_position_type"][]
           status: Database["public"]["Enums"]["registration_status_type"]
@@ -312,37 +518,103 @@ export type Database = {
         }[]
       }
       is_minor_by_date: { Args: { birthdate: string }; Returns: boolean }
-      submit_registration: {
-        Args: {
-          p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
-          p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
-          p_aceite_termos?: boolean
-          p_autorizacao_responsavel?: boolean
-          p_comprovante_pagamento?: string
-          p_condicoes_medicas?: string
-          p_contato_responsavel?: string
-          p_data_nascimento: string
-          p_declaracao_medica?: boolean
-          p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
-          p_email: string
-          p_email_responsavel?: string
-          p_equipe_anterior?: string
-          p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
-          p_genero: Database["public"]["Enums"]["gender_type"]
-          p_idade: number
-          p_medicacoes?: string
-          p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
-          p_nome_completo: string
-          p_nome_responsavel?: string
-          p_outros_esportes?: string
-          p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
-          p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
-          p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
-          p_telefone: string
-          p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
-        }
-        Returns: Json
-      }
+      submit_registration:
+        | {
+            Args: {
+              p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceite_termos?: boolean
+              p_autorizacao_responsavel?: boolean
+              p_comprovante_pagamento?: string
+              p_condicoes_medicas?: string
+              p_contato_responsavel?: string
+              p_data_nascimento: string
+              p_declaracao_medica?: boolean
+              p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
+              p_email: string
+              p_email_responsavel?: string
+              p_equipe_anterior?: string
+              p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
+              p_genero: Database["public"]["Enums"]["gender_type"]
+              p_idade: number
+              p_medicacoes?: string
+              p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
+              p_nome_completo: string
+              p_nome_responsavel?: string
+              p_outros_esportes?: string
+              p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
+              p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
+              p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
+              p_telefone: string
+              p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceite_termos?: boolean
+              p_atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"]
+              p_autorizacao_responsavel?: boolean
+              p_comprovante_pagamento?: string
+              p_condicoes_medicas?: string
+              p_contato_responsavel?: string
+              p_data_nascimento: string
+              p_declaracao_medica?: boolean
+              p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
+              p_email: string
+              p_email_responsavel?: string
+              p_equipe_anterior?: string
+              p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
+              p_genero: Database["public"]["Enums"]["gender_type"]
+              p_idade: number
+              p_medicacoes?: string
+              p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
+              p_nome_completo: string
+              p_nome_responsavel?: string
+              p_outros_esportes?: string
+              p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
+              p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
+              p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
+              p_telefone: string
+              p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
+              p_aceite_termos?: boolean
+              p_atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"]
+              p_autorizacao_responsavel?: boolean
+              p_comprovante_pagamento?: string
+              p_condicoes_medicas?: string
+              p_contato_responsavel?: string
+              p_data_nascimento: string
+              p_declaracao_medica?: boolean
+              p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
+              p_email: string
+              p_email_responsavel?: string
+              p_equipe_anterior?: string
+              p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
+              p_genero: Database["public"]["Enums"]["gender_type"]
+              p_idade: number
+              p_medicacoes?: string
+              p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
+              p_nome_completo: string
+              p_nome_responsavel?: string
+              p_outros_esportes?: string
+              p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
+              p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
+              p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
+              p_telefone: string
+              p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
+              p_valor_inscricao?: number
+            }
+            Returns: string
+          }
       update_attendance_status: {
         Args: {
           p_checked_by?: string
@@ -372,8 +644,17 @@ export type Database = {
       }
     }
     Enums: {
+      athlete_status_type: "active" | "inactive" | "pending" | "suspended"
+      athlete_team_type: "snowstorm" | "hailstorm" | "rainstorm" | "unassigned"
       attendance_status_type: "not_checked" | "present" | "absent"
+      cheer_level_type: "n2" | "n3" | "n4"
       cheer_position_type: "base" | "flyer" | "back"
+      day_period_type: "manha" | "tarde" | "noite"
+      enrollment_type:
+        | "team_cheer"
+        | "individual_only"
+        | "tumbling_only"
+        | "team_and_tumbling"
       experience_time_type:
         | "nunca-pratiquei"
         | "menos-6-meses"
@@ -381,6 +662,7 @@ export type Database = {
         | "1-2-anos"
         | "2-anos-mais"
       gender_type: "feminino" | "masculino" | "outro"
+      payment_frequency_type: "monthly" | "single"
       payment_status_type: "comprovante_pendente" | "pago"
       registration_status_type:
         | "pending"
@@ -388,8 +670,23 @@ export type Database = {
         | "accepted"
         | "rejected"
         | "waitlisted"
+      shirt_size_type:
+        | "p_adulto"
+        | "m_adulto"
+        | "g_adulto"
+        | "gg_adulto"
+        | "xgg_adulto"
+        | "p_babylook"
+        | "m_babylook"
+        | "g_babylook"
+      skill_level_type: "basico" | "intermediario" | "avancado"
       sports_experience_type: "ginastica" | "tumbling" | "danca" | "nenhuma"
-      team_level_type: "coed-n2" | "coed-n3" | "coed-n4" | "allgirl-n2-n3" | "allboy-n2-n3"
+      team_level_type:
+        | "coed-n2"
+        | "coed-n3"
+        | "allgirl-n2-n3"
+        | "allboy-n2-n3"
+        | "coed-n4"
       weekday_type:
         | "segunda"
         | "terca"
@@ -523,41 +820,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export const Constants = {
-  public: {
-    Enums: {
-      attendance_status_type: ["not_checked", "present", "absent"],
-      cheer_position_type: ["base", "flyer", "back"],
-      experience_time_type: [
-        "nunca-pratiquei",
-        "menos-6-meses",
-        "6-12-meses",
-        "1-2-anos",
-        "2-anos-mais",
-      ],
-      gender_type: ["feminino", "masculino", "outro"],
-      payment_status_type: ["comprovante_pendente", "pago"],
-      registration_status_type: [
-        "pending",
-        "under_review",
-        "accepted",
-        "rejected",
-        "waitlisted",
-      ],
-      sports_experience_type: ["ginastica", "tumbling", "danca", "nenhuma"],
-      team_level_type: ["coed-n2", "coed-n3", "coed-n4", "allgirl-n2-n3", "allboy-n2-n3"],
-      weekday_type: [
-        "segunda",
-        "terca",
-        "quarta",
-        "quinta",
-        "sexta",
-        "sabado",
-        "domingo",
-      ],
-      yes_no_maybe_type: ["sim", "nao", "talvez"],
-      yes_no_type: ["sim", "nao"],
-    },
-  },
-} as const

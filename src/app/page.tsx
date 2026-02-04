@@ -508,7 +508,7 @@ function LandingContent() {
       <section id="sobre" className={`relative z-10 ${SECTION_SPACING} bg-white scroll-mt-20`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <SectionHeader
-            badge="Por que escolher a SkyHigh"
+            badge="Por que escolher o Sky High"
             title="FAÇA PARTE DE ALGO MAIOR"
             subtitle="Muito mais do que um ginásio, somos uma família comprometida com a excelência e com o seu desenvolvimento pessoal."
           />

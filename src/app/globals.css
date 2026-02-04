@@ -8,6 +8,7 @@
 
     /* Design System Tokens - Cores do Logo SkyHigh AllStar */
     --color-primary: #FF7F00; /* Laranja vibrante (letras e borda do escudo) */
+    --color-primary-rgb: 255, 127, 0;
     --color-primary-dark: #CC6600;
     --color-primary-light: #FF9933;
 
@@ -22,14 +23,17 @@
     --color-coral-dark: #FF6B6B;
 
     --color-secondary-1: #0A1B4D; /* Azul escuro/navy (camada interna do escudo) */
+    --color-secondary-1-rgb: 10, 27, 77;
     --color-secondary-1-light: #0F2A6B;
     --color-secondary-1-dark: #050E2E;
 
     --color-secondary-2: #00BFFF; /* Azul elétrico/ciano (efeitos de raios) */
+    --color-secondary-2-rgb: 0, 191, 255;
     --color-secondary-2-dark: #0099CC;
     --color-secondary-2-light: #33CCFF;
 
     --color-dark: #000c1f; /* Navy profundo (extraído do fundo do logo SkyHigh) */
+    --color-dark-rgb: 0, 12, 31;
     --color-dark-light: #14143A;
     --color-dark-lighter: #1E1E4A;
 
@@ -106,6 +110,23 @@
 
   .container-padding {
     @apply px-4 md:px-8 lg:px-16;
+  }
+}
+
+@layer components {
+  /* Date input browser-specific styles for dark theme */
+  input[type="date"].dark-date-input {
+    color-scheme: dark;
+  }
+
+  input[type="date"].dark-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+  }
+
+  input[type="date"].dark-date-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
   }
 }
 
