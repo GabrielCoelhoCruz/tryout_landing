@@ -19,6 +19,7 @@ type CheerPositionType = Database['public']['Enums']['cheer_position_type']
  * Parse and validate team_assignments JSONB from database
  * Returns empty array if invalid or null
  * Supports compound positions like 'flyer/base', 'base/flyer', etc.
+ * Also supports special positions: 'flyer reserva', 'base frontal'
  */
 function parseTeamAssignments(jsonValue: unknown): TeamAssignment[] {
   if (!jsonValue || !Array.isArray(jsonValue)) {
@@ -26,7 +27,8 @@ function parseTeamAssignments(jsonValue: unknown): TeamAssignment[] {
   }
 
   const validTeams: AthleteTeamType[] = ['snowstorm', 'hailstorm', 'rainstorm']
-  const validPositions: CheerPositionType[] = ['base', 'flyer', 'back']
+  const validBasePositions: CheerPositionType[] = ['base', 'flyer', 'back']
+  const validSpecialPositions = ['flyer reserva', 'base frontal']
 
   return jsonValue
     .filter((item): item is { team: AthleteTeamType; position: string } => {
@@ -44,11 +46,18 @@ function parseTeamAssignments(jsonValue: unknown): TeamAssignment[] {
         return false
       }
 
-      // Validate position - support compound positions (e.g., 'flyer/base', 'base/flyer')
-      const position = item.position as string
+      // Validate position
+      const position = (item.position as string).toLowerCase().trim()
+
+      // Check if it's a special position
+      if (validSpecialPositions.includes(position)) {
+        return true
+      }
+
+      // Check compound positions (e.g., 'flyer/base', 'base/flyer')
       const positionParts = position.split('/')
       const allPartsValid = positionParts.every((part) =>
-        validPositions.includes(part.trim() as CheerPositionType)
+        validBasePositions.includes(part.trim() as CheerPositionType)
       )
 
       return allPartsValid

@@ -25,10 +25,23 @@ const BASE_POSITION_LABELS: Record<CheerPositionType, string> = {
   back: 'Back',
 }
 
+// Special position labels
+const SPECIAL_POSITION_LABELS: Record<string, string> = {
+  'flyer reserva': 'Flyer Reserva',
+  'base frontal': 'Base Frontal',
+}
+
 /**
- * Get display label for a position, handling compound positions like 'flyer/base'
+ * Get display label for a position, handling compound and special positions
  */
 export function getPositionLabel(position: string): string {
+  const normalizedPosition = position.toLowerCase().trim()
+
+  // Check if it's a special position
+  if (SPECIAL_POSITION_LABELS[normalizedPosition]) {
+    return SPECIAL_POSITION_LABELS[normalizedPosition]
+  }
+
   // Check if it's a compound position (e.g., 'flyer/base', 'base/flyer')
   if (position.includes('/')) {
     const parts = position.split('/')
