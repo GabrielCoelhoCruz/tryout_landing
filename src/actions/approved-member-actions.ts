@@ -217,6 +217,9 @@ export const submitAthleteRegistration = actionClient
       p_restriction_details: parsedInput.restrictionDetails || undefined,
       p_season: 2026,
       p_guardian_name: parsedInput.guardianName || undefined,
+      p_guardian_cpf: parsedInput.guardianCpf || undefined,
+      p_guardian_rg: parsedInput.guardianRg || undefined,
+      p_guardian_email: parsedInput.guardianEmail || undefined,
       p_guardian_phone: parsedInput.guardianPhone || undefined,
     })
 

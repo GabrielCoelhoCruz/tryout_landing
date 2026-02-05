@@ -104,6 +104,9 @@ export const athleteFormSchema = z.object({
   isMinor: z.boolean(),
   guardianName: z.string().optional(),
   guardianPhone: z.string().optional(),
+  guardianCpf: z.string().optional(),
+  guardianRg: z.string().optional(),
+  guardianEmail: z.string().optional(),
 
   // ===== CAMISETA =====
   shirtSize: z.enum(SHIRT_SIZES, {
@@ -174,6 +177,74 @@ export const athleteFormSchema = z.object({
     {
       message: 'Telefone do responsável é obrigatório para menores de idade',
       path: ['guardianPhone'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Se é menor de idade, deve informar CPF do responsável
+      if (data.isMinor && !data.guardianCpf?.trim()) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'CPF do responsável é obrigatório para menores de idade',
+      path: ['guardianCpf'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validar formato do CPF do responsável se informado
+      if (data.guardianCpf?.trim() && !cpfRegex.test(data.guardianCpf)) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'Formato de CPF inválido (ex: 123.456.789-00)',
+      path: ['guardianCpf'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Se é menor de idade, deve informar RG do responsável
+      if (data.isMinor && !data.guardianRg?.trim()) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'RG do responsável é obrigatório para menores de idade',
+      path: ['guardianRg'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Se é menor de idade, deve informar e-mail do responsável
+      if (data.isMinor && !data.guardianEmail?.trim()) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'E-mail do responsável é obrigatório para menores de idade',
+      path: ['guardianEmail'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validar formato do e-mail do responsável se informado
+      if (data.guardianEmail?.trim()) {
+        const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+        if (!emailRegex.test(data.guardianEmail)) {
+          return false
+        }
+      }
+      return true
+    },
+    {
+      message: 'Formato de e-mail inválido',
+      path: ['guardianEmail'],
     }
   )
 

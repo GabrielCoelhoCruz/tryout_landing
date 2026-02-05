@@ -880,11 +880,11 @@ export function ApprovedState({ registration, onRetry }: ApprovedStateProps) {
                       {/* Divider */}
                       <div className="w-full h-px bg-gradient-to-r from-[#FF7F00]/30 via-[#FF7F00]/10 to-transparent mb-5" />
 
-                      {/* PIX Key - Clean inline design */}
+                      {/* PIX Key - Responsive design */}
                       <div className="mb-4">
                         <p className="text-white/40 text-xs uppercase tracking-widest mb-2">Chave PIX</p>
-                        <div className="flex items-center gap-3">
-                          <code className="flex-1 text-white text-sm font-medium tracking-wide">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                          <code className="text-white text-sm font-medium tracking-wide break-all">
                             skyhigh.allstar@gmail.com
                           </code>
                           <button
@@ -893,7 +893,7 @@ export function ApprovedState({ registration, onRetry }: ApprovedStateProps) {
                               navigator.clipboard.writeText('skyhigh.allstar@gmail.com')
                               toast.success('Chave PIX copiada!')
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-[#FF7F00]/20 hover:bg-[#FF7F00]/30 text-[#FF7F00] text-xs font-semibold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
+                            className="self-start sm:self-auto px-4 py-2 rounded-lg bg-[#FF7F00]/20 hover:bg-[#FF7F00]/30 text-[#FF7F00] text-xs font-semibold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
                           >
                             Copiar
                           </button>

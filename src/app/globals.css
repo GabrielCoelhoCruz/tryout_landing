@@ -117,6 +117,18 @@
   /* Date input browser-specific styles for dark theme */
   input[type="date"].dark-date-input {
     color-scheme: dark;
+    /* Prevent date input from being too wide on mobile */
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Compact date input on mobile */
+  @media (max-width: 640px) {
+    input[type="date"].dark-date-input {
+      font-size: 16px; /* Prevents iOS zoom on focus */
+      padding-left: 12px;
+      padding-right: 8px;
+    }
   }
 
   input[type="date"].dark-date-input::-webkit-calendar-picker-indicator {

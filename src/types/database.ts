@@ -18,25 +18,34 @@ export type Database = {
         Row: {
           athlete_id: string
           contato_responsavel: string
+          cpf_responsavel: string | null
           created_at: string
+          email_responsavel: string | null
           id: string
           nome_responsavel: string
+          rg_responsavel: string | null
           updated_at: string
         }
         Insert: {
           athlete_id: string
           contato_responsavel: string
+          cpf_responsavel?: string | null
           created_at?: string
+          email_responsavel?: string | null
           id?: string
           nome_responsavel: string
+          rg_responsavel?: string | null
           updated_at?: string
         }
         Update: {
           athlete_id?: string
           contato_responsavel?: string
+          cpf_responsavel?: string | null
           created_at?: string
+          email_responsavel?: string | null
           id?: string
           nome_responsavel?: string
+          rg_responsavel?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -471,33 +480,64 @@ export type Database = {
     Functions: {
       calculate_age: { Args: { birthdate: string }; Returns: number }
       check_duplicate_email: { Args: { p_email: string }; Returns: boolean }
-      create_athlete_with_guardian: {
-        Args: {
-          p_chronic_disease_details?: string
-          p_cpf: string
-          p_data_nascimento: string
-          p_email: string
-          p_emergency_contact_name: string
-          p_emergency_contact_phone: string
-          p_endereco: string
-          p_guardian_name?: string
-          p_guardian_phone?: string
-          p_has_chronic_disease: boolean
-          p_has_health_insurance: boolean
-          p_has_restriction: boolean
-          p_health_insurance_name?: string
-          p_instagram: string
-          p_is_minor: boolean
-          p_nome_completo: string
-          p_registration_id: string
-          p_restriction_details?: string
-          p_rg: string
-          p_season?: number
-          p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
-          p_telefone: string
-        }
-        Returns: Json
-      }
+      create_athlete_with_guardian:
+        | {
+            Args: {
+              p_chronic_disease_details?: string
+              p_cpf: string
+              p_data_nascimento: string
+              p_email: string
+              p_emergency_contact_name: string
+              p_emergency_contact_phone: string
+              p_endereco: string
+              p_guardian_cpf?: string
+              p_guardian_email?: string
+              p_guardian_name?: string
+              p_guardian_phone?: string
+              p_guardian_rg?: string
+              p_has_chronic_disease: boolean
+              p_has_health_insurance: boolean
+              p_has_restriction: boolean
+              p_health_insurance_name?: string
+              p_instagram: string
+              p_is_minor: boolean
+              p_nome_completo: string
+              p_registration_id: string
+              p_restriction_details?: string
+              p_rg: string
+              p_season?: number
+              p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
+              p_telefone: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              p_chronic_disease_details?: string
+              p_cpf: string
+              p_data_nascimento: string
+              p_email: string
+              p_emergency_contact_name: string
+              p_emergency_contact_phone: string
+              p_endereco: string
+              p_guardian_name?: string
+              p_guardian_phone?: string
+              p_has_chronic_disease: boolean
+              p_has_health_insurance: boolean
+              p_has_restriction: boolean
+              p_health_insurance_name?: string
+              p_instagram: string
+              p_is_minor: boolean
+              p_nome_completo: string
+              p_registration_id: string
+              p_restriction_details?: string
+              p_rg: string
+              p_season?: number
+              p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
+              p_telefone: string
+            }
+            Returns: Json
+          }
       get_registrations_by_status: {
         Args: {
           p_limit?: number
@@ -820,3 +860,69 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      athlete_status_type: ["active", "inactive", "pending", "suspended"],
+      athlete_team_type: ["snowstorm", "hailstorm", "rainstorm", "unassigned"],
+      attendance_status_type: ["not_checked", "present", "absent"],
+      cheer_level_type: ["n2", "n3", "n4"],
+      cheer_position_type: ["base", "flyer", "back"],
+      day_period_type: ["manha", "tarde", "noite"],
+      enrollment_type: [
+        "team_cheer",
+        "individual_only",
+        "tumbling_only",
+        "team_and_tumbling",
+      ],
+      experience_time_type: [
+        "nunca-pratiquei",
+        "menos-6-meses",
+        "6-12-meses",
+        "1-2-anos",
+        "2-anos-mais",
+      ],
+      gender_type: ["feminino", "masculino", "outro"],
+      payment_frequency_type: ["monthly", "single"],
+      payment_status_type: ["comprovante_pendente", "pago"],
+      registration_status_type: [
+        "pending",
+        "under_review",
+        "accepted",
+        "rejected",
+        "waitlisted",
+      ],
+      shirt_size_type: [
+        "p_adulto",
+        "m_adulto",
+        "g_adulto",
+        "gg_adulto",
+        "xgg_adulto",
+        "p_babylook",
+        "m_babylook",
+        "g_babylook",
+      ],
+      skill_level_type: ["basico", "intermediario", "avancado"],
+      sports_experience_type: ["ginastica", "tumbling", "danca", "nenhuma"],
+      team_level_type: [
+        "coed-n2",
+        "coed-n3",
+        "allgirl-n2-n3",
+        "allboy-n2-n3",
+        "coed-n4",
+      ],
+      weekday_type: [
+        "segunda",
+        "terca",
+        "quarta",
+        "quinta",
+        "sexta",
+        "sabado",
+        "domingo",
+      ],
+      yes_no_maybe_type: ["sim", "nao", "talvez"],
+      yes_no_type: ["sim", "nao"],
+    },
+  },
+} as const

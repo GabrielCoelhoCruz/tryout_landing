@@ -188,7 +188,7 @@ export function AthleteRegistrationForm({
         }
       }
     } else if (currentStep === 'guardian') {
-      const isValid = await trigger(['guardianName', 'guardianPhone'])
+      const isValid = await trigger(['guardianName', 'guardianCpf', 'guardianRg', 'guardianEmail', 'guardianPhone'])
       if (isValid) {
         setCurrentStep('review')
       }
@@ -694,6 +694,68 @@ export function AthleteRegistrationForm({
                   />
                 </FormField>
 
+                {/* Row: CPF + RG */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    label="CPF do Responsável"
+                    icon={CreditCard}
+                    error={errors.guardianCpf?.message}
+                    required
+                  >
+                    <Controller
+                      name="guardianCpf"
+                      control={control}
+                      render={({ field }) => (
+                        <MaskedInput
+                          mask="cpf"
+                          value={field.value}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          placeholder="123.456.789-00"
+                          variant="dark"
+                        />
+                      )}
+                    />
+                  </FormField>
+
+                  <FormField
+                    label="RG do Responsável"
+                    icon={FileText}
+                    error={errors.guardianRg?.message}
+                    required
+                  >
+                    <Controller
+                      name="guardianRg"
+                      control={control}
+                      render={({ field }) => (
+                        <MaskedInput
+                          mask="rg"
+                          value={field.value}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          placeholder="12.345.678-9"
+                          variant="dark"
+                        />
+                      )}
+                    />
+                  </FormField>
+                </div>
+
+                {/* E-mail do Responsável */}
+                <FormField
+                  label="E-mail do Responsável"
+                  icon={Mail}
+                  error={errors.guardianEmail?.message}
+                  required
+                >
+                  <Input
+                    type="email"
+                    {...register('guardianEmail')}
+                    placeholder="responsavel@email.com"
+                    variant="dark"
+                  />
+                </FormField>
+
                 {/* Telefone do Responsável */}
                 <FormField
                   label="Telefone do Responsável"
@@ -801,6 +863,9 @@ export function AthleteRegistrationForm({
                 {registration.isMinor && (
                   <ReviewSection title="Responsável Legal" color="orange">
                     <ReviewItem label="Nome" value={watchedValues.guardianName} />
+                    <ReviewItem label="CPF" value={watchedValues.guardianCpf} />
+                    <ReviewItem label="RG" value={watchedValues.guardianRg} />
+                    <ReviewItem label="E-mail" value={watchedValues.guardianEmail} />
                     <ReviewItem label="Telefone" value={watchedValues.guardianPhone} />
                   </ReviewSection>
                 )}
