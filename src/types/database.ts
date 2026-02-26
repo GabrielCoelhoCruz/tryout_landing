@@ -396,6 +396,7 @@ export type Database = {
           base_interest_count: number | null
           coed_n2_interest_count: number | null
           coed_n3_interest_count: number | null
+          cheerpom_interest_count: number | null
           coed_n4_interest_count: number | null
           flyer_interest_count: number | null
           last_30_days: number | null

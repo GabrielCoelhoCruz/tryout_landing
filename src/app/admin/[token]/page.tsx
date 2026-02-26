@@ -276,6 +276,7 @@ export default function AdminDashboard() {
             { label: 'Coed N4', value: stats?.coed_n4_interest_count || 0, color: '#10B981' },
             { label: 'All Girl', value: stats?.allgirl_interest_count || 0, color: '#EC4899' },
             { label: 'All Boy', value: stats?.allboy_interest_count || 0, color: '#A855F7' },
+            { label: 'Cheer Pom', value: stats?.cheerpom_interest_count || 0, color: '#FF69B4' },
           ]}
         />
 

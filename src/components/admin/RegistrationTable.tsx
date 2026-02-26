@@ -53,7 +53,7 @@ const positionConfig: Record<string, { label: string; color: string; bgColor: st
   back: { label: 'Back', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
 }
 
-const levelOrder = ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3']
+const levelOrder = ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3', 'cheer-pom']
 
 const levelConfig: Record<string, { label: string; color: string; bgColor: string; borderColor: string }> = {
   'coed-n2': { label: 'Coed N2', color: 'text-[#FF7F00]', bgColor: 'bg-[#FF7F00]/10', borderColor: 'border-[#FF7F00]/30' },
@@ -61,6 +61,7 @@ const levelConfig: Record<string, { label: string; color: string; bgColor: strin
   'coed-n4': { label: 'Coed N4', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10', borderColor: 'border-emerald-400/30' },
   'allgirl-n2-n3': { label: 'All Girl', color: 'text-pink-400', bgColor: 'bg-pink-400/10', borderColor: 'border-pink-400/30' },
   'allboy-n2-n3': { label: 'All Boy', color: 'text-purple-400', bgColor: 'bg-purple-400/10', borderColor: 'border-purple-400/30' },
+  'cheer-pom': { label: 'Cheer Pom', color: 'text-[#FF69B4]', bgColor: 'bg-[#FF69B4]/10', borderColor: 'border-[#FF69B4]/30' },
 }
 
 const ITEMS_PER_PAGE = 10
@@ -191,6 +192,7 @@ export function RegistrationTable({
               <option value="coed-n4" className="bg-[#1a1a2e] text-white">Coed N4</option>
               <option value="allgirl-n2-n3" className="bg-[#1a1a2e] text-white">All Girl</option>
               <option value="allboy-n2-n3" className="bg-[#1a1a2e] text-white">All Boy</option>
+              <option value="cheer-pom" className="bg-[#1a1a2e] text-white">Cheer Pom</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/50">
               <ChevronDown className="w-4 h-4" />
