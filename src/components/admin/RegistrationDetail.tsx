@@ -98,12 +98,13 @@ const yesNoMaybeLabels = {
   talvez: 'Talvez',
 }
 
-const teamLevelLabels = {
+const teamLevelLabels: Record<string, string> = {
   'coed-n2': 'Coed N2',
   'coed-n3': 'Coed N3',
   'coed-n4': 'Coed N4',
   'allgirl-n2-n3': 'All Girl N2/N3',
   'allboy-n2-n3': 'All Boy N2/N3',
+  'cheer-pom': 'Cheer Pom',
 }
 
 export function RegistrationDetail({

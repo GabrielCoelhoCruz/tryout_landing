@@ -81,6 +81,11 @@ export const TEAM_CONFIG: Record<AthleteTeamType, TeamConfig> = {
     level: 'COED N3 NT',
     color: '#3B82F6', // Blue
   },
+  cheerpom: {
+    name: 'Cheer Pom',
+    level: 'POM',
+    color: '#FF69B4', // Pink
+  },
   unassigned: {
     name: 'A definir',
     level: 'Aguardando',

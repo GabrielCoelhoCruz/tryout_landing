@@ -66,7 +66,9 @@ export function PricingCard({
                 <p className="text-[#4A4A4A] text-xs opacity-60">{item.sublabel}</p>
               </div>
               <div className="flex items-baseline gap-0.5">
-                <span className="text-[#4A4A4A] text-xs">R$</span>
+                {/^\d+$/.test(item.price) && (
+                  <span className="text-[#4A4A4A] text-xs">R$</span>
+                )}
                 <span
                   className="font-display text-2xl"
                   style={{ color: isLast ? '#4A4A4A' : color }}

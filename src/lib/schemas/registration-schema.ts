@@ -23,7 +23,7 @@ export const cheerPositionSchema = z.enum(['base', 'flyer', 'back'], {
   message: 'Selecione uma posição válida',
 })
 export const teamLevelSchema = z.enum(
-  ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3'],
+  ['coed-n2', 'coed-n3', 'coed-n4', 'allgirl-n2-n3', 'allboy-n2-n3', 'cheer-pom'],
   { message: 'Selecione um nível válido' }
 )
 export const weekdaySchema = z.enum(
@@ -80,7 +80,7 @@ const baseRegistrationSchema = z.object({
 
   // Payment
   'comprovante-pagamento': z.string().optional(),
-  'valor-inscricao': z.number().min(25).max(40).optional(),
+  'valor-inscricao': z.number().min(0).max(40).optional(),
 
   // Health
   'condicoes-medicas': z.string().optional(),

@@ -685,7 +685,7 @@ export type Database = {
     }
     Enums: {
       athlete_status_type: "active" | "inactive" | "pending" | "suspended"
-      athlete_team_type: "snowstorm" | "hailstorm" | "rainstorm" | "unassigned"
+      athlete_team_type: "snowstorm" | "hailstorm" | "rainstorm" | "cheerpom" | "unassigned"
       attendance_status_type: "not_checked" | "present" | "absent"
       cheer_level_type: "n2" | "n3" | "n4"
       cheer_position_type: "base" | "flyer" | "back"
@@ -727,6 +727,7 @@ export type Database = {
         | "allgirl-n2-n3"
         | "allboy-n2-n3"
         | "coed-n4"
+        | "cheer-pom"
       weekday_type:
         | "segunda"
         | "terca"
@@ -865,7 +866,7 @@ export const Constants = {
   public: {
     Enums: {
       athlete_status_type: ["active", "inactive", "pending", "suspended"],
-      athlete_team_type: ["snowstorm", "hailstorm", "rainstorm", "unassigned"],
+      athlete_team_type: ["snowstorm", "hailstorm", "rainstorm", "cheerpom", "unassigned"],
       attendance_status_type: ["not_checked", "present", "absent"],
       cheer_level_type: ["n2", "n3", "n4"],
       cheer_position_type: ["base", "flyer", "back"],
@@ -911,6 +912,7 @@ export const Constants = {
         "allgirl-n2-n3",
         "allboy-n2-n3",
         "coed-n4",
+        "cheer-pom",
       ],
       weekday_type: [
         "segunda",

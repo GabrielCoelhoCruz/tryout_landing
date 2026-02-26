@@ -54,6 +54,7 @@ const TEAM_LOGOS: Record<string, string> = {
   snowstorm: '/images/Snowstorm.jpg',
   hailstorm: '/images/Hailstorm.jpg',
   rainstorm: '/images/Rainstorm.jpg',
+  cheerpom: '/images/CheerPom.jpg',
 }
 
 // Decorative white stars configuration for shareable card

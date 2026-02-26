@@ -130,6 +130,19 @@ export const TEAMS: readonly Team[] = [
     color: '#00BFFF',
     storm: 'rain',
   },
+  {
+    name: 'CHEER POM',
+    level: 'Pom',
+    category: 'Cheer Pom',
+    description:
+      'O Cheer Pom é uma modalidade do cheerleading que combina dança, técnica e expressão artística com o uso dos pompons. As coreografias unem sincronia, energia e criatividade, transformando cada apresentação em um espetáculo visual cheio de brilho e emoção.\n\nAlém da performance, o Cheer Pom desenvolve coordenação, ritmo, postura, confiança e trabalho em equipe. É onde a música encontra o movimento e o espírito de equipe ganha forma.\n\nIsso é Cheer Pom: atitude, arte e energia em cada passo.',
+    requirements: [
+      'Idade mínima: a definir',
+    ],
+    vacancies: 0,
+    color: '#FF69B4',
+    storm: 'mixed',
+  },
 ] as const
 
 export const TESTIMONIALS = [
@@ -230,16 +243,16 @@ export const FAQS = [
 
 export const TRYOUT_INFO = [
   {
-    icon: ClipboardList,
-    label: 'Inscrições abertas',
-    value: '01 - 25 Mar, 2026',
-    color: '#FF7F00',
+    icon: Calendar,
+    label: 'Cheer Pom',
+    value: '21 Mar, 2026 — Data fixa',
+    color: '#FF69B4',
   },
   {
-    icon: Calendar,
-    label: 'Data do Tryout',
-    value: '28 e 29 Mar, 2026',
-    color: '#00BFFF',
+    icon: ClipboardList,
+    label: 'Demais Equipes',
+    value: 'Tryouts agendados',
+    color: '#FF7F00',
   },
   {
     icon: Users,
@@ -249,74 +262,6 @@ export const TRYOUT_INFO = [
   },
 ] as const
 
-export const TRYOUT_SCHEDULE = [
-  {
-    date: '28/03',
-    day: 'Sábado',
-    teams: [
-      {
-        name: 'All Girl',
-        color: '#FF69B4',
-        schedule: [
-          { time: '9h30 - 10h', activity: 'Credenciamento' },
-          { time: '10h - 13h', activity: 'Tryout' },
-        ],
-      },
-      {
-        name: 'Intervalo',
-        color: '#6B7280',
-        schedule: [
-          { time: '13h - 14h', activity: 'Descanso' },
-        ],
-      },
-      {
-        name: 'All Boy',
-        color: '#00BFFF',
-        schedule: [
-          { time: '14h - 14h30', activity: 'Credenciamento' },
-          { time: '14h30 - 17h30', activity: 'Tryout' },
-        ],
-      },
-    ],
-  },
-  {
-    date: '29/03',
-    day: 'Domingo',
-    teams: [
-      {
-        name: 'COED N2',
-        color: '#3B82F6',
-        schedule: [
-          { time: '9h30 - 10h', activity: 'Credenciamento' },
-          { time: '10h - 12h', activity: 'Tryout' },
-        ],
-      },
-      {
-        name: 'Intervalo',
-        color: '#6B7280',
-        schedule: [
-          { time: '12h - 13h', activity: 'Descanso' },
-        ],
-      },
-      {
-        name: 'COED N3',
-        color: '#2563EB',
-        schedule: [
-          { time: '13h - 13h30', activity: 'Credenciamento' },
-          { time: '13h30 - 15h30', activity: 'Tryout' },
-        ],
-      },
-      {
-        name: 'COED N4',
-        color: '#FF7F00',
-        schedule: [
-          { time: '15h30 - 16h', activity: 'Credenciamento' },
-          { time: '16h - 18h', activity: 'Tryout' },
-        ],
-      },
-    ],
-  },
-] as const
 
 export const PRICING_PLANS = [
   {
@@ -341,6 +286,17 @@ export const PRICING_PLANS = [
       { label: 'Atleta SkyHigh 2025', sublabel: 'Antecipado', price: '30' },
       { label: 'Não atleta SkyHigh', sublabel: 'Antecipado', price: '35' },
       { label: 'Na porta', sublabel: 'Todos', price: '40' },
+    ],
+  },
+  {
+    id: 'cheerpom',
+    name: 'Cheer Pom',
+    description: 'Seletiva Cheer Pom — 21/03',
+    icon: '🎀',
+    color: '#FF69B4',
+    prices: [
+      { label: 'Atleta SkyHigh 2026', sublabel: '', price: 'Isento' },
+      { label: 'Não atleta SkyHigh', sublabel: 'Antecipado', price: '25' },
     ],
   },
 ] as const

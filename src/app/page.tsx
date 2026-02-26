@@ -34,7 +34,6 @@ import {
   JOURNEY_STEPS,
   FAQS,
   TRYOUT_INFO,
-  TRYOUT_SCHEDULE,
   PRICING_PLANS,
 } from '@/constants/landing-data'
 import { SCROLL_THRESHOLD, SECTION_SPACING } from '@/constants/animation-config'
@@ -631,7 +630,7 @@ function LandingContent() {
                     {TEAMS[activeTeam].name}
                   </h3>
 
-                  <p className="text-white/60 text-lg leading-relaxed mb-6">
+                  <p className="text-white/60 text-lg leading-relaxed mb-6 whitespace-pre-line">
                     {TEAMS[activeTeam].description}
                   </p>
 
@@ -866,7 +865,7 @@ function LandingContent() {
             ))}
           </div>
 
-          {/* Schedule Section */}
+          {/* Schedule Section - Cheer Pom fixed date + WhatsApp scheduling for others */}
           <motion.div
             className="mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -874,62 +873,71 @@ function LandingContent() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="text-center mb-8">
-              <h3 className="font-display text-2xl text-[#000c1f] mb-2">Cronograma do Tryout</h3>
-              <p className="text-[#4A4A4A] text-sm">
-                Horários detalhados por níveis
-              </p>
-            </div>
-
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {TRYOUT_SCHEDULE.map((day, dayIndex) => (
-                <motion.div
-                  key={day.date}
-                  className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: dayIndex * 0.1 }}
-                >
-                  {/* Day Header */}
-                  <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200">
-                    <div className="w-12 h-12 rounded-xl bg-[#FF7F00] flex items-center justify-center text-white">
-                      <Calendar className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="font-display text-xl text-[#000c1f]">{day.date}/2026</div>
-                      <div className="text-sm text-[#4A4A4A]">{day.day}</div>
-                    </div>
+              {/* Cheer Pom - Fixed Date */}
+              <motion.div
+                className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100 border-l-4 border-l-[#FF69B4]"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF69B4] flex items-center justify-center text-white">
+                    <Calendar className="w-6 h-6" />
                   </div>
+                  <div>
+                    <div className="font-display text-xl text-[#000c1f]">Cheer Pom</div>
+                    <div className="text-sm text-[#4A4A4A]">21/03/2026 — Sábado</div>
+                  </div>
+                </div>
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Clock className="w-3.5 h-3.5 text-[#4A4A4A]" />
+                    <span className="text-[#000c1f] font-medium">13h - 13h30</span>
+                    <span className="text-[#4A4A4A]">— Credenciamento</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Clock className="w-3.5 h-3.5 text-[#4A4A4A]" />
+                    <span className="text-[#000c1f] font-medium">13h30 - 15h30</span>
+                    <span className="text-[#4A4A4A]">— Seletiva</span>
+                  </div>
+                </div>
+                <div className="text-xs text-[#4A4A4A] space-y-1">
+                  <p>Atleta SkyHigh 2026: <span className="font-semibold text-[#FF69B4]">Isento</span></p>
+                  <p>Não atleta: <span className="font-semibold text-[#FF69B4]">R$ 25,00</span></p>
+                </div>
+              </motion.div>
 
-                  {/* Teams Schedule */}
-                  <div className="space-y-4">
-                    {day.teams.map((team, teamIndex) => (
-                      <div key={teamIndex}>
-                        <div
-                          className="flex items-center gap-2 mb-2"
-                          style={{ color: team.color }}
-                        >
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: team.color }}
-                          />
-                          <span className="font-semibold text-sm">{team.name}</span>
-                        </div>
-                        <div className="ml-4 space-y-1">
-                          {team.schedule.map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-sm">
-                              <Clock className="w-3.5 h-3.5 text-[#4A4A4A]" />
-                              <span className="text-[#000c1f] font-medium">{item.time}</span>
-                              <span className="text-[#4A4A4A]">— {item.activity}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+              {/* Other Teams - Scheduled tryouts */}
+              <motion.div
+                className="bg-[#FAFAFA] rounded-2xl p-6 border border-gray-100 border-l-4 border-l-[#FF7F00] flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200">
+                  <div className="w-12 h-12 rounded-xl bg-[#FF7F00] flex items-center justify-center text-white">
+                    <Calendar className="w-6 h-6" />
                   </div>
-                </motion.div>
-              ))}
+                  <div>
+                    <div className="font-display text-xl text-[#000c1f]">Demais Equipes</div>
+                    <div className="text-sm text-[#4A4A4A]">Tryouts agendados — datas em breve</div>
+                  </div>
+                </div>
+                <p className="text-[#4A4A4A] text-sm mb-6 flex-1">
+                  Os tryouts para Coed N2, Coed N3, Coed N4, All Girl e All Boy serão agendados. Faça sua inscrição pelo formulário e entre em contato com a gente para agendar o tryout.
+                </p>
+                <GlowingButton
+                  variant="primary"
+                  onClick={() => router.push('/formulario')}
+                  className="!w-full !justify-center"
+                >
+                  Inscreva-se
+                  <ArrowRight className="w-5 h-5" />
+                </GlowingButton>
+              </motion.div>
             </div>
           </motion.div>
 
@@ -949,7 +957,7 @@ function LandingContent() {
             </div>
 
             {/* Pricing Cards */}
-            <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {PRICING_PLANS.map((plan, index) => (
                 <PricingCard
                   key={plan.id}

@@ -23,15 +23,39 @@ export const TRYOUT_PRICING = {
     single: 35,
     multiple: 40,
   },
+  // Cheer Pom pricing
+  cheerPom: {
+    skyhigh: 0,    // Atleta SH 2025 → isento
+    nonSkyhigh: 25, // Não atleta → R$25
+  },
 } as const
 
 export function calculateTryoutPrice(
   isSkyhighAthlete: boolean,
-  teamCount: number
+  teamCount: number,
+  selectedTeams?: string[]
 ): number {
-  const category = isSkyhighAthlete ? 'skyhigh' : 'nonSkyhigh'
-  const quantity = teamCount > 1 ? 'multiple' : 'single'
-  return TRYOUT_PRICING[category][quantity]
+  const teams = selectedTeams || []
+  const hasCheerPom = teams.includes('cheer-pom')
+  const otherTeamCount = hasCheerPom ? teamCount - 1 : teamCount
+
+  let total = 0
+
+  // Cheer Pom pricing
+  if (hasCheerPom) {
+    total += isSkyhighAthlete
+      ? TRYOUT_PRICING.cheerPom.skyhigh
+      : TRYOUT_PRICING.cheerPom.nonSkyhigh
+  }
+
+  // Regular teams pricing
+  if (otherTeamCount > 0) {
+    const category = isSkyhighAthlete ? 'skyhigh' : 'nonSkyhigh'
+    const quantity = otherTeamCount > 1 ? 'multiple' : 'single'
+    total += TRYOUT_PRICING[category][quantity]
+  }
+
+  return total
 }
 
 // File upload constraints

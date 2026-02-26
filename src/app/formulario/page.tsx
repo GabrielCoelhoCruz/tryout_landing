@@ -1227,13 +1227,13 @@ export default function FormularioPage() {
 
   // Calculate tryout price based on athlete status and number of teams
   const atletaSkyhigh2025 = watchedData['atleta-skyhigh-2025']
-  const nivelInteresse = watchedData['nivel-interesse'] || []
+  const nivelInteresse = useMemo(() => watchedData['nivel-interesse'] || [], [watchedData['nivel-interesse']])
   const isSkyhighAthlete = atletaSkyhigh2025 === 'sim' ? true : atletaSkyhigh2025 === 'nao' ? false : null
   const teamCount = nivelInteresse.length
   const calculatedPrice = useMemo(() => {
     if (isSkyhighAthlete === null || teamCount === 0) return null
-    return calculateTryoutPrice(isSkyhighAthlete, teamCount)
-  }, [isSkyhighAthlete, teamCount])
+    return calculateTryoutPrice(isSkyhighAthlete, teamCount, nivelInteresse as string[])
+  }, [isSkyhighAthlete, teamCount, nivelInteresse])
 
   // Calculate age automatically when birth date changes
   useEffect(() => {
