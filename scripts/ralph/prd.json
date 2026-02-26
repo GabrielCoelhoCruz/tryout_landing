@@ -1,0 +1,49 @@
+{
+  "name": "Dogfood Fixes - Landing Page",
+  "branchName": "fix/dogfood-issues",
+  "description": "Fix 7 issues found during dogfood QA session on the landing page and registration form",
+  "stories": [
+    {
+      "id": "DF-001",
+      "title": "Update outdated tryout dates",
+      "description": "Tryout Info section shows Jan 2026 dates that have already passed. Update dates in landing-data.ts constants and hero badge text to reflect current/upcoming dates.",
+      "priority": 1,
+      "passes": true
+    },
+    {
+      "id": "DF-002",
+      "title": "Fix LCP image missing priority and filename with space",
+      "description": "Console warning: Logo image detected as LCP but header already has priority. This was a false positive — header Image already has priority prop.",
+      "priority": 2,
+      "passes": true
+    },
+    {
+      "id": "DF-003",
+      "title": "Fix scroll container position warning",
+      "description": "Console warning about container missing non-static position for scroll offset calculation. Added position:relative to main container.",
+      "priority": 3,
+      "passes": true
+    },
+    {
+      "id": "DF-004",
+      "title": "Fix sidebar navigation overlapping footer",
+      "description": "Right-side ScrollProgress dots overlap footer content. Hide sidebar when user reaches bottom, lower z-index to z-40.",
+      "priority": 4,
+      "passes": true
+    },
+    {
+      "id": "DF-005",
+      "title": "Add Privacy Policy and Terms links to landing page footer",
+      "description": "The form page footer has legal links but the landing page footer does not. Added for consistency.",
+      "priority": 5,
+      "passes": true
+    },
+    {
+      "id": "DF-006",
+      "title": "Fix team tabs overlapping navbar on scroll",
+      "description": "Investigation showed the apparent overlap was from agent-browser annotation overlay, not actual UI. Navbar z-50 already above section z-10. No code change needed.",
+      "priority": 6,
+      "passes": true
+    }
+  ]
+}

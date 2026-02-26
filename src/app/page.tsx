@@ -357,7 +357,7 @@ function LandingContent() {
   }, [activeTeam, setStorm, setIntensity])
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA] overflow-hidden">
+    <main className="relative min-h-screen bg-[#FAFAFA] overflow-hidden">
       {/* ============================================ */}
       {/* HEADER */}
       {/* ============================================ */}
@@ -1181,6 +1181,14 @@ function LandingContent() {
           
           {/* Bottom bar */}
           <div className="pt-8 border-t border-white/10 flex flex-col items-center gap-3">
+            <div className="flex items-center gap-4 text-sm">
+              <Link href="/politica-de-privacidade" className="text-white/40 hover:text-white/70 transition-colors">
+                Política de Privacidade
+              </Link>
+              <Link href="/termos-de-uso" className="text-white/40 hover:text-white/70 transition-colors">
+                Termos de Uso
+              </Link>
+            </div>
             <p className="text-white/40 text-sm">
               © {new Date().getFullYear()} SkyHigh AllStar. Todos os direitos reservados.
             </p>

@@ -232,13 +232,13 @@ export const TRYOUT_INFO = [
   {
     icon: ClipboardList,
     label: 'Inscrições abertas',
-    value: '06 - 30 Jan, 2026',
+    value: '01 - 25 Mar, 2026',
     color: '#FF7F00',
   },
   {
     icon: Calendar,
     label: 'Data do Tryout',
-    value: '31 Jan e 01 Fev, 2026',
+    value: '28 e 29 Mar, 2026',
     color: '#00BFFF',
   },
   {
@@ -251,7 +251,7 @@ export const TRYOUT_INFO = [
 
 export const TRYOUT_SCHEDULE = [
   {
-    date: '31/01',
+    date: '28/03',
     day: 'Sábado',
     teams: [
       {
@@ -280,7 +280,7 @@ export const TRYOUT_SCHEDULE = [
     ],
   },
   {
-    date: '01/02',
+    date: '29/03',
     day: 'Domingo',
     teams: [
       {

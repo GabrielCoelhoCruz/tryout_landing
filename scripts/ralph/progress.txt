@@ -1,0 +1,43 @@
+## Codebase Patterns
+- Landing page is a single-file component at src/app/page.tsx with inline sections
+- Constants/data in src/constants/landing-data.ts
+- ScrollProgress component at src/components/ui/ScrollProgress.tsx (side dots + top bar)
+- Footer is inline in page.tsx (landing) and also exists as src/components/Footer.tsx (used by form page)
+- Navbar is z-50 fixed position
+- All animations use framer-motion
+- Font: Bebas Neue (display) + Work Sans (body)
+---
+
+## 2026-02-25 - DF-001
+- Updated tryout dates from Jan 2026 to Mar 2026 in TRYOUT_INFO, TRYOUT_SCHEDULE
+- Files changed: src/constants/landing-data.ts
+- **Learnings:**
+  - All date-related data lives in landing-data.ts constants
+  - Schedule dates use DD/MM format, info cards use "DD Mon, YYYY" format
+
+## 2026-02-25 - DF-003
+- Added `relative` to main container to fix framer-motion useScroll position warning
+- Files changed: src/app/page.tsx
+- **Learnings:**
+  - framer-motion useScroll needs a container with non-static position
+  - The warning comes from the scroll offset calculation
+
+## 2026-02-25 - DF-004
+- Hide side dots when near bottom of page, lowered z-index from z-50 to z-40
+- Files changed: src/components/ui/ScrollProgress.tsx
+- **Learnings:**
+  - ScrollProgress has nearBottom detection using scrollHeight - 200px threshold
+  - Side dots z-index was competing with navbar z-50
+
+## 2026-02-25 - DF-005
+- Added Privacy Policy and Terms of Use links to landing page footer
+- Files changed: src/app/page.tsx
+- **Learnings:**
+  - Landing page has inline footer, form page uses Footer component
+  - Legal links existed on form page but not landing page
+
+## 2026-02-25 - DF-002, DF-006
+- DF-002: LCP warning was false positive, header Image already has priority prop
+- DF-006: Team tabs z-index overlap was agent-browser annotation artifacts, not actual UI issue
+- No code changes needed
+---

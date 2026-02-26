@@ -36,6 +36,7 @@ export function ScrollProgress({
   showSideDots = true,
 }: ScrollProgressProps) {
   const [activeSection, setActiveSection] = useState(0)
+  const [nearBottom, setNearBottom] = useState(false)
   const prefersReduced = useReducedMotion()
   const { scrollYProgress } = useScroll()
 
@@ -50,6 +51,8 @@ export function ScrollProgress({
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 2
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
+      setNearBottom(atBottom)
 
       sections.forEach((section, index) => {
         const element = document.getElementById(section.id)
@@ -144,7 +147,7 @@ export function ScrollProgress({
 
       {/* Side Navigation Dots - Storm Indicators */}
       {showSideDots && (
-        <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4 px-3 py-4 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50">
+        <div className={`fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-4 px-3 py-4 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 transition-opacity duration-300 ${nearBottom ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           {sections.map((section, index) => {
             const isActive = index === activeSection
             const isPast = index < activeSection
