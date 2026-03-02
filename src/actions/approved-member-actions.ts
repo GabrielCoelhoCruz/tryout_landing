@@ -28,7 +28,7 @@ function parseTeamAssignments(jsonValue: unknown): TeamAssignment[] {
 
   const validTeams: AthleteTeamType[] = ['snowstorm', 'hailstorm', 'rainstorm']
   const validBasePositions: CheerPositionType[] = ['base', 'flyer', 'back']
-  const validSpecialPositions = ['flyer reserva', 'base frontal']
+  const validSpecialPositions = ['flyer reserva', 'base frontal', 'base lateral', 'base reserva']
 
   return jsonValue
     .filter((item): item is { team: AthleteTeamType; position: string } => {
