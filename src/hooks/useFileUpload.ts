@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react'
-import { supabase } from '@/lib/supabase'
+import { uploadToStorage } from '@/actions/upload-actions'
 import { logError } from '@/lib/error-logger'
-import { STORAGE_CONFIG } from '@/constants/storage'
 
 type UploadResult = {
   url: string
@@ -22,9 +21,8 @@ type UseFileUploadReturn = {
 }
 
 /**
- * Hook for handling file uploads to Supabase Storage
- * @param options - Configuration options including bucket name
- * @returns File state and upload functions
+ * Hook for handling file uploads to Supabase Storage via server action.
+ * Uses service_role key server-side to bypass RLS.
  */
 export function useFileUpload({
   bucket,
@@ -33,37 +31,20 @@ export function useFileUpload({
   const [file, setFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
 
-  const generateFileName = useCallback((originalName: string): string => {
-    const fileExt = originalName.split('.').pop()
-    const uniqueId = Math.random().toString(36).substring(2)
-    return `${Date.now()}-${uniqueId}.${fileExt}`
-  }, [])
-
   const upload = useCallback(async (): Promise<UploadResult | null> => {
     if (!file) return null
 
     setIsUploading(true)
     try {
-      const fileName = generateFileName(file.name)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('bucket', bucket)
 
-      const { error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(fileName, file, {
-          cacheControl: STORAGE_CONFIG.cacheControlOneHour,
-          upsert: false,
-        })
-
-      if (uploadError) {
-        throw uploadError
-      }
-
-      const { data: urlData } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(fileName)
+      const result = await uploadToStorage(formData)
 
       return {
-        url: urlData.publicUrl,
-        fileName,
+        url: result.url,
+        fileName: result.fileName,
       }
     } catch (error) {
       logError(error, { component: 'useFileUpload', action: 'upload' })
@@ -72,7 +53,7 @@ export function useFileUpload({
     } finally {
       setIsUploading(false)
     }
-  }, [file, bucket, generateFileName, onError])
+  }, [file, bucket, onError])
 
   const clear = useCallback(() => {
     setFile(null)

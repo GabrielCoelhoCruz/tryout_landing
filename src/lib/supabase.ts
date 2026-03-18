@@ -12,10 +12,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
 
 // Server-side Supabase client (for API routes/Server Actions)
+// Uses service_role key to bypass RLS (auth handled at app level via token)
 export function createServerClient() {
-  return createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const key = serviceRoleKey || supabaseAnonKey
+
+  return createClient<Database>(supabaseUrl, key, {
     auth: {
       persistSession: false,
+      autoRefreshToken: false,
     },
   })
 }
