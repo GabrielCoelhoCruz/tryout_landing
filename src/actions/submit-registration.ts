@@ -64,7 +64,7 @@ export const submitRegistration = actionClient
       p_declaracao_medica: parsedInput['declaracao-medica'],
       p_comprovante_pagamento: parsedInput['comprovante-pagamento'] || undefined,
       p_atleta_skyhigh_2025: parsedInput['atleta-skyhigh-2025'] as YesNoType,
-      p_valor_inscricao: parsedInput['valor-inscricao'] || undefined,
+      p_valor_inscricao: parsedInput['valor-inscricao'] ?? undefined,
     })
 
     if (error) {

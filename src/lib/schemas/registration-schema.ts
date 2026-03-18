@@ -80,7 +80,7 @@ const baseRegistrationSchema = z.object({
 
   // Payment
   'comprovante-pagamento': z.string().optional(),
-  'valor-inscricao': z.number().min(0).max(40).optional(),
+  'valor-inscricao': z.number().min(0).max(60).optional(),
 
   // Health
   'condicoes-medicas': z.string().optional(),

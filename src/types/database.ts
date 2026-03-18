@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      athlete_discounts: {
+        Row: {
+          athlete_id: string
+          created_at: string | null
+          discount_id: string
+          id: string
+          notes: string | null
+          valid_from: string
+          valid_until: string | null
+        }
+        Insert: {
+          athlete_id: string
+          created_at?: string | null
+          discount_id: string
+          id?: string
+          notes?: string | null
+          valid_from?: string
+          valid_until?: string | null
+        }
+        Update: {
+          athlete_id?: string
+          created_at?: string | null
+          discount_id?: string
+          id?: string
+          notes?: string | null
+          valid_from?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "athlete_discounts_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "athlete_discounts_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_financial_summary"
+            referencedColumns: ["athlete_id"]
+          },
+          {
+            foreignKeyName: "athlete_discounts_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_status_combined"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "athlete_discounts_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_birthdays_current_month"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "athlete_discounts_discount_id_fkey"
+            columns: ["discount_id"]
+            isOneToOne: false
+            referencedRelation: "discounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       athlete_guardians: {
         Row: {
           athlete_id: string
@@ -56,6 +122,27 @@ export type Database = {
             referencedRelation: "athletes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "athlete_guardians_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: true
+            referencedRelation: "vw_athlete_financial_summary"
+            referencedColumns: ["athlete_id"]
+          },
+          {
+            foreignKeyName: "athlete_guardians_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: true
+            referencedRelation: "vw_athlete_status_combined"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "athlete_guardians_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: true
+            referencedRelation: "vw_birthdays_current_month"
+            referencedColumns: ["id"]
+          },
         ]
       }
       athletes: {
@@ -65,6 +152,7 @@ export type Database = {
           cpf: string
           created_at: string
           data_nascimento: string
+          date_of_birth: string | null
           document_url: string | null
           email: string
           emergency_contact_name: string | null
@@ -85,15 +173,18 @@ export type Database = {
           mensalidade_amount: number | null
           nome_completo: string
           payment_proof_url: string | null
+          photo_url: string | null
           registration_id: string | null
           restriction_details: string | null
           reviewed_at: string | null
           reviewed_by: string | null
           rg: string
+          role: Database["public"]["Enums"]["staff_role"] | null
           season: number
           shirt_size: Database["public"]["Enums"]["shirt_size_type"] | null
           status: Database["public"]["Enums"]["athlete_status_type"]
           team: Database["public"]["Enums"]["athlete_team_type"]
+          team_assignments: Json | null
           telefone: string
           updated_at: string
         }
@@ -103,6 +194,7 @@ export type Database = {
           cpf: string
           created_at?: string
           data_nascimento: string
+          date_of_birth?: string | null
           document_url?: string | null
           email: string
           emergency_contact_name?: string | null
@@ -123,15 +215,18 @@ export type Database = {
           mensalidade_amount?: number | null
           nome_completo: string
           payment_proof_url?: string | null
+          photo_url?: string | null
           registration_id?: string | null
           restriction_details?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           rg: string
+          role?: Database["public"]["Enums"]["staff_role"] | null
           season?: number
           shirt_size?: Database["public"]["Enums"]["shirt_size_type"] | null
           status?: Database["public"]["Enums"]["athlete_status_type"]
           team?: Database["public"]["Enums"]["athlete_team_type"]
+          team_assignments?: Json | null
           telefone: string
           updated_at?: string
         }
@@ -141,6 +236,7 @@ export type Database = {
           cpf?: string
           created_at?: string
           data_nascimento?: string
+          date_of_birth?: string | null
           document_url?: string | null
           email?: string
           emergency_contact_name?: string | null
@@ -161,15 +257,18 @@ export type Database = {
           mensalidade_amount?: number | null
           nome_completo?: string
           payment_proof_url?: string | null
+          photo_url?: string | null
           registration_id?: string | null
           restriction_details?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
           rg?: string
+          role?: Database["public"]["Enums"]["staff_role"] | null
           season?: number
           shirt_size?: Database["public"]["Enums"]["shirt_size_type"] | null
           status?: Database["public"]["Enums"]["athlete_status_type"]
           team?: Database["public"]["Enums"]["athlete_team_type"]
+          team_assignments?: Json | null
           telefone?: string
           updated_at?: string
         }
@@ -189,6 +288,345 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      attendance: {
+        Row: {
+          athlete_id: string
+          checked_at: string | null
+          checked_by: string | null
+          id: string
+          notes: string | null
+          photo_url: string | null
+          session_id: string
+          status: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Insert: {
+          athlete_id: string
+          checked_at?: string | null
+          checked_by?: string | null
+          id?: string
+          notes?: string | null
+          photo_url?: string | null
+          session_id: string
+          status?: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Update: {
+          athlete_id?: string
+          checked_at?: string | null
+          checked_by?: string | null
+          id?: string
+          notes?: string | null
+          photo_url?: string | null
+          session_id?: string
+          status?: Database["public"]["Enums"]["attendance_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_financial_summary"
+            referencedColumns: ["athlete_id"]
+          },
+          {
+            foreignKeyName: "attendance_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_status_combined"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_birthdays_current_month"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "training_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      charges: {
+        Row: {
+          amount_paid: number | null
+          athlete_id: string
+          category: Database["public"]["Enums"]["charge_category"]
+          created_at: string | null
+          description: string
+          discount_amount: number | null
+          due_date: string
+          final_amount: number | null
+          id: string
+          late_fee_amount: number | null
+          notes: string | null
+          original_amount: number
+          paid_at: string | null
+          payment_plan_id: string | null
+          reference_month: string
+          status: Database["public"]["Enums"]["charge_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount_paid?: number | null
+          athlete_id: string
+          category: Database["public"]["Enums"]["charge_category"]
+          created_at?: string | null
+          description: string
+          discount_amount?: number | null
+          due_date: string
+          final_amount?: number | null
+          id?: string
+          late_fee_amount?: number | null
+          notes?: string | null
+          original_amount?: number
+          paid_at?: string | null
+          payment_plan_id?: string | null
+          reference_month: string
+          status?: Database["public"]["Enums"]["charge_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount_paid?: number | null
+          athlete_id?: string
+          category?: Database["public"]["Enums"]["charge_category"]
+          created_at?: string | null
+          description?: string
+          discount_amount?: number | null
+          due_date?: string
+          final_amount?: number | null
+          id?: string
+          late_fee_amount?: number | null
+          notes?: string | null
+          original_amount?: number
+          paid_at?: string | null
+          payment_plan_id?: string | null
+          reference_month?: string
+          status?: Database["public"]["Enums"]["charge_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "charges_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charges_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_financial_summary"
+            referencedColumns: ["athlete_id"]
+          },
+          {
+            foreignKeyName: "charges_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_status_combined"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charges_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_birthdays_current_month"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charges_payment_plan_id_fkey"
+            columns: ["payment_plan_id"]
+            isOneToOne: false
+            referencedRelation: "payment_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coaches: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nome_completo: string
+          registration_id: string | null
+          role: Database["public"]["Enums"]["coach_role_type"]
+          status: Database["public"]["Enums"]["coach_status_type"]
+          team: Database["public"]["Enums"]["athlete_team_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          nome_completo: string
+          registration_id?: string | null
+          role?: Database["public"]["Enums"]["coach_role_type"]
+          status?: Database["public"]["Enums"]["coach_status_type"]
+          team: Database["public"]["Enums"]["athlete_team_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nome_completo?: string
+          registration_id?: string | null
+          role?: Database["public"]["Enums"]["coach_role_type"]
+          status?: Database["public"]["Enums"]["coach_status_type"]
+          team?: Database["public"]["Enums"]["athlete_team_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coaches_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coaches_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "registrations_full"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discounts: {
+        Row: {
+          created_at: string | null
+          fixed_amount: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          percentage: number | null
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          fixed_amount?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          percentage?: number | null
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          fixed_amount?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          percentage?: number | null
+          type?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          date: string
+          description: string | null
+          id: string
+          is_recurring: boolean | null
+          location: string | null
+          recurrence_rule: string | null
+          teams: string[] | null
+          time_end: string | null
+          time_start: string | null
+          title: string
+          type: Database["public"]["Enums"]["event_type"]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          date: string
+          description?: string | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          recurrence_rule?: string | null
+          teams?: string[] | null
+          time_end?: string | null
+          time_start?: string | null
+          title: string
+          type: Database["public"]["Enums"]["event_type"]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          date?: string
+          description?: string | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          recurrence_rule?: string | null
+          teams?: string[] | null
+          time_end?: string | null
+          time_start?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["event_type"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: Database["public"]["Enums"]["expense_category"]
+          created_at: string | null
+          description: string
+          expense_date: string
+          id: string
+          notes: string | null
+          receipt_url: string | null
+          team: Database["public"]["Enums"]["athlete_team_type"] | null
+          updated_at: string | null
+          vendor: string | null
+        }
+        Insert: {
+          amount: number
+          category: Database["public"]["Enums"]["expense_category"]
+          created_at?: string | null
+          description: string
+          expense_date: string
+          id?: string
+          notes?: string | null
+          receipt_url?: string | null
+          team?: Database["public"]["Enums"]["athlete_team_type"] | null
+          updated_at?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: Database["public"]["Enums"]["expense_category"]
+          created_at?: string | null
+          description?: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          receipt_url?: string | null
+          team?: Database["public"]["Enums"]["athlete_team_type"] | null
+          updated_at?: string | null
+          vendor?: string | null
+        }
+        Relationships: []
       }
       guardians: {
         Row: {
@@ -231,6 +669,177 @@ export type Database = {
             columns: ["registration_id"]
             isOneToOne: true
             referencedRelation: "registrations_full"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      materials: {
+        Row: {
+          category: Database["public"]["Enums"]["material_category"]
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          file_type: string
+          file_url: string
+          id: string
+          sort_order: number | null
+          subcategory: string | null
+          teams: string[] | null
+          title: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["material_category"]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          file_type?: string
+          file_url: string
+          id?: string
+          sort_order?: number | null
+          subcategory?: string | null
+          teams?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["material_category"]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          sort_order?: number | null
+          subcategory?: string | null
+          teams?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      payment_plans: {
+        Row: {
+          amount: number
+          applies_to_enrollment:
+            | Database["public"]["Enums"]["enrollment_type"][]
+            | null
+          applies_to_teams:
+            | Database["public"]["Enums"]["athlete_team_type"][]
+            | null
+          category: Database["public"]["Enums"]["charge_category"]
+          created_at: string | null
+          due_day: number | null
+          id: string
+          is_active: boolean | null
+          is_recurring: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          applies_to_enrollment?:
+            | Database["public"]["Enums"]["enrollment_type"][]
+            | null
+          applies_to_teams?:
+            | Database["public"]["Enums"]["athlete_team_type"][]
+            | null
+          category: Database["public"]["Enums"]["charge_category"]
+          created_at?: string | null
+          due_day?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_recurring?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          applies_to_enrollment?:
+            | Database["public"]["Enums"]["enrollment_type"][]
+            | null
+          applies_to_teams?:
+            | Database["public"]["Enums"]["athlete_team_type"][]
+            | null
+          category?: Database["public"]["Enums"]["charge_category"]
+          created_at?: string | null
+          due_day?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_recurring?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          athlete_id: string
+          charge_id: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          proof_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          athlete_id: string
+          charge_id: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_date: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          proof_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          athlete_id?: string
+          charge_id?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          proof_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_financial_summary"
+            referencedColumns: ["athlete_id"]
+          },
+          {
+            foreignKeyName: "payments_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_athlete_status_combined"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "vw_birthdays_current_month"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_charge_id_fkey"
+            columns: ["charge_id"]
+            isOneToOne: false
+            referencedRelation: "charges"
             referencedColumns: ["id"]
           },
         ]
@@ -383,6 +992,39 @@ export type Database = {
         }
         Relationships: []
       }
+      training_sessions: {
+        Row: {
+          created_at: string | null
+          date: string
+          end_time: string | null
+          id: string
+          notes: string | null
+          start_time: string | null
+          team: string
+          type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string | null
+          team: string
+          type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string | null
+          team?: string
+          type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       registration_stats: {
@@ -394,9 +1036,9 @@ export type Database = {
           allgirl_interest_count: number | null
           back_interest_count: number | null
           base_interest_count: number | null
+          cheerpom_interest_count: number | null
           coed_n2_interest_count: number | null
           coed_n3_interest_count: number | null
-          cheerpom_interest_count: number | null
           coed_n4_interest_count: number | null
           flyer_interest_count: number | null
           last_30_days: number | null
@@ -477,68 +1119,146 @@ export type Database = {
         }
         Relationships: []
       }
+      vw_athlete_financial_summary: {
+        Row: {
+          athlete_id: string | null
+          charges_count: number | null
+          nome_completo: string | null
+          overdue_count: number | null
+          paid_count: number | null
+          pending_count: number | null
+          team: Database["public"]["Enums"]["athlete_team_type"] | null
+          total_charged: number | null
+          total_overdue: number | null
+          total_paid: number | null
+          total_pending: number | null
+        }
+        Relationships: []
+      }
+      vw_athlete_status_combined: {
+        Row: {
+          athlete_status:
+            | Database["public"]["Enums"]["athlete_status_type"]
+            | null
+          combined_status: string | null
+          id: string | null
+          nome_completo: string | null
+          overdue_count: number | null
+          team: Database["public"]["Enums"]["athlete_team_type"] | null
+          total_overdue: number | null
+          total_pending: number | null
+        }
+        Relationships: []
+      }
+      vw_birthdays_current_month: {
+        Row: {
+          birth_day: number | null
+          date_of_birth: string | null
+          id: string | null
+          is_today: boolean | null
+          nome_completo: string | null
+          team: Database["public"]["Enums"]["athlete_team_type"] | null
+        }
+        Insert: {
+          birth_day?: never
+          date_of_birth?: string | null
+          id?: string | null
+          is_today?: never
+          nome_completo?: string | null
+          team?: Database["public"]["Enums"]["athlete_team_type"] | null
+        }
+        Update: {
+          birth_day?: never
+          date_of_birth?: string | null
+          id?: string | null
+          is_today?: never
+          nome_completo?: string | null
+          team?: Database["public"]["Enums"]["athlete_team_type"] | null
+        }
+        Relationships: []
+      }
+      vw_monthly_overview: {
+        Row: {
+          month: string | null
+          net_result: number | null
+          payments_count: number | null
+          total_expenses: number | null
+          total_revenue: number | null
+        }
+        Relationships: []
+      }
+      vw_team_summary: {
+        Row: {
+          athlete_count: number | null
+          team: Database["public"]["Enums"]["athlete_team_type"] | null
+          total_charged: number | null
+          total_expenses: number | null
+          total_pending: number | null
+          total_received: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       calculate_age: { Args: { birthdate: string }; Returns: number }
       check_duplicate_email: { Args: { p_email: string }; Returns: boolean }
-      create_athlete_with_guardian:
-        | {
-            Args: {
-              p_chronic_disease_details?: string
-              p_cpf: string
-              p_data_nascimento: string
-              p_email: string
-              p_emergency_contact_name: string
-              p_emergency_contact_phone: string
-              p_endereco: string
-              p_guardian_cpf?: string
-              p_guardian_email?: string
-              p_guardian_name?: string
-              p_guardian_phone?: string
-              p_guardian_rg?: string
-              p_has_chronic_disease: boolean
-              p_has_health_insurance: boolean
-              p_has_restriction: boolean
-              p_health_insurance_name?: string
-              p_instagram: string
-              p_is_minor: boolean
-              p_nome_completo: string
-              p_registration_id: string
-              p_restriction_details?: string
-              p_rg: string
-              p_season?: number
-              p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
-              p_telefone: string
-            }
-            Returns: Json
-          }
-        | {
-            Args: {
-              p_chronic_disease_details?: string
-              p_cpf: string
-              p_data_nascimento: string
-              p_email: string
-              p_emergency_contact_name: string
-              p_emergency_contact_phone: string
-              p_endereco: string
-              p_guardian_name?: string
-              p_guardian_phone?: string
-              p_has_chronic_disease: boolean
-              p_has_health_insurance: boolean
-              p_has_restriction: boolean
-              p_health_insurance_name?: string
-              p_instagram: string
-              p_is_minor: boolean
-              p_nome_completo: string
-              p_registration_id: string
-              p_restriction_details?: string
-              p_rg: string
-              p_season?: number
-              p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
-              p_telefone: string
-            }
-            Returns: Json
-          }
+      create_athlete_with_guardian: {
+        Args: {
+          p_chronic_disease_details?: string
+          p_cpf: string
+          p_data_nascimento: string
+          p_email: string
+          p_emergency_contact_name: string
+          p_emergency_contact_phone: string
+          p_endereco: string
+          p_guardian_cpf?: string
+          p_guardian_email?: string
+          p_guardian_name?: string
+          p_guardian_phone?: string
+          p_guardian_rg?: string
+          p_has_chronic_disease: boolean
+          p_has_health_insurance: boolean
+          p_has_restriction: boolean
+          p_health_insurance_name?: string
+          p_instagram: string
+          p_is_minor: boolean
+          p_nome_completo: string
+          p_registration_id: string
+          p_restriction_details?: string
+          p_rg: string
+          p_season?: number
+          p_shirt_size: Database["public"]["Enums"]["shirt_size_type"]
+          p_telefone: string
+        }
+        Returns: Json
+      }
+      delete_charge_cascade: {
+        Args: { p_charge_id: string }
+        Returns: undefined
+      }
+      generate_monthly_charges: {
+        Args: { p_payment_plan_id?: string; p_reference_month: string }
+        Returns: Json
+      }
+      generate_weekly_sessions: {
+        Args: {
+          p_end: string
+          p_start: string
+          p_team: string
+          p_weekdays: number[]
+        }
+        Returns: undefined
+      }
+      get_athlete_attendance: {
+        Args: { p_athlete_id: string; p_month: number; p_year: number }
+        Returns: {
+          attended: number
+          rate: number
+          total: number
+        }[]
+      }
+      get_dashboard_kpis: { Args: never; Returns: Json }
+      get_my_teams: { Args: never; Returns: string[] }
       get_registrations_by_status: {
         Args: {
           p_limit?: number
@@ -559,71 +1279,19 @@ export type Database = {
         }[]
       }
       is_minor_by_date: { Args: { birthdate: string }; Returns: boolean }
-      submit_registration:
-        | {
-            Args: {
-              p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
-              p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
-              p_aceite_termos?: boolean
-              p_autorizacao_responsavel?: boolean
-              p_comprovante_pagamento?: string
-              p_condicoes_medicas?: string
-              p_contato_responsavel?: string
-              p_data_nascimento: string
-              p_declaracao_medica?: boolean
-              p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
-              p_email: string
-              p_email_responsavel?: string
-              p_equipe_anterior?: string
-              p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
-              p_genero: Database["public"]["Enums"]["gender_type"]
-              p_idade: number
-              p_medicacoes?: string
-              p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
-              p_nome_completo: string
-              p_nome_responsavel?: string
-              p_outros_esportes?: string
-              p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
-              p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
-              p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
-              p_telefone: string
-              p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
-            }
-            Returns: Json
-          }
-        | {
-            Args: {
-              p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
-              p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
-              p_aceite_termos?: boolean
-              p_atleta_skyhigh_2025?: Database["public"]["Enums"]["yes_no_type"]
-              p_autorizacao_responsavel?: boolean
-              p_comprovante_pagamento?: string
-              p_condicoes_medicas?: string
-              p_contato_responsavel?: string
-              p_data_nascimento: string
-              p_declaracao_medica?: boolean
-              p_dias_disponiveis?: Database["public"]["Enums"]["weekday_type"][]
-              p_email: string
-              p_email_responsavel?: string
-              p_equipe_anterior?: string
-              p_experiencia_ginastica?: Database["public"]["Enums"]["sports_experience_type"]
-              p_genero: Database["public"]["Enums"]["gender_type"]
-              p_idade: number
-              p_medicacoes?: string
-              p_nivel_interesse?: Database["public"]["Enums"]["team_level_type"][]
-              p_nome_completo: string
-              p_nome_responsavel?: string
-              p_outros_esportes?: string
-              p_participa_campeonatos?: Database["public"]["Enums"]["yes_no_maybe_type"]
-              p_posicao_interesse?: Database["public"]["Enums"]["cheer_position_type"][]
-              p_pratica_cheerleading?: Database["public"]["Enums"]["yes_no_type"]
-              p_telefone: string
-              p_tempo_experiencia?: Database["public"]["Enums"]["experience_time_type"]
-            }
-            Returns: string
-          }
-        | {
+      process_payment: {
+        Args: {
+          p_amount: number
+          p_athlete_id: string
+          p_charge_id: string
+          p_notes?: string
+          p_payment_date: string
+          p_payment_method: Database["public"]["Enums"]["payment_method"]
+        }
+        Returns: Json
+      }
+      reverse_payment: { Args: { p_payment_id: string }; Returns: Json }
+      submit_registration: {
             Args: {
               p_aceita_crossover?: Database["public"]["Enums"]["yes_no_type"]
               p_aceita_realocacao?: Database["public"]["Enums"]["yes_no_type"]
@@ -664,6 +1332,7 @@ export type Database = {
         }
         Returns: Json
       }
+      update_overdue_charges: { Args: never; Returns: Json }
       update_payment_proof: {
         Args: { p_proof_url: string; p_registration_id: string }
         Returns: Json
@@ -685,17 +1354,62 @@ export type Database = {
       }
     }
     Enums: {
-      athlete_status_type: "active" | "inactive" | "pending" | "suspended"
-      athlete_team_type: "snowstorm" | "hailstorm" | "rainstorm" | "cheerpom" | "unassigned"
+      athlete_status_type:
+        | "active"
+        | "inactive"
+        | "pending"
+        | "suspended"
+        | "afastado"
+      athlete_team_type:
+        | "snowstorm"
+        | "hailstorm"
+        | "rainstorm"
+        | "unassigned"
+        | "cheerpom"
+      attendance_status: "presente" | "ausente" | "justificado"
       attendance_status_type: "not_checked" | "present" | "absent"
+      charge_category:
+        | "mensalidade"
+        | "matricula"
+        | "uniforme"
+        | "competicao"
+        | "evento"
+        | "material"
+        | "seguro"
+        | "taxa_extra"
+        | "outro"
+      charge_status:
+        | "pendente"
+        | "pago"
+        | "atrasado"
+        | "parcial"
+        | "cancelado"
+        | "isento"
       cheer_level_type: "n2" | "n3" | "n4"
       cheer_position_type: "base" | "flyer" | "back"
+      coach_role_type: "head_coach" | "assistant_coach" | "athlete_coach"
+      coach_status_type: "active" | "inactive"
       day_period_type: "manha" | "tarde" | "noite"
       enrollment_type:
         | "team_cheer"
         | "individual_only"
         | "tumbling_only"
         | "team_and_tumbling"
+        | "team_and_cross"
+      event_type: "treino" | "campeonato" | "evento_interno" | "data_importante"
+      expense_category:
+        | "aluguel"
+        | "equipamento"
+        | "viagem"
+        | "hospedagem"
+        | "competicao"
+        | "uniforme"
+        | "marketing"
+        | "administrativo"
+        | "seguro"
+        | "coaching"
+        | "manutencao"
+        | "outro"
       experience_time_type:
         | "nunca-pratiquei"
         | "menos-6-meses"
@@ -703,7 +1417,16 @@ export type Database = {
         | "1-2-anos"
         | "2-anos-mais"
       gender_type: "feminino" | "masculino" | "outro"
+      material_category: "posicao" | "preventivo" | "flexibilidade"
       payment_frequency_type: "monthly" | "single"
+      payment_method:
+        | "pix"
+        | "transferencia"
+        | "dinheiro"
+        | "cartao_credito"
+        | "cartao_debito"
+        | "boleto"
+        | "outro"
       payment_status_type: "comprovante_pendente" | "pago"
       registration_status_type:
         | "pending"
@@ -722,6 +1445,7 @@ export type Database = {
         | "g_babylook"
       skill_level_type: "basico" | "intermediario" | "avancado"
       sports_experience_type: "ginastica" | "tumbling" | "danca" | "nenhuma"
+      staff_role: "atleta" | "coach" | "auxiliar" | "staff"
       team_level_type:
         | "coed-n2"
         | "coed-n3"
@@ -866,17 +1590,67 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      athlete_status_type: ["active", "inactive", "pending", "suspended"],
-      athlete_team_type: ["snowstorm", "hailstorm", "rainstorm", "cheerpom", "unassigned"],
+      athlete_status_type: [
+        "active",
+        "inactive",
+        "pending",
+        "suspended",
+        "afastado",
+      ],
+      athlete_team_type: [
+        "snowstorm",
+        "hailstorm",
+        "rainstorm",
+        "unassigned",
+        "cheerpom",
+      ],
+      attendance_status: ["presente", "ausente", "justificado"],
       attendance_status_type: ["not_checked", "present", "absent"],
+      charge_category: [
+        "mensalidade",
+        "matricula",
+        "uniforme",
+        "competicao",
+        "evento",
+        "material",
+        "seguro",
+        "taxa_extra",
+        "outro",
+      ],
+      charge_status: [
+        "pendente",
+        "pago",
+        "atrasado",
+        "parcial",
+        "cancelado",
+        "isento",
+      ],
       cheer_level_type: ["n2", "n3", "n4"],
       cheer_position_type: ["base", "flyer", "back"],
+      coach_role_type: ["head_coach", "assistant_coach", "athlete_coach"],
+      coach_status_type: ["active", "inactive"],
       day_period_type: ["manha", "tarde", "noite"],
       enrollment_type: [
         "team_cheer",
         "individual_only",
         "tumbling_only",
         "team_and_tumbling",
+        "team_and_cross",
+      ],
+      event_type: ["treino", "campeonato", "evento_interno", "data_importante"],
+      expense_category: [
+        "aluguel",
+        "equipamento",
+        "viagem",
+        "hospedagem",
+        "competicao",
+        "uniforme",
+        "marketing",
+        "administrativo",
+        "seguro",
+        "coaching",
+        "manutencao",
+        "outro",
       ],
       experience_time_type: [
         "nunca-pratiquei",
@@ -886,7 +1660,17 @@ export const Constants = {
         "2-anos-mais",
       ],
       gender_type: ["feminino", "masculino", "outro"],
+      material_category: ["posicao", "preventivo", "flexibilidade"],
       payment_frequency_type: ["monthly", "single"],
+      payment_method: [
+        "pix",
+        "transferencia",
+        "dinheiro",
+        "cartao_credito",
+        "cartao_debito",
+        "boleto",
+        "outro",
+      ],
       payment_status_type: ["comprovante_pendente", "pago"],
       registration_status_type: [
         "pending",
@@ -907,6 +1691,7 @@ export const Constants = {
       ],
       skill_level_type: ["basico", "intermediario", "avancado"],
       sports_experience_type: ["ginastica", "tumbling", "danca", "nenhuma"],
+      staff_role: ["atleta", "coach", "auxiliar", "staff"],
       team_level_type: [
         "coed-n2",
         "coed-n3",
